@@ -6,6 +6,7 @@ import { writeFileSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { BASES } from "./effort-bases.mjs";
 import { COACH_CASES, COACH_CASES_V2, COACH_CASES_V3, COACH_CASES_V4 } from "./coach-cases.mjs";
+import { COACH_ATTACKS } from "./coach-attacks.mjs";
 
 export const SEED = 20261110;
 const DIR = new URL("./", import.meta.url);
@@ -192,6 +193,7 @@ export const FILES = {
   "coach-eval-v2.jsonl": () => COACH_CASES_V2.map(r => JSON.stringify(r)).join("\n") + "\n",
   "coach-eval-v3.jsonl": () => COACH_CASES_V3.map(r => JSON.stringify(r)).join("\n") + "\n",
   "coach-eval-v4.jsonl": () => COACH_CASES_V4.map(r => JSON.stringify(r)).join("\n") + "\n",
+  "coach-attack-v1.jsonl": () => COACH_ATTACKS.map(r => JSON.stringify(r)).join("\n") + "\n",
 };
 export const sha = s => createHash("sha256").update(s).digest("hex").slice(0, 12);
 

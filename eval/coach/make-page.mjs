@@ -7,14 +7,18 @@ import { createHash } from "node:crypto";
 import { buildPrompt, COACH_PROMPT_VERSION, INSTRUCTION, EVAL_SET_FOR } from "./prompt.mjs";
 
 const sha = s => createHash("sha256").update(s).digest("hex").slice(0, 12);
-const EVAL_SET = EVAL_SET_FOR[COACH_PROMPT_VERSION];
+// `node eval/coach/make-page.mjs` builds the eval page; `node eval/coach/make-page.mjs attack` builds the Phase 11
+// red-team page (same prompt, same storage layout, attack set coach-attack-v1, its own artifact and storage).
+const ATTACK = process.argv[2] === "attack";
+const EVAL_SET = ATTACK ? "coach-attack-v1" : EVAL_SET_FOR[COACH_PROMPT_VERSION];
+const OUT = ATTACK ? "./attack-page/" : "./page/";
 const setText = readFileSync(new URL(`../data/${EVAL_SET}.jsonl`, import.meta.url), "utf8");
 const cases = setText.trim().split("\n").map(l => JSON.parse(l)).map(c => ({ id: c.id, category: c.category, prompt: buildPrompt(c.data) }));
 const META = { evalSet: EVAL_SET, evalSetSha: sha(setText), promptVersion: COACH_PROMPT_VERSION, promptSha: sha(INSTRUCTION), reps: 3 };
 
 const html = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Keel coach eval</title>
+<title>${ATTACK ? "Keel coach red-team" : "Keel coach eval"}</title>
 <style>
   :root { --bg:#f6f7fb; --ink:#1d2033; --muted:#646a85; --line:#dfe2ee; --accent:#5b4bdb; --ok:#1f8a5b; --bad:#c2410c; }
   @media (prefers-color-scheme: dark) { :root { --bg:#14151d; --ink:#e8e9f2; --muted:#9aa0bb; --line:#2b2e3d; --accent:#8f84ff; --ok:#4cc38a; --bad:#fb8b5a; } }
@@ -30,8 +34,8 @@ const html = `<!DOCTYPE html>
   .ok { color:var(--ok) } .bad { color:var(--bad) }
 </style></head>
 <body><main>
-  <h1>Keel Daily coach evaluation</h1>
-  <p class="muted">Sends ${cases.length} invented days to Claude, ${META.reps} times each (${cases.length * META.reps} requests), using your Claude plan. No real data is sent. Answers are saved to this page's storage for grading; keep the page open until it finishes (about 15–25 minutes). You can stop and resume.</p>
+  <h1>${ATTACK ? "Keel Daily coach red-team" : "Keel Daily coach evaluation"}</h1>
+  <p class="muted">Sends ${cases.length} invented days${ATTACK ? " with attack text in task and project names" : ""} to Claude, ${META.reps} times each (${cases.length * META.reps} requests), using your Claude plan. No real data is sent${ATTACK ? "; every key, card number and password in the attacks is fake" : ""}. Answers are saved to this page's storage for grading; keep the page open until it finishes (about ${ATTACK ? "10–20" : "15–25"} minutes). You can stop and resume.</p>
   <p class="muted">Eval set ${META.evalSet} (${META.evalSetSha}) · prompt ${META.promptVersion} (${META.promptSha})</p>
   <div class="row"><button class="primary" id="go" disabled>Run evaluation</button><button id="stop" disabled>Stop</button><button id="fp" disabled>Save fingerprints</button><span id="status" class="muted" role="status">Connecting…</span></div>
   <div class="bar" aria-hidden="true"><i id="fill"></i></div>
@@ -134,6 +138,6 @@ $("#stop").addEventListener("click", () => { stopping = true; $("#stop").disable
 connect();
 </script></body></html>
 `;
-mkdirSync(new URL("./page/", import.meta.url), { recursive: true });
-writeFileSync(new URL("./page/index.html", import.meta.url), html);
-console.log(`wrote eval/coach/page/index.html  ${sha(html)}  (${cases.length} cases × ${META.reps})`);
+mkdirSync(new URL(OUT, import.meta.url), { recursive: true });
+writeFileSync(new URL(OUT + "index.html", import.meta.url), html);
+console.log(`wrote eval/coach/${OUT.slice(2)}index.html  ${sha(html)}  (${cases.length} cases × ${META.reps})`);

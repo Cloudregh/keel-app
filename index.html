@@ -1413,6 +1413,31 @@ function coachUse() {
 }
 function coachSave(u) { try { localStorage.setItem(LS_AI, JSON.stringify(u)); } catch { /* storage full: the in-memory limit still applies */ } COACH.use = u; }
 /** null if a review may start now, otherwise a sentence saying when the next one is available. */
+/* Fix 56: one review can't become an oversized request, whatever a restored backup or synced data holds. Only the
+   copy sent to the coach is shortened; stored tasks are untouched. Normal days are within every cap (the eval days are,
+   tested), so their prompt is unchanged. */
+const COACH_CAP = { title: 300, due: 10, done: 15, projects: 8, sessions: 30, total: 14000, shortTitle: 60 };
+function capCoachData(d) {
+  const cut = (v, n) => typeof v === "string" && v.length > n ? v.slice(0, n - 1) + "…" : v;
+  const titles = n => {
+    d.stillDue.forEach(t => { t.title = cut(t.title, n); });
+    d.completedToday = d.completedToday.map(t => cut(t, n));
+    d.sessions.forEach(x => { x.task = cut(x.task, n); });
+    d.byProject = Object.fromEntries(Object.entries(d.byProject).map(([p, m]) => [cut(p, n), m]));
+  };
+  if (d.stillDue.length > COACH_CAP.due) {           // most urgent first: earliest due date, then highest priority
+    const all = d.stillDue.slice().sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : 0) || (+b.priority || 0) - (+a.priority || 0));
+    d.stillDue = all.slice(0, COACH_CAP.due); d.moreDue = all.length - COACH_CAP.due;
+  }
+  d.stillDue.forEach(t => { delete t.due; });
+  if (d.completedToday.length > COACH_CAP.done) { d.moreCompleted = d.completedToday.length - COACH_CAP.done; d.completedToday = d.completedToday.slice(0, COACH_CAP.done); }
+  if (d.sessions.length > COACH_CAP.sessions) { d.moreSessions = d.sessions.length - COACH_CAP.sessions; d.sessions = d.sessions.slice(-COACH_CAP.sessions); }
+  const proj = Object.entries(d.byProject).sort((a, b) => b[1] - a[1]);
+  if (proj.length > COACH_CAP.projects) d.byProject = Object.fromEntries([...proj.slice(0, COACH_CAP.projects - 1), ["Other projects", proj.slice(COACH_CAP.projects - 1).reduce((a, [, m]) => a + m, 0)]]);
+  titles(COACH_CAP.title);
+  if (JSON.stringify(d).length > COACH_CAP.total) titles(COACH_CAP.shortTitle);
+  return d;
+}
 function coachBlocked(now = Date.now()) {
   const u = COACH.use && COACH.use.day === todayKey() ? COACH.use : coachUse();
   if (u.count >= COACH_LIMIT.perDay) return `You've had ${COACH_LIMIT.perDay} reviews today, the daily limit. The next one is available tomorrow.`;
@@ -1721,7 +1746,7 @@ function projBars(byProj) {
                      corrections retrain the effort model. Everything stays in this browser.  */
 /* Planner version (bug 47): stamped on every plan and on the saved model. Bump it whenever the planner code
    changes; eval/manifest.json maps each version to its code hash and a test enforces the bump. */
-const PLANNER_VERSION = "planner-v2.1";
+const PLANNER_VERSION = "planner-v2.2";
 const EFF = ["L", "M", "H"];
 const EFF_LABEL = { L: "Light", M: "Medium", H: "Heavy" };
 const PRIOR_CURVE = [0.15, 0.1, 0.08, 0.06, 0.06, 0.1, 0.25, 0.45, 0.6, 0.85, 1.0, 1.0, 0.8, 0.5, 0.45, 0.6, 0.75, 0.7, 0.6, 0.5, 0.42, 0.35, 0.28, 0.2];
@@ -1782,11 +1807,13 @@ function featurize(t) {
   }
   return f;
 }
+/* Bug 58: word tables are plain objects, so a word like "constructor" must never read an inherited property. */
+const ownCount = (o, k) => Object.hasOwn(o, k) && typeof o[k] === "number" ? o[k] : 0;
 const STOP = new Set("the a an and or to for of on in at with my me i is be it this that from by up out about into over as".split(" "));
-const LEX_MAP = (() => { const m = {}; for (const c of EFF) for (const w of LEX[c].split(" ")) m[stem(w)] = c; return m; })();
+const LEX_MAP = (() => { const m = Object.create(null); for (const c of EFF) for (const w of LEX[c].split(" ")) m[stem(w)] = c; return m; })();
 const META_PRIOR = { "_est:xs": "L", "_est:s": "L", "_est:l": "H", "_est:xl": "H", "_subs:many": "H", "_prio:3": "H" };
 function priorCounts(tok) {
-  const c = LEX_MAP[tok] || META_PRIOR[tok];
+  const c = LEX_MAP[tok] || (Object.hasOwn(META_PRIOR, tok) ? META_PRIOR[tok] : null);   // own keys only (bug 58)
   if (!c) return null;
   return { L: c === "L" ? 3 : c === "M" ? 0.6 : 0.2, M: c === "M" ? 3 : 0.8, H: c === "H" ? 3 : c === "M" ? 0.6 : 0.2 };
 }
@@ -1805,7 +1832,7 @@ function predictEffort(t) {
   for (const tok of f) {
     const pc = priorCounts(tok);
     for (const c of EFF) {
-      const cnt = (nb.c[c][tok] || 0) + (pc ? pc[c] : 0);
+      const cnt = ownCount(nb.c[c], tok) + (pc ? pc[c] : 0);
       const tot = nb.n[c] + 40;   // 40 ≈ total pseudo-mass from the lexicon prior
       const lp = Math.log((cnt + alpha) / (tot + alpha * V));
       score[c] += lp; contrib[c][tok] = lp;
@@ -1818,13 +1845,14 @@ function predictEffort(t) {
   const z = e.L + e.M + e.H; const p = { L: e.L / z, M: e.M / z, H: e.H / z };
   const best = EFF.reduce((a, c) => p[c] > p[a] ? c : a, "M");
   const others = EFF.filter(c => c !== best);
-  const why = f.filter(tok => !tok.startsWith("_") || META_PRIOR[tok]).map(tok => [tok, contrib[best][tok] - Math.max(...others.map(o => contrib[o][tok]))]).filter(x => x[1] > 0.4).sort((a, b) => b[1] - a[1]).slice(0, 2).map(x => x[0].startsWith("_est") ? "its estimate" : x[0].startsWith("_subs") ? "its many steps" : x[0].startsWith("_prio") ? "its priority" : `“${x[0].replace("_", " ")}”`);
+  // bug 59: never quote a very long "word" (a pasted link or hash) as a reason
+  const why = f.filter(tok => (!tok.startsWith("_") || Object.hasOwn(META_PRIOR, tok)) && tok.length <= 40).map(tok => [tok, contrib[best][tok] - Math.max(...others.map(o => contrib[o][tok]))]).filter(x => x[1] > 0.4).sort((a, b) => b[1] - a[1]).slice(0, 2).map(x => x[0].startsWith("_est") ? "its estimate" : x[0].startsWith("_subs") ? "its many steps" : x[0].startsWith("_prio") ? "its priority" : `“${x[0].replace("_", " ")}”`);
   return { p, best, conf: p[best], why, sure: p[best] >= 0.7 ? "likely" : p[best] >= 0.5 ? "probably" : "unsure" };
 }
 /** Trains on the task's current features and returns them, so the same features can be removed later. */
 function trainEffort(t, label, weight) {
   const m = mlState(), nb = m.nb, f = featurize(t);
-  for (const tok of f) { nb.c[label][tok] = (nb.c[label][tok] || 0) + weight; nb.n[label] += weight; }
+  for (const tok of f) { nb.c[label][tok] = ownCount(nb.c[label], tok) + weight; nb.n[label] += weight; }
   nb.docs[label] += weight;
   return f;
 }
@@ -2764,10 +2792,13 @@ const A = {
     closeModal();
   },
   ai: async () => {
-    if (COACH.status === "running") return;
+    if (COACH.status === "running" || COACH.starting) return;
     const blocked = coachBlocked();
     if (blocked) { COACH.status = "limited"; COACH.note = blocked; renderCoach(); return; }
-    const sample = await window.claude.use("sample"); if (!sample) return;
+    COACH.starting = true;                               // fix 57: no second request while Claude is connecting
+    let sample;
+    try { sample = await window.claude.use("sample"); } finally { COACH.starting = false; }
+    if (!sample) return;
     const use = coachUse(); use.count++; coachSave(use);
     COACH.ctl = new AbortController(); COACH.status = "running"; COACH.text = ""; COACH.note = ""; renderCoach();
     const k = todayKey(), st = dayStats(k), s = state.settings;
@@ -2783,8 +2814,9 @@ const A = {
       sessions: st.list.map(e => ({ type: e.type, start: fmtTime(e.start), end: fmtTime(e.end), min: Math.round(e.dur / MIN), task: (taskById(e.taskId) || {}).title || null })),
       lastTrackedEnd: st.list.length ? fmtTime(Math.max(...st.list.map(e => e.end))) : null,
       completedToday: state.tasks.filter(t => t.done && t.doneAt && dayKey(t.doneAt) === k).map(t => t.title),
-      stillDue: state.tasks.filter(t => !t.done && t.due && t.due <= k).map(t => ({ title: t.title, priority: t.priority, estimateMin: t.estimate || null }))
+      stillDue: state.tasks.filter(t => !t.done && t.due && t.due <= k).map(t => ({ title: t.title, priority: t.priority, estimateMin: t.estimate || null, due: t.due }))
     };
+    capCoachData(data);
     const prompt = `You are a concise, warm productivity coach inside a time-tracking app. Using only the data below, write a short review of the user's day in plain text (no markdown, no headings, no bullet symbols). Two or three short paragraphs, at most 90 words in total: 1) what went well, citing specific numbers; 2) one honest observation about focus, breaks or switching; 3) one concrete suggestion for the rest of today or tomorrow, naming a specific task if one is due. If almost nothing was tracked, say so kindly and suggest how to start. Each session has its start and end time, and lastTrackedEnd is when tracking last stopped. workPct and focusPct are the day's progress toward the work and focus goals; use them instead of calculating percentages. workLeftMin and focusLeftMin are the minutes still needed to reach each goal; check any claim about where a suggested block would take the user against them.\n\nDATA:\n${JSON.stringify(data)}`;
     const ctl = COACH.ctl;
     try {
