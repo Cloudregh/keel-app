@@ -1,0 +1,1633 @@
+{
+ "generatedAt": "2026-11-12T19:01:29.665Z",
+ "seconds": 17,
+ "app": "207a615b983a",
+ "plannerModel": {
+  "version": "planner-v2.1",
+  "sha256": "541b16481e59",
+  "components": [
+   "naive-bayes-effort",
+   "bayes-duration-shrinkage",
+   "energy-curve",
+   "plan-builder",
+   "pairwise-perceptron"
+  ],
+  "randomness": "none (deterministic given inputs and clock)",
+  "shaOf": "index.html from '/* ================= Planner:' up to (not including) '/* ---- UI: plan panel' (method fixed 2026-11-12; the earlier e451ce05c4cb used an unrecorded range)",
+  "changes": [
+   "2026-11-12: fixes 34 (exact untraining) and 36 (Unicode words)",
+   "2026-11-12: fixes 37 (overdue first), 39 (temperature 0.45), 40 (duration buffer only when erratic), 41 (ordering steps)",
+   "2026-11-12: fix 38 (verb feature, weight 3, chosen on validation vocabulary)",
+   "2026-11-12: fixes 44 (model repair), 45 (guards and defaults), 46 (revision cache key), 47 (version stamp), 48 (label pruning); PLANNER_VERSION introduced as planner-v2.0",
+   "2026-11-12: fix 49 (plan overflow is always a boolean) → planner-v2.1"
+  ],
+  "versions": {
+   "planner-v1": "e451ce05c4cb (range not recorded)",
+   "planner-v2.0": "d2ce6766d811",
+   "planner-v2.1": "541b16481e59"
+  }
+ },
+ "datasets": {
+  "effort-v1": {
+   "file": "eval/data/effort-v1.jsonl",
+   "sha256": "286e4ee9c9d1",
+   "rows": 300,
+   "splits": {
+    "train": 102,
+    "val": 48,
+    "test": 150
+   },
+   "frozen": "2026-11-12"
+  },
+  "duration-v1": {
+   "file": "eval/data/duration-v1.json",
+   "sha256": "3eefa22e8f34",
+   "rows": 150,
+   "splits": {
+    "history": 100,
+    "test": 50
+   },
+   "frozen": "2026-11-12"
+  },
+  "energy-v1": {
+   "file": "eval/data/energy-v1.json",
+   "sha256": "fc5f409702bb",
+   "sessions": 136,
+   "splits": {
+    "history": 90,
+    "test": 46
+   },
+   "frozen": "2026-11-12"
+  },
+  "effort-newvocab-v1": {
+   "file": "eval/data/effort-newvocab-v1.jsonl",
+   "sha256": "43d8852b653e",
+   "rows": 60,
+   "splits": {
+    "corrections": 20,
+    "test": 40
+   },
+   "frozen": "2026-11-12"
+  },
+  "duration-users-v1": {
+   "file": "eval/data/duration-users-v1.json",
+   "sha256": "f6a7a9cf3aeb",
+   "users": 20,
+   "tasksPerUser": 60,
+   "splits": {
+    "history": 40,
+    "test": 20
+   },
+   "frozen": "2026-11-12"
+  },
+  "effort-newvocab-v2": {
+   "file": "eval/data/effort-newvocab-v2.jsonl",
+   "sha256": "6096dfc0a5f6",
+   "rows": 60,
+   "splits": {
+    "corrections": 20,
+    "test": 40
+   },
+   "frozen": "2026-11-12",
+   "note": "corrections cover every first-word verb (finding 38, option B); designed after v1"
+  },
+  "effort-v2": {
+   "file": "eval/data/effort-v2.jsonl",
+   "sha256": "1a057392bd27",
+   "rows": 300,
+   "splits": {
+    "train": 102,
+    "val": 48,
+    "test": 150
+   },
+   "frozen": "2026-11-12",
+   "note": "effort-v1 with label-neutral notes (finding 42)"
+  },
+  "effort-newvocab-val-v1": {
+   "file": "eval/data/effort-newvocab-val-v1.jsonl",
+   "sha256": "9d24dc5cf0ef",
+   "rows": 60,
+   "splits": {
+    "corrections": 20,
+    "val": 40
+   },
+   "frozen": "2026-11-12",
+   "note": "validation only, for choosing the verb weight (finding 38, addendum 2)"
+  }
+ },
+ "seed": 20261110,
+ "browser": "153.0.8010.12",
+ "reproducible": true,
+ "verdicts": [
+  {
+   "name": "Effort macro-F1 (as shipped, test)",
+   "value": 0.8416,
+   "rule": "≥ 0.70",
+   "pass": true
+  },
+  {
+   "name": "… over majority-class baseline",
+   "value": 0.6749,
+   "rule": "≥ +0.15",
+   "pass": true
+  },
+  {
+   "name": "… vs keyword-only baseline",
+   "value": 0.08489999999999998,
+   "rule": "≥ 0",
+   "pass": true
+  },
+  {
+   "name": "… vs production (previous release)",
+   "value": 0,
+   "rule": "≥ 0",
+   "pass": true
+  },
+  {
+   "name": "Slice gap: estimate",
+   "value": 0.0107,
+   "rule": "≤ 0.15",
+   "pass": true
+  },
+  {
+   "name": "Slice gap: project",
+   "value": 0.1196,
+   "rule": "≤ 0.15",
+   "pass": true
+  },
+  {
+   "name": "New vocabulary v2 accuracy after 20 corrections (option B)",
+   "value": 1,
+   "rule": "≥ 0.80",
+   "pass": true
+  },
+  {
+   "name": "Duration: error reduction vs raw estimate",
+   "value": 0.4708,
+   "rule": "≥ 30%",
+   "pass": true
+  },
+  {
+   "name": "Planner hard-constraint violations (500 days)",
+   "value": 0,
+   "rule": "= 0",
+   "pass": true
+  },
+  {
+   "name": "buildPlan p95 latency (ms)",
+   "value": 3,
+   "rule": "< 50 ms",
+   "pass": true
+  },
+  {
+   "name": "Ordering weights after 30 identical moves: quick-win rise (bug 41)",
+   "value": 0.23930000000000007,
+   "rule": "≥ +0.15",
+   "pass": true
+  },
+  {
+   "name": "Ordering weights stay within ½–2× of default (bug 41)",
+   "value": 0.8738333333333334,
+   "rule": "all in [0.5, 2]",
+   "pass": true
+  },
+  {
+   "name": "Calibration: test ECE below the shipped 0.364 (bug 39)",
+   "value": 0.1186,
+   "rule": "< 0.364",
+   "pass": true
+  }
+ ],
+ "meta": {
+  "pageErrors": []
+ },
+ "effort": {
+  "primary": {
+   "macroF1": 0.8416,
+   "accuracy": 0.8467,
+   "per": {
+    "L": {
+     "precision": 0.86,
+     "recall": 0.86,
+     "f1": 0.86,
+     "support": 50
+    },
+    "M": {
+     "precision": 0.8293,
+     "recall": 0.68,
+     "f1": 0.7473,
+     "support": 50
+    },
+    "H": {
+     "precision": 0.8475,
+     "recall": 1,
+     "f1": 0.9174,
+     "support": 50
+    }
+   },
+   "n": 150,
+   "ci95": [
+    0.7845,
+    0.8911
+   ],
+   "confusion": {
+    "L": {
+     "L": 43,
+     "M": 7,
+     "H": 0
+    },
+    "M": {
+     "L": 7,
+     "M": 34,
+     "H": 9
+    },
+    "H": {
+     "L": 0,
+     "M": 0,
+     "H": 50
+    }
+   }
+  },
+  "baselines": {
+   "majority": 0.1667,
+   "keywordOnly": 0.7567,
+   "production": 0.8416,
+   "productionSameAsCurrent": true
+  },
+  "withTrainCorrections": {
+   "macroF1": 0.8629,
+   "accuracy": 0.8667,
+   "per": {
+    "L": {
+     "precision": 0.8136,
+     "recall": 0.96,
+     "f1": 0.8807,
+     "support": 50
+    },
+    "M": {
+     "precision": 0.8974,
+     "recall": 0.7,
+     "f1": 0.7865,
+     "support": 50
+    },
+    "H": {
+     "precision": 0.9038,
+     "recall": 0.94,
+     "f1": 0.9216,
+     "support": 50
+    }
+   },
+   "n": 150,
+   "ci95": [
+    0.8019,
+    0.9163
+   ]
+  },
+  "withTrainCorrectionsNoNotes": {
+   "macroF1": 0.8625,
+   "accuracy": 0.8667,
+   "per": {
+    "L": {
+     "precision": 0.8393,
+     "recall": 0.94,
+     "f1": 0.8868,
+     "support": 50
+    },
+    "M": {
+     "precision": 0.8974,
+     "recall": 0.7,
+     "f1": 0.7865,
+     "support": 50
+    },
+    "H": {
+     "precision": 0.8727,
+     "recall": 0.96,
+     "f1": 0.9143,
+     "support": 50
+    }
+   },
+   "n": 150,
+   "ci95": [
+    0.806,
+    0.91
+   ]
+  },
+  "primaryNoNotes": {
+   "macroF1": 0.8113,
+   "accuracy": 0.82,
+   "per": {
+    "L": {
+     "precision": 0.8431,
+     "recall": 0.86,
+     "f1": 0.8515,
+     "support": 50
+    },
+    "M": {
+     "precision": 0.8108,
+     "recall": 0.6,
+     "f1": 0.6897,
+     "support": 50
+    },
+    "H": {
+     "precision": 0.8065,
+     "recall": 1,
+     "f1": 0.8929,
+     "support": 50
+    }
+   },
+   "n": 150,
+   "ci95": [
+    0.7401,
+    0.8762
+   ]
+  },
+  "slices": {
+   "estimate": {
+    "has estimate": {
+     "n": 105,
+     "macroF1": 0.8438,
+     "accuracy": 0.8476,
+     "judged": true
+    },
+    "no estimate": {
+     "n": 45,
+     "macroF1": 0.8331,
+     "accuracy": 0.8444,
+     "judged": true
+    }
+   },
+   "project": {
+    "none": {
+     "n": 33,
+     "macroF1": 0.9113,
+     "accuracy": 0.9091,
+     "judged": true
+    },
+    "p_work": {
+     "n": 37,
+     "macroF1": 0.7917,
+     "accuracy": 0.8108,
+     "judged": true
+    },
+    "p_personal": {
+     "n": 49,
+     "macroF1": 0.7953,
+     "accuracy": 0.7959,
+     "judged": true
+    },
+    "p_study": {
+     "n": 31,
+     "macroF1": 0.8964,
+     "accuracy": 0.9032,
+     "judged": true
+    }
+   },
+   "phrasing": {
+    "variant 1": {
+     "n": 75,
+     "macroF1": 0.7982,
+     "accuracy": 0.8133,
+     "judged": true
+    },
+    "variant 2": {
+     "n": 75,
+     "macroF1": 0.8788,
+     "accuracy": 0.88,
+     "judged": true
+    }
+   }
+  },
+  "sliceGap": {
+   "estimate": 0.0107,
+   "project": 0.1196
+  },
+  "calibration": {
+   "brier": 0.2936,
+   "ece": 0.1186,
+   "table": [
+    {
+     "bin": "0.3–0.4",
+     "n": 18,
+     "meanConfidence": 0.3333,
+     "accuracy": 0.6111
+    },
+    {
+     "bin": "0.4–0.5",
+     "n": 3,
+     "meanConfidence": 0.4136,
+     "accuracy": 0.3333
+    },
+    {
+     "bin": "0.5–0.6",
+     "n": 11,
+     "meanConfidence": 0.5486,
+     "accuracy": 1
+    },
+    {
+     "bin": "0.7–0.8",
+     "n": 10,
+     "meanConfidence": 0.793,
+     "accuracy": 1
+    },
+    {
+     "bin": "0.8–0.9",
+     "n": 39,
+     "meanConfidence": 0.814,
+     "accuracy": 0.7949
+    },
+    {
+     "bin": "0.9–1",
+     "n": 69,
+     "meanConfidence": 0.9822,
+     "accuracy": 0.913
+    }
+   ]
+  },
+  "calibrationWithCorrections": {
+   "brier": 0.2201,
+   "ece": 0.105,
+   "table": [
+    {
+     "bin": "0.5–0.6",
+     "n": 5,
+     "meanConfidence": 0.542,
+     "accuracy": 0.4
+    },
+    {
+     "bin": "0.6–0.7",
+     "n": 2,
+     "meanConfidence": 0.6289,
+     "accuracy": 1
+    },
+    {
+     "bin": "0.7–0.8",
+     "n": 3,
+     "meanConfidence": 0.731,
+     "accuracy": 0
+    },
+    {
+     "bin": "0.8–0.9",
+     "n": 7,
+     "meanConfidence": 0.8569,
+     "accuracy": 0.5714
+    },
+    {
+     "bin": "0.9–1",
+     "n": 133,
+     "meanConfidence": 0.9933,
+     "accuracy": 0.9173
+    }
+   ]
+  },
+  "robustness": {
+   "clean": {
+    "macroF1": 0.8416,
+    "changed": 0
+   },
+   "typo": {
+    "macroF1": 0.8276,
+    "changed": 0.0133
+   },
+   "noEstimate": {
+    "macroF1": 0.792,
+    "changed": 0.14
+   },
+   "capitals": {
+    "macroF1": 0.8416,
+    "changed": 0
+   },
+   "filler": {
+    "macroF1": 0.8349,
+    "changed": 0.0067
+   },
+   "keywordStuffing": {
+    "macroF1": 0.6463,
+    "changed": 0.1933
+   },
+   "notesRemoved": {
+    "macroF1": 0.8113,
+    "changed": 0.0267
+   }
+  },
+  "outOfRange": {
+   "estimate -5": {
+    "ok": true,
+    "best": "H"
+   },
+   "estimate 10000": {
+    "ok": true,
+    "best": "H"
+   },
+   "estimate NaN": {
+    "ok": true,
+    "best": "H"
+   },
+   "priority 9": {
+    "ok": true,
+    "best": "H"
+   },
+   "5000-char title": {
+    "ok": true,
+    "best": "M"
+   },
+   "empty": {
+    "ok": true,
+    "best": "M"
+   },
+   "emoji only": {
+    "ok": true,
+    "best": "M"
+   },
+   "subtasks not array": {
+    "ok": true,
+    "best": "H"
+   }
+  },
+  "worstErrors": [
+   {
+    "id": "m43-2",
+    "title": "Clear out the garage shelves",
+    "label": "M",
+    "predicted": "H",
+    "confidence": 0.9676,
+    "estimate": 90,
+    "estimateBucket": "l",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 0
+    },
+    "why": [
+     "its estimate",
+     "its priority"
+    ],
+    "cause": "no known keyword; estimate or other metadata decided"
+   },
+   {
+    "id": "m15-1",
+    "title": "Plan the weekend trip itinerary",
+    "label": "M",
+    "predicted": "H",
+    "confidence": 0.9676,
+    "estimate": 90,
+    "estimateBucket": "l",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 1
+    },
+    "why": [
+     "“plan”",
+     "its estimate"
+    ],
+    "cause": "a keyword from the predicted class (wording points the other way)"
+   },
+   {
+    "id": "m23-1",
+    "title": "Fix the leaking bathroom tap",
+    "label": "M",
+    "predicted": "H",
+    "confidence": 0.9676,
+    "estimate": 90,
+    "estimateBucket": "l",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 0
+    },
+    "why": [
+     "its estimate",
+     "its priority"
+    ],
+    "cause": "no known keyword; estimate or other metadata decided"
+   },
+   {
+    "id": "m34-2",
+    "title": "Align with marketing on the launch calendar",
+    "label": "M",
+    "predicted": "H",
+    "confidence": 0.9676,
+    "estimate": 90,
+    "estimateBucket": "l",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 1
+    },
+    "why": [
+     "“launch”",
+     "its estimate"
+    ],
+    "cause": "a keyword from the predicted class (wording points the other way)"
+   },
+   {
+    "id": "m35-2",
+    "title": "Check the office printer works with every laptop",
+    "label": "M",
+    "predicted": "L",
+    "confidence": 0.9676,
+    "estimate": 30,
+    "estimateBucket": "s",
+    "keywordHits": {
+     "L": 1,
+     "M": 0,
+     "H": 0
+    },
+    "why": [
+     "“check”",
+     "its estimate"
+    ],
+    "cause": "a keyword from the predicted class (wording points the other way)"
+   },
+   {
+    "id": "m21-1",
+    "title": "Prepare questions for the doctor",
+    "label": "M",
+    "predicted": "H",
+    "confidence": 0.9676,
+    "estimate": 90,
+    "estimateBucket": "l",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 1
+    },
+    "why": [
+     "“prepare”",
+     "its estimate"
+    ],
+    "cause": "a keyword from the predicted class (wording points the other way)"
+   },
+   {
+    "id": "m39-2",
+    "title": "Match receipts to the expense report",
+    "label": "M",
+    "predicted": "H",
+    "confidence": 0.8774,
+    "estimate": 30,
+    "estimateBucket": "s",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 1
+    },
+    "why": [
+     "“report”",
+     "its priority"
+    ],
+    "cause": "a keyword from the predicted class (wording points the other way)"
+   },
+   {
+    "id": "m05-1",
+    "title": "Meal prep for the week",
+    "label": "M",
+    "predicted": "L",
+    "confidence": 0.8075,
+    "estimate": 30,
+    "estimateBucket": "s",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 0
+    },
+    "why": [
+     "its estimate"
+    ],
+    "cause": "no known keyword; estimate or other metadata decided"
+   },
+   {
+    "id": "m33-1",
+    "title": "Watch the online lecture",
+    "label": "M",
+    "predicted": "L",
+    "confidence": 0.8075,
+    "estimate": 30,
+    "estimateBucket": "s",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 0
+    },
+    "why": [
+     "its estimate"
+    ],
+    "cause": "no known keyword; estimate or other metadata decided"
+   },
+   {
+    "id": "m11-1",
+    "title": "Set up the new laptop",
+    "label": "M",
+    "predicted": "H",
+    "confidence": 0.8075,
+    "estimate": 90,
+    "estimateBucket": "l",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 0
+    },
+    "why": [
+     "its estimate"
+    ],
+    "cause": "no known keyword; estimate or other metadata decided"
+   },
+   {
+    "id": "m30-1",
+    "title": "Cook dinner for guests",
+    "label": "M",
+    "predicted": "H",
+    "confidence": 0.8075,
+    "estimate": 60,
+    "estimateBucket": "m",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 0
+    },
+    "why": [
+     "its priority"
+    ],
+    "cause": "no known keyword; estimate or other metadata decided"
+   },
+   {
+    "id": "m26-1",
+    "title": "Assemble the new bookshelf",
+    "label": "M",
+    "predicted": "L",
+    "confidence": 0.8075,
+    "estimate": 30,
+    "estimateBucket": "s",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 0
+    },
+    "why": [
+     "its estimate"
+    ],
+    "cause": "no known keyword; estimate or other metadata decided"
+   },
+   {
+    "id": "m49-1",
+    "title": "Mentor session with junior designer",
+    "label": "M",
+    "predicted": "H",
+    "confidence": 0.8075,
+    "estimate": 90,
+    "estimateBucket": "l",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 0
+    },
+    "why": [
+     "its estimate"
+    ],
+    "cause": "no known keyword; estimate or other metadata decided"
+   },
+   {
+    "id": "m32-1",
+    "title": "Back up the laptop",
+    "label": "M",
+    "predicted": "L",
+    "confidence": 0.8075,
+    "estimate": 30,
+    "estimateBucket": "s",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 0
+    },
+    "why": [
+     "its estimate"
+    ],
+    "cause": "no known keyword; estimate or other metadata decided"
+   },
+   {
+    "id": "m24-1",
+    "title": "Respond to the client's change requests",
+    "label": "M",
+    "predicted": "L",
+    "confidence": 0.4136,
+    "estimate": 60,
+    "estimateBucket": "m",
+    "keywordHits": {
+     "L": 1,
+     "M": 0,
+     "H": 0
+    },
+    "why": [
+     "“respond”"
+    ],
+    "cause": "a keyword from the predicted class (wording points the other way)"
+   },
+   {
+    "id": "m39-1",
+    "title": "Reconcile expense report",
+    "label": "M",
+    "predicted": "L",
+    "confidence": 0.4136,
+    "estimate": 30,
+    "estimateBucket": "s",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 1
+    },
+    "why": [
+     "its estimate"
+    ],
+    "cause": "Medium boundary: mixed or weak signals"
+   },
+   {
+    "id": "l26-1",
+    "title": "Forward tax letter to accountant",
+    "label": "L",
+    "predicted": "M",
+    "confidence": 0.3333,
+    "estimate": 0,
+    "estimateBucket": "none",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 0
+    },
+    "why": [],
+    "cause": "no known keyword and no estimate (nothing to go on)"
+   },
+   {
+    "id": "l31-2",
+    "title": "Approve Akua's vacation request",
+    "label": "L",
+    "predicted": "M",
+    "confidence": 0.3333,
+    "estimate": 0,
+    "estimateBucket": "none",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 0
+    },
+    "why": [],
+    "cause": "no known keyword and no estimate (nothing to go on)"
+   },
+   {
+    "id": "l33-1",
+    "title": "Fill in the attendance form",
+    "label": "L",
+    "predicted": "M",
+    "confidence": 0.3333,
+    "estimate": 0,
+    "estimateBucket": "none",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 0
+    },
+    "why": [],
+    "cause": "no known keyword and no estimate (nothing to go on)"
+   },
+   {
+    "id": "l35-2",
+    "title": "Track the parcel delivery",
+    "label": "L",
+    "predicted": "M",
+    "confidence": 0.3333,
+    "estimate": 0,
+    "estimateBucket": "none",
+    "keywordHits": {
+     "L": 0,
+     "M": 0,
+     "H": 0
+    },
+    "why": [],
+    "cause": "no known keyword and no estimate (nothing to go on)"
+   }
+  ],
+  "errorCauses": {
+   "no known keyword; estimate or other metadata decided": 9,
+   "a keyword from the predicted class (wording points the other way)": 6,
+   "Medium boundary: mixed or weak signals": 1,
+   "no known keyword and no estimate (nothing to go on)": 7
+  },
+  "topFeatures": {
+   "asShipped": {
+    "L": [
+     [
+      "_est:s",
+      0.8
+     ],
+     [
+      "_est:xs",
+      0.8
+     ],
+     [
+      "book",
+      0.8
+     ],
+     [
+      "buy",
+      0.8
+     ],
+     [
+      "call",
+      0.8
+     ],
+     [
+      "cancel",
+      0.8
+     ],
+     [
+      "check",
+      0.8
+     ],
+     [
+      "confirm",
+      0.8
+     ],
+     [
+      "download",
+      0.8
+     ],
+     [
+      "email",
+      0.8
+     ],
+     [
+      "file",
+      0.8
+     ],
+     [
+      "follow",
+      0.8
+     ]
+    ],
+    "M": [
+     [
+      "brainstorm",
+      0.92
+     ],
+     [
+      "clean",
+      0.92
+     ],
+     [
+      "configure",
+      0.92
+     ],
+     [
+      "document",
+      0.92
+     ],
+     [
+      "gym",
+      0.92
+     ],
+     [
+      "interview",
+      0.92
+     ],
+     [
+      "meet",
+      0.92
+     ],
+     [
+      "not",
+      0.92
+     ],
+     [
+      "organize",
+      0.92
+     ],
+     [
+      "outline",
+      0.92
+     ],
+     [
+      "practice",
+      0.92
+     ],
+     [
+      "read",
+      0.92
+     ]
+    ],
+    "H": [
+     [
+      "_est:l",
+      0.8
+     ],
+     [
+      "_est:xl",
+      0.8
+     ],
+     [
+      "_prio:3",
+      0.8
+     ],
+     [
+      "_subs:many",
+      0.8
+     ],
+     [
+      "analysi",
+      0.8
+     ],
+     [
+      "analyze",
+      0.8
+     ],
+     [
+      "architect",
+      0.8
+     ],
+     [
+      "article",
+      0.8
+     ],
+     [
+      "audit",
+      0.8
+     ],
+     [
+      "budget",
+      0.8
+     ],
+     [
+      "build",
+      0.8
+     ],
+     [
+      "campaign",
+      0.8
+     ]
+    ]
+   },
+   "afterTrainCorrections": {
+    "L": [
+     [
+      "_v:send",
+      3.3
+     ],
+     [
+      "_est:xs",
+      3.28
+     ],
+     [
+      "_v:buy",
+      2.65
+     ],
+     [
+      "_v:order",
+      2.65
+     ],
+     [
+      "_v:submit",
+      2.65
+     ],
+     [
+      "_v:add",
+      2.03
+     ],
+     [
+      "_v:archive",
+      2.03
+     ],
+     [
+      "_v:ask",
+      2.03
+     ],
+     [
+      "_v:charge",
+      2.03
+     ],
+     [
+      "_v:clear",
+      2.03
+     ],
+     [
+      "_v:email",
+      2.03
+     ],
+     [
+      "_v:follow",
+      2.03
+     ]
+    ],
+    "M": [
+     [
+      "_est:m",
+      3.58
+     ],
+     [
+      "_v:help",
+      2.48
+     ],
+     [
+      "_v:listen",
+      2.48
+     ],
+     [
+      "_v:read",
+      2.48
+     ],
+     [
+      "not",
+      2.22
+     ],
+     [
+      "afternoon",
+      2.12
+     ],
+     [
+      "but",
+      2.12
+     ],
+     [
+      "focu",
+      2.12
+     ],
+     [
+      "need",
+      2.12
+     ],
+     [
+      "need_some",
+      2.12
+     ],
+     [
+      "some",
+      2.12
+     ],
+     [
+      "some_focu",
+      2.12
+     ]
+    ],
+    "H": [
+     [
+      "_subs:many",
+      3.2
+     ],
+     [
+      "_est:xl",
+      2.84
+     ],
+     [
+      "_v:draft",
+      2.82
+     ],
+     [
+      "long",
+      2.71
+     ],
+     [
+      "block",
+      2.59
+     ],
+     [
+      "block_long",
+      2.59
+     ],
+     [
+      "long_stretch",
+      2.59
+     ],
+     [
+      "quiet",
+      2.59
+     ],
+     [
+      "stretch",
+      2.59
+     ],
+     [
+      "stretch_quiet",
+      2.59
+     ],
+     [
+      "time",
+      2.59
+     ],
+     [
+      "_v:build",
+      2.44
+     ]
+    ]
+   }
+  }
+ },
+ "newVocab": {
+  "corrections": 20,
+  "testN": 40,
+  "accuracyBefore": 0.325,
+  "accuracyAfter": 0.675,
+  "macroF1After": 0.6817,
+  "confusionAfter": {
+   "L": {
+    "L": 7,
+    "M": 6,
+    "H": 0
+   },
+   "M": {
+    "L": 1,
+    "M": 11,
+    "H": 1
+   },
+   "H": {
+    "L": 0,
+    "M": 5,
+    "H": 9
+   }
+  },
+  "ci95After": [
+   0.525,
+   0.825
+  ],
+  "errorsAfter": [
+   {
+    "title": "Feed the chickens",
+    "label": "L",
+    "predicted": "M"
+   },
+   {
+    "title": "Top up the chickens' water",
+    "label": "L",
+    "predicted": "M"
+   },
+   {
+    "title": "Feed the goats",
+    "label": "L",
+    "predicted": "M"
+   },
+   {
+    "title": "Refill the goats' water trough",
+    "label": "L",
+    "predicted": "M"
+   },
+   {
+    "title": "Feed the ducks",
+    "label": "L",
+    "predicted": "M"
+   },
+   {
+    "title": "Top up the ducks' water",
+    "label": "L",
+    "predicted": "M"
+   },
+   {
+    "title": "Grade and sort the eggs for market",
+    "label": "M",
+    "predicted": "L"
+   },
+   {
+    "title": "Grade the cocoa beans after drying",
+    "label": "M",
+    "predicted": "H"
+   },
+   {
+    "title": "Clear the bush for the new plot",
+    "label": "H",
+    "predicted": "M"
+   },
+   {
+    "title": "Clear the overgrown back plot",
+    "label": "H",
+    "predicted": "M"
+   },
+   {
+    "title": "Clear land for the plantain suckers",
+    "label": "H",
+    "predicted": "M"
+   },
+   {
+    "title": "Dig a trench for the borehole pump",
+    "label": "H",
+    "predicted": "M"
+   },
+   {
+    "title": "Dig foundations for the storeroom",
+    "label": "H",
+    "predicted": "M"
+   }
+  ]
+ },
+ "duration": {
+  "users": {
+   "n": 400,
+   "modelMedAbsLog": 0.2432,
+   "rawMedAbsLog": 0.4595,
+   "reduction": 0.4708,
+   "reductionCI95": [
+    0.3527,
+    0.5287
+   ],
+   "usersBetterThanRaw": 19,
+   "perUser": [
+    {
+     "user": "u1",
+     "bias": 1.452,
+     "modelMedAbsLog": 0.3555,
+     "rawMedAbsLog": 0.3729
+    },
+    {
+     "user": "u2",
+     "bias": 1.506,
+     "modelMedAbsLog": 0.2213,
+     "rawMedAbsLog": 0.4414
+    },
+    {
+     "user": "u3",
+     "bias": 1.556,
+     "modelMedAbsLog": 0.3414,
+     "rawMedAbsLog": 0.3874
+    },
+    {
+     "user": "u4",
+     "bias": 1.431,
+     "modelMedAbsLog": 0.2377,
+     "rawMedAbsLog": 0.3031
+    },
+    {
+     "user": "u5",
+     "bias": 1.552,
+     "modelMedAbsLog": 0.2028,
+     "rawMedAbsLog": 0.383
+    },
+    {
+     "user": "u6",
+     "bias": 1.538,
+     "modelMedAbsLog": 0.3994,
+     "rawMedAbsLog": 0.5954
+    },
+    {
+     "user": "u7",
+     "bias": 1.79,
+     "modelMedAbsLog": 0.2221,
+     "rawMedAbsLog": 0.6879
+    },
+    {
+     "user": "u8",
+     "bias": 1.589,
+     "modelMedAbsLog": 0.2637,
+     "rawMedAbsLog": 0.4487
+    },
+    {
+     "user": "u9",
+     "bias": 1.493,
+     "modelMedAbsLog": 0.2637,
+     "rawMedAbsLog": 0.3921
+    },
+    {
+     "user": "u10",
+     "bias": 1.711,
+     "modelMedAbsLog": 0.149,
+     "rawMedAbsLog": 0.4878
+    },
+    {
+     "user": "u11",
+     "bias": 1.568,
+     "modelMedAbsLog": 0.2717,
+     "rawMedAbsLog": 0.4559
+    },
+    {
+     "user": "u12",
+     "bias": 1.615,
+     "modelMedAbsLog": 0.1885,
+     "rawMedAbsLog": 0.3325
+    },
+    {
+     "user": "u13",
+     "bias": 1.681,
+     "modelMedAbsLog": 0.2562,
+     "rawMedAbsLog": 0.5878
+    },
+    {
+     "user": "u14",
+     "bias": 1.45,
+     "modelMedAbsLog": 0.2196,
+     "rawMedAbsLog": 0.4328
+    },
+    {
+     "user": "u15",
+     "bias": 1.471,
+     "modelMedAbsLog": 0.233,
+     "rawMedAbsLog": 0.4377
+    },
+    {
+     "user": "u16",
+     "bias": 1.771,
+     "modelMedAbsLog": 0.2281,
+     "rawMedAbsLog": 0.6
+    },
+    {
+     "user": "u17",
+     "bias": 1.44,
+     "modelMedAbsLog": 0.2434,
+     "rawMedAbsLog": 0.1873
+    },
+    {
+     "user": "u18",
+     "bias": 1.472,
+     "modelMedAbsLog": 0.344,
+     "rawMedAbsLog": 0.3733
+    },
+    {
+     "user": "u19",
+     "bias": 1.439,
+     "modelMedAbsLog": 0.2834,
+     "rawMedAbsLog": 0.4349
+    },
+    {
+     "user": "u20",
+     "bias": 1.782,
+     "modelMedAbsLog": 0.2231,
+     "rawMedAbsLog": 0.5966
+    }
+   ]
+  },
+  "v1": {
+   "n": 50,
+   "modelMedAbsLog": 0.3845,
+   "rawMedAbsLog": 0.2624,
+   "reduction": -0.4657
+  }
+ },
+ "planner": {
+  "constraints": {
+   "days": 500,
+   "plannedTasks": 2157,
+   "emptyDays": 79,
+   "violations": {
+    "overlap": 0,
+    "overdueNotFirst": 0,
+    "partsOutOfOrder": 0,
+    "noBreakAfter75": 0,
+    "heavyOver240": 0,
+    "beforeNow": 0
+   },
+   "totalViolatingDays": null,
+   "examples": []
+  },
+  "latencyMs": {
+   "runs": 200,
+   "median": 2,
+   "p95": 3,
+   "max": 4
+  }
+ },
+ "energy": {
+  "learnedDays": 15,
+  "corrWithTrue": {
+   "prior": 0.8272,
+   "learned": 0.918
+  },
+  "testFocusInTop4Hours": {
+   "prior": 0.4156,
+   "learned": 0.4156
+  },
+  "top4Hours": {
+   "prior": [
+    10,
+    11,
+    9,
+    12
+   ],
+   "learned": [
+    10,
+    9,
+    11,
+    12
+   ]
+  }
+ },
+ "ordering": {
+  "weightsBefore": {
+   "prio": 1,
+   "energy": 1.2,
+   "switch": 0.35,
+   "quick": 0.6,
+   "urgency": 1
+  },
+  "weightsAfter": {
+   "prio": 1.3141,
+   "energy": 1.0486,
+   "switch": 0.35,
+   "quick": 0.8393,
+   "urgency": 1
+  },
+  "firstBefore": "quick",
+  "firstAfter": "quick",
+  "peakHour": {
+   "firstBefore": "quick",
+   "firstAfter": "quick",
+   "weightsAfter": {
+    "prio": 1.3141,
+    "energy": 1.0073,
+    "switch": 0.35,
+    "quick": 0.8393,
+    "urgency": 1
+   }
+  }
+ },
+ "newVocabV2": {
+  "corrections": 20,
+  "testN": 40,
+  "accuracyBefore": 0.375,
+  "accuracyAfter": 1,
+  "macroF1After": 1,
+  "confusionAfter": {
+   "L": {
+    "L": 11,
+    "M": 0,
+    "H": 0
+   },
+   "M": {
+    "L": 0,
+    "M": 15,
+    "H": 0
+   },
+   "H": {
+    "L": 0,
+    "M": 0,
+    "H": 14
+   }
+  },
+  "ci95After": [
+   1,
+   1
+  ],
+  "errorsAfter": []
+ },
+ "effortV2": {
+  "macroF1": 0.8113,
+  "accuracy": 0.82,
+  "per": {
+   "L": {
+    "precision": 0.8431,
+    "recall": 0.86,
+    "f1": 0.8515,
+    "support": 50
+   },
+   "M": {
+    "precision": 0.8108,
+    "recall": 0.6,
+    "f1": 0.6897,
+    "support": 50
+   },
+   "H": {
+    "precision": 0.8065,
+    "recall": 1,
+    "f1": 0.8929,
+    "support": 50
+   }
+  },
+  "n": 150,
+  "ci95": [
+   0.7401,
+   0.8762
+  ],
+  "calibration": {
+   "brier": 0.3437,
+   "ece": 0.1395,
+   "table": [
+    {
+     "bin": "0.3–0.4",
+     "n": 20,
+     "meanConfidence": 0.3333,
+     "accuracy": 0.7
+    },
+    {
+     "bin": "0.4–0.5",
+     "n": 4,
+     "meanConfidence": 0.4136,
+     "accuracy": 0.5
+    },
+    {
+     "bin": "0.5–0.6",
+     "n": 8,
+     "meanConfidence": 0.5486,
+     "accuracy": 1
+    },
+    {
+     "bin": "0.7–0.8",
+     "n": 8,
+     "meanConfidence": 0.793,
+     "accuracy": 0.875
+    },
+    {
+     "bin": "0.8–0.9",
+     "n": 42,
+     "meanConfidence": 0.8135,
+     "accuracy": 0.7143
+    },
+    {
+     "bin": "0.9–1",
+     "n": 68,
+     "meanConfidence": 0.9825,
+     "accuracy": 0.9118
+    }
+   ]
+  }
+ }
+}

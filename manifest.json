@@ -1,0 +1,14 @@
+{
+  "name": "Keel — focus & time tracker",
+  "short_name": "Keel",
+  "description": "Focus timer, time tracking, app activity and a task planner that learns your day.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

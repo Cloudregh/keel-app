@@ -1,0 +1,1352 @@
+[
+ {
+  "id": "dur-001",
+  "label": "M",
+  "title": "Help Kofi carry furniture to the new flat",
+  "estimate": 30,
+  "actualMin": 33,
+  "doneAt": 1788250764563,
+  "split": "history"
+ },
+ {
+  "id": "dur-002",
+  "label": "M",
+  "title": "Interview a candidate for the support role",
+  "estimate": 60,
+  "actualMin": 67,
+  "doneAt": 1788302777349,
+  "split": "history"
+ },
+ {
+  "id": "dur-003",
+  "label": "H",
+  "title": "Lay out the Q1 product roadmap",
+  "estimate": 90,
+  "actualMin": 90,
+  "doneAt": 1788320412616,
+  "split": "history"
+ },
+ {
+  "id": "dur-004",
+  "label": "L",
+  "title": "Submit timesheet",
+  "estimate": 15,
+  "actualMin": 17,
+  "doneAt": 1788373337277,
+  "split": "history"
+ },
+ {
+  "id": "dur-005",
+  "label": "M",
+  "title": "Summarize customer feedback from last week",
+  "estimate": 90,
+  "actualMin": 119,
+  "doneAt": 1788407968595,
+  "split": "history"
+ },
+ {
+  "id": "dur-006",
+  "label": "H",
+  "title": "Draft the employee handbook",
+  "estimate": 240,
+  "actualMin": 413,
+  "doneAt": 1788422854686,
+  "split": "history"
+ },
+ {
+  "id": "dur-007",
+  "label": "M",
+  "title": "Translate the event flyer into Twi",
+  "estimate": 45,
+  "actualMin": 50,
+  "doneAt": 1788476926046,
+  "split": "history"
+ },
+ {
+  "id": "dur-008",
+  "label": "M",
+  "title": "Conduct the support engineer interview",
+  "estimate": 60,
+  "actualMin": 41,
+  "doneAt": 1788512689560,
+  "split": "history"
+ },
+ {
+  "id": "dur-009",
+  "label": "H",
+  "title": "Draft the employee handbook",
+  "estimate": 240,
+  "actualMin": 333,
+  "doneAt": 1788541616253,
+  "split": "history"
+ },
+ {
+  "id": "dur-010",
+  "label": "M",
+  "title": "Gym workout",
+  "estimate": 45,
+  "actualMin": 65,
+  "doneAt": 1788578436972,
+  "split": "history"
+ },
+ {
+  "id": "dur-011",
+  "label": "L",
+  "title": "Text Abena the address",
+  "estimate": 30,
+  "actualMin": 56,
+  "doneAt": 1788597514551,
+  "split": "history"
+ },
+ {
+  "id": "dur-012",
+  "label": "L",
+  "title": "Send invoice to Kofi",
+  "estimate": 20,
+  "actualMin": 23,
+  "doneAt": 1788646838498,
+  "split": "history"
+ },
+ {
+  "id": "dur-013",
+  "label": "M",
+  "title": "Help Kofi carry furniture to the new flat",
+  "estimate": 30,
+  "actualMin": 30,
+  "doneAt": 1788684728506,
+  "split": "history"
+ },
+ {
+  "id": "dur-014",
+  "label": "H",
+  "title": "Draft the Q3 performance report",
+  "estimate": 180,
+  "actualMin": 94,
+  "doneAt": 1788712453190,
+  "split": "history"
+ },
+ {
+  "id": "dur-015",
+  "label": "M",
+  "title": "Leg day at the gym",
+  "estimate": 30,
+  "actualMin": 48,
+  "doneAt": 1788748909500,
+  "split": "history"
+ },
+ {
+  "id": "dur-016",
+  "label": "M",
+  "title": "Tax discussion with the accountant",
+  "estimate": 45,
+  "actualMin": 51,
+  "doneAt": 1788772832172,
+  "split": "history"
+ },
+ {
+  "id": "dur-017",
+  "label": "L",
+  "title": "Put the recycling bins out",
+  "estimate": 20,
+  "actualMin": 23,
+  "doneAt": 1788803167243,
+  "split": "history"
+ },
+ {
+  "id": "dur-018",
+  "label": "M",
+  "title": "Walk the new hire through our tools",
+  "estimate": 60,
+  "actualMin": 111,
+  "doneAt": 1788857377365,
+  "split": "history"
+ },
+ {
+  "id": "dur-019",
+  "label": "L",
+  "title": "Take out the recycling",
+  "estimate": 10,
+  "actualMin": 13,
+  "doneAt": 1788871872254,
+  "split": "history"
+ },
+ {
+  "id": "dur-020",
+  "label": "M",
+  "title": "Check the newsletter for typos before sending",
+  "estimate": 45,
+  "actualMin": 77,
+  "doneAt": 1788908633318,
+  "split": "history"
+ },
+ {
+  "id": "dur-021",
+  "label": "M",
+  "title": "Leg day at the gym",
+  "estimate": 30,
+  "actualMin": 39,
+  "doneAt": 1788960079277,
+  "split": "history"
+ },
+ {
+  "id": "dur-022",
+  "label": "H",
+  "title": "Lay out the Q1 product roadmap",
+  "estimate": 90,
+  "actualMin": 51,
+  "doneAt": 1788988801478,
+  "split": "history"
+ },
+ {
+  "id": "dur-023",
+  "label": "M",
+  "title": "Help Kofi move furniture",
+  "estimate": 30,
+  "actualMin": 33,
+  "doneAt": 1789021528773,
+  "split": "history"
+ },
+ {
+  "id": "dur-024",
+  "label": "H",
+  "title": "Code the new product landing page",
+  "estimate": 180,
+  "actualMin": 369,
+  "doneAt": 1789060234960,
+  "split": "history"
+ },
+ {
+  "id": "dur-025",
+  "label": "L",
+  "title": "Text Abena the address",
+  "estimate": 30,
+  "actualMin": 37,
+  "doneAt": 1789098684793,
+  "split": "history"
+ },
+ {
+  "id": "dur-026",
+  "label": "M",
+  "title": "Leg day at the gym",
+  "estimate": 30,
+  "actualMin": 64,
+  "doneAt": 1789121675957,
+  "split": "history"
+ },
+ {
+  "id": "dur-027",
+  "label": "L",
+  "title": "Clear the newsletters out of the inbox",
+  "estimate": 5,
+  "actualMin": 10,
+  "doneAt": 1789164524005,
+  "split": "history"
+ },
+ {
+  "id": "dur-028",
+  "label": "L",
+  "title": "Nudge Kwame about Friday's deadline",
+  "estimate": 10,
+  "actualMin": 14,
+  "doneAt": 1789183182953,
+  "split": "history"
+ },
+ {
+  "id": "dur-029",
+  "label": "L",
+  "title": "Request a copy of my payslip from HR",
+  "estimate": 30,
+  "actualMin": 21,
+  "doneAt": 1789234998418,
+  "split": "history"
+ },
+ {
+  "id": "dur-030",
+  "label": "M",
+  "title": "Prepare agenda for Monday meeting",
+  "estimate": 45,
+  "actualMin": 49,
+  "doneAt": 1789261713393,
+  "split": "history"
+ },
+ {
+  "id": "dur-031",
+  "label": "L",
+  "title": "Ask HR for a payslip copy",
+  "estimate": 5,
+  "actualMin": 4,
+  "doneAt": 1789290813932,
+  "split": "history"
+ },
+ {
+  "id": "dur-032",
+  "label": "H",
+  "title": "Put together the fundraising deck",
+  "estimate": 240,
+  "actualMin": 517,
+  "doneAt": 1789327905185,
+  "split": "history"
+ },
+ {
+  "id": "dur-033",
+  "label": "H",
+  "title": "Draft chapter 12 of the novel",
+  "estimate": 240,
+  "actualMin": 548,
+  "doneAt": 1789362443193,
+  "split": "history"
+ },
+ {
+  "id": "dur-034",
+  "label": "H",
+  "title": "Draft the Q3 performance report",
+  "estimate": 180,
+  "actualMin": 361,
+  "doneAt": 1789404774752,
+  "split": "history"
+ },
+ {
+  "id": "dur-035",
+  "label": "M",
+  "title": "Prepare agenda for Monday meeting",
+  "estimate": 45,
+  "actualMin": 39,
+  "doneAt": 1789429151886,
+  "split": "history"
+ },
+ {
+  "id": "dur-036",
+  "label": "L",
+  "title": "Remind Kwame about the deadline",
+  "estimate": 15,
+  "actualMin": 17,
+  "doneAt": 1789463539166,
+  "split": "history"
+ },
+ {
+  "id": "dur-037",
+  "label": "M",
+  "title": "Write up notes from the planning meeting",
+  "estimate": 60,
+  "actualMin": 115,
+  "doneAt": 1789507349233,
+  "split": "history"
+ },
+ {
+  "id": "dur-038",
+  "label": "L",
+  "title": "Place the weekly grocery order",
+  "estimate": 10,
+  "actualMin": 16,
+  "doneAt": 1789541421678,
+  "split": "history"
+ },
+ {
+  "id": "dur-039",
+  "label": "L",
+  "title": "Archive newsletter emails",
+  "estimate": 15,
+  "actualMin": 11,
+  "doneAt": 1789573502830,
+  "split": "history"
+ },
+ {
+  "id": "dur-040",
+  "label": "M",
+  "title": "Proofread the newsletter",
+  "estimate": 45,
+  "actualMin": 63,
+  "doneAt": 1789600854749,
+  "split": "history"
+ },
+ {
+  "id": "dur-041",
+  "label": "M",
+  "title": "Leg day at the gym",
+  "estimate": 30,
+  "actualMin": 40,
+  "doneAt": 1789650904520,
+  "split": "history"
+ },
+ {
+  "id": "dur-042",
+  "label": "L",
+  "title": "Place the weekly grocery order",
+  "estimate": 10,
+  "actualMin": 8,
+  "doneAt": 1789686129932,
+  "split": "history"
+ },
+ {
+  "id": "dur-043",
+  "label": "H",
+  "title": "Write a long-form article on remote work",
+  "estimate": 240,
+  "actualMin": 251,
+  "doneAt": 1789715158157,
+  "split": "history"
+ },
+ {
+  "id": "dur-044",
+  "label": "M",
+  "title": "Summarize customer feedback from last week",
+  "estimate": 90,
+  "actualMin": 151,
+  "doneAt": 1789740874797,
+  "split": "history"
+ },
+ {
+  "id": "dur-045",
+  "label": "M",
+  "title": "Guitar practice session",
+  "estimate": 60,
+  "actualMin": 62,
+  "doneAt": 1789772197267,
+  "split": "history"
+ },
+ {
+  "id": "dur-046",
+  "label": "M",
+  "title": "Gym workout",
+  "estimate": 45,
+  "actualMin": 125,
+  "doneAt": 1789821795628,
+  "split": "history"
+ },
+ {
+  "id": "dur-047",
+  "label": "M",
+  "title": "Call with the accountant about taxes",
+  "estimate": 30,
+  "actualMin": 45,
+  "doneAt": 1789858513699,
+  "split": "history"
+ },
+ {
+  "id": "dur-048",
+  "label": "H",
+  "title": "Translate the whole product manual into French",
+  "estimate": 180,
+  "actualMin": 234,
+  "doneAt": 1789880384174,
+  "split": "history"
+ },
+ {
+  "id": "dur-049",
+  "label": "M",
+  "title": "Walk the new hire through our tools",
+  "estimate": 60,
+  "actualMin": 120,
+  "doneAt": 1789919821945,
+  "split": "history"
+ },
+ {
+  "id": "dur-050",
+  "label": "L",
+  "title": "Order groceries",
+  "estimate": 5,
+  "actualMin": 7,
+  "doneAt": 1789946074405,
+  "split": "history"
+ },
+ {
+  "id": "dur-051",
+  "label": "M",
+  "title": "Proofread the newsletter",
+  "estimate": 45,
+  "actualMin": 124,
+  "doneAt": 1789984283689,
+  "split": "history"
+ },
+ {
+  "id": "dur-052",
+  "label": "M",
+  "title": "Prepare agenda for Monday meeting",
+  "estimate": 45,
+  "actualMin": 28,
+  "doneAt": 1790028585228,
+  "split": "history"
+ },
+ {
+  "id": "dur-053",
+  "label": "L",
+  "title": "Clear the newsletters out of the inbox",
+  "estimate": 5,
+  "actualMin": 5,
+  "doneAt": 1790048622654,
+  "split": "history"
+ },
+ {
+  "id": "dur-054",
+  "label": "L",
+  "title": "Buy printer ink",
+  "estimate": 5,
+  "actualMin": 5,
+  "doneAt": 1790089021310,
+  "split": "history"
+ },
+ {
+  "id": "dur-055",
+  "label": "M",
+  "title": "Gym workout",
+  "estimate": 45,
+  "actualMin": 82,
+  "doneAt": 1790117161984,
+  "split": "history"
+ },
+ {
+  "id": "dur-056",
+  "label": "M",
+  "title": "Summarize customer feedback from last week",
+  "estimate": 90,
+  "actualMin": 116,
+  "doneAt": 1790155905006,
+  "split": "history"
+ },
+ {
+  "id": "dur-057",
+  "label": "L",
+  "title": "Order groceries",
+  "estimate": 5,
+  "actualMin": 6,
+  "doneAt": 1790203231022,
+  "split": "history"
+ },
+ {
+  "id": "dur-058",
+  "label": "M",
+  "title": "Translate the event flyer into Twi",
+  "estimate": 45,
+  "actualMin": 69,
+  "doneAt": 1790238214493,
+  "split": "history"
+ },
+ {
+  "id": "dur-059",
+  "label": "L",
+  "title": "Add public holidays to calendar",
+  "estimate": 10,
+  "actualMin": 7,
+  "doneAt": 1790259577482,
+  "split": "history"
+ },
+ {
+  "id": "dur-060",
+  "label": "M",
+  "title": "Conduct the support engineer interview",
+  "estimate": 60,
+  "actualMin": 75,
+  "doneAt": 1790310158637,
+  "split": "history"
+ },
+ {
+  "id": "dur-061",
+  "label": "H",
+  "title": "Launch the email campaign",
+  "estimate": 240,
+  "actualMin": 385,
+  "doneAt": 1790324307234,
+  "split": "history"
+ },
+ {
+  "id": "dur-062",
+  "label": "L",
+  "title": "Submit timesheet",
+  "estimate": 15,
+  "actualMin": 20,
+  "doneAt": 1790370081906,
+  "split": "history"
+ },
+ {
+  "id": "dur-063",
+  "label": "H",
+  "title": "Translate the whole product manual into French",
+  "estimate": 180,
+  "actualMin": 464,
+  "doneAt": 1790404083984,
+  "split": "history"
+ },
+ {
+  "id": "dur-064",
+  "label": "M",
+  "title": "Summarize customer feedback from last week",
+  "estimate": 90,
+  "actualMin": 85,
+  "doneAt": 1790436921759,
+  "split": "history"
+ },
+ {
+  "id": "dur-065",
+  "label": "L",
+  "title": "Place the weekly grocery order",
+  "estimate": 10,
+  "actualMin": 14,
+  "doneAt": 1790473388091,
+  "split": "history"
+ },
+ {
+  "id": "dur-066",
+  "label": "M",
+  "title": "Summarize customer feedback from last week",
+  "estimate": 90,
+  "actualMin": 190,
+  "doneAt": 1790499449765,
+  "split": "history"
+ },
+ {
+  "id": "dur-067",
+  "label": "M",
+  "title": "Conduct the support engineer interview",
+  "estimate": 60,
+  "actualMin": 117,
+  "doneAt": 1790539983113,
+  "split": "history"
+ },
+ {
+  "id": "dur-068",
+  "label": "M",
+  "title": "Wash the car",
+  "estimate": 60,
+  "actualMin": 116,
+  "doneAt": 1790583350499,
+  "split": "history"
+ },
+ {
+  "id": "dur-069",
+  "label": "L",
+  "title": "Send invoice to Kofi",
+  "estimate": 20,
+  "actualMin": 22,
+  "doneAt": 1790607219183,
+  "split": "history"
+ },
+ {
+  "id": "dur-070",
+  "label": "H",
+  "title": "Draft chapter 12 of the novel",
+  "estimate": 240,
+  "actualMin": 300,
+  "doneAt": 1790640515945,
+  "split": "history"
+ },
+ {
+  "id": "dur-071",
+  "label": "H",
+  "title": "Write a long-form article on remote work",
+  "estimate": 240,
+  "actualMin": 391,
+  "doneAt": 1790674817835,
+  "split": "history"
+ },
+ {
+  "id": "dur-072",
+  "label": "M",
+  "title": "Proofread the newsletter",
+  "estimate": 45,
+  "actualMin": 52,
+  "doneAt": 1790703754085,
+  "split": "history"
+ },
+ {
+  "id": "dur-073",
+  "label": "L",
+  "title": "Send a follow-up note about the application",
+  "estimate": 10,
+  "actualMin": 5,
+  "doneAt": 1790756758377,
+  "split": "history"
+ },
+ {
+  "id": "dur-074",
+  "label": "H",
+  "title": "Write the novel's next chapter",
+  "estimate": 120,
+  "actualMin": 112,
+  "doneAt": 1790794059028,
+  "split": "history"
+ },
+ {
+  "id": "dur-075",
+  "label": "H",
+  "title": "Lay out the Q1 product roadmap",
+  "estimate": 90,
+  "actualMin": 103,
+  "doneAt": 1790811018693,
+  "split": "history"
+ },
+ {
+  "id": "dur-076",
+  "label": "H",
+  "title": "Work through a TypeScript fundamentals course",
+  "estimate": 120,
+  "actualMin": 196,
+  "doneAt": 1790843737799,
+  "split": "history"
+ },
+ {
+  "id": "dur-077",
+  "label": "L",
+  "title": "Send in this week's timesheet",
+  "estimate": 10,
+  "actualMin": 14,
+  "doneAt": 1790878015743,
+  "split": "history"
+ },
+ {
+  "id": "dur-078",
+  "label": "M",
+  "title": "Gym workout",
+  "estimate": 45,
+  "actualMin": 84,
+  "doneAt": 1790913210820,
+  "split": "history"
+ },
+ {
+  "id": "dur-079",
+  "label": "L",
+  "title": "Send a follow-up note about the application",
+  "estimate": 10,
+  "actualMin": 15,
+  "doneAt": 1790956326373,
+  "split": "history"
+ },
+ {
+  "id": "dur-080",
+  "label": "M",
+  "title": "Interview a candidate for the support role",
+  "estimate": 60,
+  "actualMin": 78,
+  "doneAt": 1790988547025,
+  "split": "history"
+ },
+ {
+  "id": "dur-081",
+  "label": "H",
+  "title": "Work through a TypeScript fundamentals course",
+  "estimate": 120,
+  "actualMin": 198,
+  "doneAt": 1791032079254,
+  "split": "history"
+ },
+ {
+  "id": "dur-082",
+  "label": "M",
+  "title": "Write up notes from the planning meeting",
+  "estimate": 60,
+  "actualMin": 109,
+  "doneAt": 1791066160907,
+  "split": "history"
+ },
+ {
+  "id": "dur-083",
+  "label": "M",
+  "title": "Wash the car",
+  "estimate": 60,
+  "actualMin": 84,
+  "doneAt": 1791099301702,
+  "split": "history"
+ },
+ {
+  "id": "dur-084",
+  "label": "L",
+  "title": "Text Abena the address",
+  "estimate": 30,
+  "actualMin": 25,
+  "doneAt": 1791133573615,
+  "split": "history"
+ },
+ {
+  "id": "dur-085",
+  "label": "M",
+  "title": "Listen to the podcast episode for book club",
+  "estimate": 60,
+  "actualMin": 64,
+  "doneAt": 1791159833978,
+  "split": "history"
+ },
+ {
+  "id": "dur-086",
+  "label": "L",
+  "title": "Archive newsletter emails",
+  "estimate": 15,
+  "actualMin": 40,
+  "doneAt": 1791202394422,
+  "split": "history"
+ },
+ {
+  "id": "dur-087",
+  "label": "L",
+  "title": "Remind Kwame about the deadline",
+  "estimate": 15,
+  "actualMin": 12,
+  "doneAt": 1791241226220,
+  "split": "history"
+ },
+ {
+  "id": "dur-088",
+  "label": "M",
+  "title": "Translate the flyer into Twi",
+  "estimate": 60,
+  "actualMin": 63,
+  "doneAt": 1791257823353,
+  "split": "history"
+ },
+ {
+  "id": "dur-089",
+  "label": "H",
+  "title": "Draft the employee handbook",
+  "estimate": 240,
+  "actualMin": 331,
+  "doneAt": 1791296323049,
+  "split": "history"
+ },
+ {
+  "id": "dur-090",
+  "label": "M",
+  "title": "Onboarding session for new hire",
+  "estimate": 30,
+  "actualMin": 28,
+  "doneAt": 1791335328677,
+  "split": "history"
+ },
+ {
+  "id": "dur-091",
+  "label": "L",
+  "title": "Plug in laptop and headphones to charge",
+  "estimate": 10,
+  "actualMin": 17,
+  "doneAt": 1791362509897,
+  "split": "history"
+ },
+ {
+  "id": "dur-092",
+  "label": "H",
+  "title": "Translate the whole product manual into French",
+  "estimate": 180,
+  "actualMin": 279,
+  "doneAt": 1791413409587,
+  "split": "history"
+ },
+ {
+  "id": "dur-093",
+  "label": "L",
+  "title": "Place the weekly grocery order",
+  "estimate": 10,
+  "actualMin": 9,
+  "doneAt": 1791435488519,
+  "split": "history"
+ },
+ {
+  "id": "dur-094",
+  "label": "L",
+  "title": "Place the weekly grocery order",
+  "estimate": 10,
+  "actualMin": 10,
+  "doneAt": 1791477269958,
+  "split": "history"
+ },
+ {
+  "id": "dur-095",
+  "label": "M",
+  "title": "Guitar practice session",
+  "estimate": 60,
+  "actualMin": 139,
+  "doneAt": 1791516442679,
+  "split": "history"
+ },
+ {
+  "id": "dur-096",
+  "label": "H",
+  "title": "Lay out the Q1 product roadmap",
+  "estimate": 90,
+  "actualMin": 140,
+  "doneAt": 1791550850253,
+  "split": "history"
+ },
+ {
+  "id": "dur-097",
+  "label": "H",
+  "title": "Write a long-form article on remote work",
+  "estimate": 240,
+  "actualMin": 513,
+  "doneAt": 1791585505275,
+  "split": "history"
+ },
+ {
+  "id": "dur-098",
+  "label": "M",
+  "title": "Call with the accountant about taxes",
+  "estimate": 30,
+  "actualMin": 17,
+  "doneAt": 1791606020781,
+  "split": "history"
+ },
+ {
+  "id": "dur-099",
+  "label": "M",
+  "title": "Wash the car",
+  "estimate": 60,
+  "actualMin": 123,
+  "doneAt": 1791648935652,
+  "split": "history"
+ },
+ {
+  "id": "dur-100",
+  "label": "L",
+  "title": "Nudge Kwame about Friday's deadline",
+  "estimate": 10,
+  "actualMin": 7,
+  "doneAt": 1791692519884,
+  "split": "history"
+ },
+ {
+  "id": "dur-101",
+  "label": "L",
+  "title": "Ask HR for a payslip copy",
+  "estimate": 5,
+  "actualMin": 8,
+  "doneAt": 1791715314938,
+  "split": "test"
+ },
+ {
+  "id": "dur-102",
+  "label": "L",
+  "title": "Add public holidays to calendar",
+  "estimate": 10,
+  "actualMin": 15,
+  "doneAt": 1791749637295,
+  "split": "test"
+ },
+ {
+  "id": "dur-103",
+  "label": "L",
+  "title": "Place the weekly grocery order",
+  "estimate": 10,
+  "actualMin": 13,
+  "doneAt": 1791775354514,
+  "split": "test"
+ },
+ {
+  "id": "dur-104",
+  "label": "M",
+  "title": "Interview a candidate for the support role",
+  "estimate": 60,
+  "actualMin": 125,
+  "doneAt": 1791823659638,
+  "split": "test"
+ },
+ {
+  "id": "dur-105",
+  "label": "M",
+  "title": "Help Kofi carry furniture to the new flat",
+  "estimate": 30,
+  "actualMin": 65,
+  "doneAt": 1791854823399,
+  "split": "test"
+ },
+ {
+  "id": "dur-106",
+  "label": "H",
+  "title": "Build the landing page",
+  "estimate": 120,
+  "actualMin": 101,
+  "doneAt": 1791889081847,
+  "split": "test"
+ },
+ {
+  "id": "dur-107",
+  "label": "M",
+  "title": "Go over this month's spending",
+  "estimate": 30,
+  "actualMin": 31,
+  "doneAt": 1791917317587,
+  "split": "test"
+ },
+ {
+  "id": "dur-108",
+  "label": "M",
+  "title": "Summarize customer feedback from last week",
+  "estimate": 90,
+  "actualMin": 90,
+  "doneAt": 1791963800885,
+  "split": "test"
+ },
+ {
+  "id": "dur-109",
+  "label": "M",
+  "title": "Review monthly budget",
+  "estimate": 30,
+  "actualMin": 59,
+  "doneAt": 1791992429537,
+  "split": "test"
+ },
+ {
+  "id": "dur-110",
+  "label": "M",
+  "title": "Leg day at the gym",
+  "estimate": 30,
+  "actualMin": 37,
+  "doneAt": 1792032519737,
+  "split": "test"
+ },
+ {
+  "id": "dur-111",
+  "label": "M",
+  "title": "Wash the car",
+  "estimate": 60,
+  "actualMin": 53,
+  "doneAt": 1792063528145,
+  "split": "test"
+ },
+ {
+  "id": "dur-112",
+  "label": "H",
+  "title": "Refactor the billing module",
+  "estimate": 180,
+  "actualMin": 294,
+  "doneAt": 1792089240216,
+  "split": "test"
+ },
+ {
+  "id": "dur-113",
+  "label": "H",
+  "title": "Build and launch the November email campaign",
+  "estimate": 180,
+  "actualMin": 170,
+  "doneAt": 1792128325444,
+  "split": "test"
+ },
+ {
+  "id": "dur-114",
+  "label": "H",
+  "title": "Plan next year's marketing strategy",
+  "estimate": 120,
+  "actualMin": 135,
+  "doneAt": 1792164656044,
+  "split": "test"
+ },
+ {
+  "id": "dur-115",
+  "label": "L",
+  "title": "Remind Kwame about the deadline",
+  "estimate": 15,
+  "actualMin": 26,
+  "doneAt": 1792202002848,
+  "split": "test"
+ },
+ {
+  "id": "dur-116",
+  "label": "H",
+  "title": "Write a long-form article on remote work",
+  "estimate": 240,
+  "actualMin": 257,
+  "doneAt": 1792226731698,
+  "split": "test"
+ },
+ {
+  "id": "dur-117",
+  "label": "H",
+  "title": "Write the policy brief on solar subsidies",
+  "estimate": 240,
+  "actualMin": 660,
+  "doneAt": 1792264590849,
+  "split": "test"
+ },
+ {
+  "id": "dur-118",
+  "label": "L",
+  "title": "Put next year's public holidays in my calendar",
+  "estimate": 10,
+  "actualMin": 9,
+  "doneAt": 1792314427872,
+  "split": "test"
+ },
+ {
+  "id": "dur-119",
+  "label": "H",
+  "title": "Lay out the Q1 product roadmap",
+  "estimate": 90,
+  "actualMin": 63,
+  "doneAt": 1792331103890,
+  "split": "test"
+ },
+ {
+  "id": "dur-120",
+  "label": "H",
+  "title": "Translate the whole product manual into French",
+  "estimate": 180,
+  "actualMin": 326,
+  "doneAt": 1792364795301,
+  "split": "test"
+ },
+ {
+  "id": "dur-121",
+  "label": "L",
+  "title": "Place the weekly grocery order",
+  "estimate": 10,
+  "actualMin": 13,
+  "doneAt": 1792400432322,
+  "split": "test"
+ },
+ {
+  "id": "dur-122",
+  "label": "H",
+  "title": "Draft the employee handbook",
+  "estimate": 240,
+  "actualMin": 330,
+  "doneAt": 1792446243855,
+  "split": "test"
+ },
+ {
+  "id": "dur-123",
+  "label": "M",
+  "title": "Gym workout",
+  "estimate": 45,
+  "actualMin": 32,
+  "doneAt": 1792483900718,
+  "split": "test"
+ },
+ {
+  "id": "dur-124",
+  "label": "L",
+  "title": "Buy printer ink",
+  "estimate": 5,
+  "actualMin": 4,
+  "doneAt": 1792510891739,
+  "split": "test"
+ },
+ {
+  "id": "dur-125",
+  "label": "H",
+  "title": "Work through a TypeScript fundamentals course",
+  "estimate": 120,
+  "actualMin": 428,
+  "doneAt": 1792546535805,
+  "split": "test"
+ },
+ {
+  "id": "dur-126",
+  "label": "H",
+  "title": "Write a long-form article on remote work",
+  "estimate": 240,
+  "actualMin": 193,
+  "doneAt": 1792575733514,
+  "split": "test"
+ },
+ {
+  "id": "dur-127",
+  "label": "L",
+  "title": "Put the recycling bins out",
+  "estimate": 20,
+  "actualMin": 24,
+  "doneAt": 1792620393648,
+  "split": "test"
+ },
+ {
+  "id": "dur-128",
+  "label": "M",
+  "title": "Prepare agenda for Monday meeting",
+  "estimate": 45,
+  "actualMin": 48,
+  "doneAt": 1792659874086,
+  "split": "test"
+ },
+ {
+  "id": "dur-129",
+  "label": "L",
+  "title": "Submit timesheet",
+  "estimate": 15,
+  "actualMin": 18,
+  "doneAt": 1792680679730,
+  "split": "test"
+ },
+ {
+  "id": "dur-130",
+  "label": "H",
+  "title": "Build and launch the November email campaign",
+  "estimate": 180,
+  "actualMin": 223,
+  "doneAt": 1792714504553,
+  "split": "test"
+ },
+ {
+  "id": "dur-131",
+  "label": "M",
+  "title": "Translate the event flyer into Twi",
+  "estimate": 45,
+  "actualMin": 33,
+  "doneAt": 1792756246339,
+  "split": "test"
+ },
+ {
+  "id": "dur-132",
+  "label": "L",
+  "title": "Send Abena the venue address",
+  "estimate": 15,
+  "actualMin": 31,
+  "doneAt": 1792790719667,
+  "split": "test"
+ },
+ {
+  "id": "dur-133",
+  "label": "H",
+  "title": "Analyze the A/B test results in depth",
+  "estimate": 180,
+  "actualMin": 372,
+  "doneAt": 1792817549881,
+  "split": "test"
+ },
+ {
+  "id": "dur-134",
+  "label": "H",
+  "title": "Draft chapter 12 of the novel",
+  "estimate": 240,
+  "actualMin": 465,
+  "doneAt": 1792855235865,
+  "split": "test"
+ },
+ {
+  "id": "dur-135",
+  "label": "M",
+  "title": "Prepare agenda for Monday meeting",
+  "estimate": 45,
+  "actualMin": 71,
+  "doneAt": 1792886910451,
+  "split": "test"
+ },
+ {
+  "id": "dur-136",
+  "label": "L",
+  "title": "Ring mum to say hi",
+  "estimate": 10,
+  "actualMin": 8,
+  "doneAt": 1792918468563,
+  "split": "test"
+ },
+ {
+  "id": "dur-137",
+  "label": "M",
+  "title": "Listen to the podcast episode for book club",
+  "estimate": 60,
+  "actualMin": 85,
+  "doneAt": 1792958692662,
+  "split": "test"
+ },
+ {
+  "id": "dur-138",
+  "label": "H",
+  "title": "Build and launch the November email campaign",
+  "estimate": 180,
+  "actualMin": 206,
+  "doneAt": 1792988503993,
+  "split": "test"
+ },
+ {
+  "id": "dur-139",
+  "label": "M",
+  "title": "Write up notes from the planning meeting",
+  "estimate": 60,
+  "actualMin": 74,
+  "doneAt": 1793021346804,
+  "split": "test"
+ },
+ {
+  "id": "dur-140",
+  "label": "H",
+  "title": "Write the first version of the staff handbook",
+  "estimate": 180,
+  "actualMin": 240,
+  "doneAt": 1793064863881,
+  "split": "test"
+ },
+ {
+  "id": "dur-141",
+  "label": "M",
+  "title": "Translate the flyer into Twi",
+  "estimate": 60,
+  "actualMin": 74,
+  "doneAt": 1793096453761,
+  "split": "test"
+ },
+ {
+  "id": "dur-142",
+  "label": "M",
+  "title": "Proofread the newsletter",
+  "estimate": 45,
+  "actualMin": 99,
+  "doneAt": 1793124203525,
+  "split": "test"
+ },
+ {
+  "id": "dur-143",
+  "label": "M",
+  "title": "Wash the car",
+  "estimate": 60,
+  "actualMin": 71,
+  "doneAt": 1793177228246,
+  "split": "test"
+ },
+ {
+  "id": "dur-144",
+  "label": "M",
+  "title": "Leg day at the gym",
+  "estimate": 30,
+  "actualMin": 29,
+  "doneAt": 1793206937747,
+  "split": "test"
+ },
+ {
+  "id": "dur-145",
+  "label": "M",
+  "title": "Review monthly budget",
+  "estimate": 30,
+  "actualMin": 60,
+  "doneAt": 1793236321843,
+  "split": "test"
+ },
+ {
+  "id": "dur-146",
+  "label": "H",
+  "title": "Draft chapter 12 of the novel",
+  "estimate": 240,
+  "actualMin": 350,
+  "doneAt": 1793272414888,
+  "split": "test"
+ },
+ {
+  "id": "dur-147",
+  "label": "H",
+  "title": "Write the novel's next chapter",
+  "estimate": 120,
+  "actualMin": 124,
+  "doneAt": 1793307800073,
+  "split": "test"
+ },
+ {
+  "id": "dur-148",
+  "label": "H",
+  "title": "Prepare the investor pitch deck",
+  "estimate": 90,
+  "actualMin": 89,
+  "doneAt": 1793334960743,
+  "split": "test"
+ },
+ {
+  "id": "dur-149",
+  "label": "M",
+  "title": "Read the next chapter of the UX book",
+  "estimate": 60,
+  "actualMin": 85,
+  "doneAt": 1793366570696,
+  "split": "test"
+ },
+ {
+  "id": "dur-150",
+  "label": "L",
+  "title": "Archive newsletter emails",
+  "estimate": 15,
+  "actualMin": 16,
+  "doneAt": 1793408877388,
+  "split": "test"
+ }
+]

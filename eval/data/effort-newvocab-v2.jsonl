@@ -1,0 +1,60 @@
+{"id":"nv-l01","label":"L","title":"Feed the chickens","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-l02","label":"L","title":"Collect eggs from the coop","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-l03","label":"L","title":"Top up the chickens' water","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-l04","label":"L","title":"Spray the tomato seedlings","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-l05","label":"L","title":"Count the egg trays","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-l06","label":"L","title":"Feed the goats","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-l07","label":"L","title":"Collect eggs from the second coop","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-l08","label":"L","title":"Spray the pepper seedlings","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-l09","label":"L","title":"Refill the goats' water trough","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-l10","label":"L","title":"Lock the coop for the night","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-l11","label":"L","title":"Count the crates at the stall","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-l12","label":"L","title":"Note today's egg tally","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-l13","label":"L","title":"Feed the ducks","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-l14","label":"L","title":"Spray the garden beds","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-l15","label":"L","title":"Collect eggs and wipe the trays","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-l16","label":"L","title":"Top up the ducks' water","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-l17","label":"L","title":"Lock the storeroom","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-l18","label":"L","title":"Count the feed sacks","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-l19","label":"L","title":"Note the stall takings","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-l20","label":"L","title":"Refill the drinkers in the coop","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m01","label":"M","title":"Weed the cassava plot","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-m02","label":"M","title":"Prune the cocoa trees on the east plot","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-m03","label":"M","title":"Mend the coop fencing","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-m04","label":"M","title":"Restock the stall with yams","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-m05","label":"M","title":"Weed the maize plot","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m06","label":"M","title":"Prune the cocoa trees near the river","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m07","label":"M","title":"Mend the goat pen gate","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m08","label":"M","title":"Restock the stall with plantain","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m09","label":"M","title":"Grade and sort the eggs for market","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-m10","label":"M","title":"Weed the pepper plot","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m11","label":"M","title":"Mend the irrigation hose","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m12","label":"M","title":"Restock the feed store","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m13","label":"M","title":"Prune the orange trees","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m14","label":"M","title":"Grade the cocoa beans after drying","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m15","label":"M","title":"Weed around the young cocoa seedlings","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m16","label":"M","title":"Mend the stall awning","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m17","label":"M","title":"Restock the chicken feed","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m18","label":"M","title":"Grade the plantain bunches","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m19","label":"M","title":"Prune the mango trees","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-m20","label":"M","title":"Mend the storeroom door","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h01","label":"H","title":"Harvest the cocoa on the east plot","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-h02","label":"H","title":"Clear the bush for the new plot","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-h03","label":"H","title":"Construct new drying racks","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-h04","label":"H","title":"Ferment and turn the cocoa beans","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-h05","label":"H","title":"Harvest the cassava field","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-h06","label":"H","title":"Clear the overgrown back plot","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h07","label":"H","title":"Construct the second chicken coop","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h08","label":"H","title":"Ferment the new batch of cocoa","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h09","label":"H","title":"Harvest the maize field","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h10","label":"H","title":"Clear land for the plantain suckers","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h11","label":"H","title":"Construct a goat shelter","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h12","label":"H","title":"Harvest the cocoa near the river","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h13","label":"H","title":"Dig the new irrigation trench","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"corrections"}
+{"id":"nv-h14","label":"H","title":"Construct raised beds for the nursery","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h15","label":"H","title":"Clear and burn the field debris","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h16","label":"H","title":"Dig a trench for the borehole pump","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h17","label":"H","title":"Harvest and bag the groundnuts","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h18","label":"H","title":"Ferment and dry the late cocoa","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h19","label":"H","title":"Dig foundations for the storeroom","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}
+{"id":"nv-h20","label":"H","title":"Construct the market stall shelves","notes":"","estimate":0,"priority":1,"projectId":null,"subtasks":[],"split":"test"}

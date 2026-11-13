@@ -1,0 +1,138 @@
+{
+ "runId": "run-20261112234548",
+ "rubric": "coach-rubric-v2",
+ "promptVersion": "coach-v2",
+ "stopClaims": {
+  "claims": 121,
+  "wrong": []
+ },
+ "pctClaims": {
+  "claims": 42,
+  "wrong": []
+ },
+ "projectionClaims": {
+  "claims": 4,
+  "wrong": [
+   "c10#2 \"past your focus goal (190 + 45 = 235 of 240)\"",
+   "c45#2 \"reach your focus goal (180 + 45 = 225 of 240)\""
+  ],
+  "loose": [
+   "c46#2 \"past your focus goal (210 + 30 = 240 of 240)\""
+  ]
+ },
+ "literalTaskRulePassRate": 0.8866666666666667,
+ "evalSet": "coach-eval-v2",
+ "n": 150,
+ "passRate": 0.9933333333333333,
+ "ungroundedRate": 0.03333333333333333,
+ "strictUngroundedRate": 0.2733333333333333,
+ "byCheck": {
+  "nonEmpty": 0,
+  "noRefusal": 0,
+  "plainText": 0,
+  "length": 0,
+  "paragraphs": 0,
+  "english": 0,
+  "citesNumber": 0,
+  "namesDueTask": 1,
+  "emptyDayAck": 0
+ },
+ "byCat": {
+  "typical": [
+   42,
+   42
+  ],
+  "empty": [
+   12,
+   12
+  ],
+  "low": [
+   12,
+   12
+  ],
+  "long-stretch": [
+   12,
+   12
+  ],
+  "many-switch": [
+   12,
+   12
+  ],
+  "overdue": [
+   15,
+   15
+  ],
+  "multilingual": [
+   14,
+   15
+  ],
+  "edge": [
+   18,
+   18
+  ],
+  "ambiguous": [
+   12,
+   12
+  ]
+ },
+ "inconsistent": [
+  "c38 (2/3)"
+ ],
+ "alwaysFail": [],
+ "failures": [
+  {
+   "case": "c19",
+   "rep": 3,
+   "failed": [],
+   "ungrounded": [
+    "14 minutes"
+   ],
+   "text": "Good start getting a session going: you logged a 6-minute focus block on \"Check email\" at 10:40am, which is the first step toward your 240-minute focus goal.\n\nHonestly, there's very little tracked so far, and with a focus score of 41 and 4 tab switches in that short stretch, your attention was fairly scattered. Tracking also stopped at 10:46am, so the last 14 minutes are unaccounted for.\n\nTry starting a 25-minute block now on one meaningful task, with other tabs closed. Assign it to a project so your time is easier to review later."
+  },
+  {
+   "case": "c38",
+   "rep": 2,
+   "failed": [],
+   "ungrounded": [
+    "160"
+   ],
+   "text": "You got 100 minutes of focused work in today, all of it on العمل, including a solid 60-minute stretch reviewing the report. That's about 42% of your 240-minute focus goal, and a good start.\n\nTracking stopped at 11:00am, so four hours are unaccounted for. Your focus score of 63 and 12 tab switches suggest some drift, especially during the client replies.\n\nSince مراجعة التقرير is still due and estimated at 60 minutes, start it now with one tab and notifications off. Finishing it would take you past 160 focus minutes today."
+  },
+  {
+   "case": "c38",
+   "rep": 3,
+   "failed": [
+    "namesDueTask"
+   ],
+   "ungrounded": [],
+   "text": "You put in 100 focused minutes this morning, including a solid 60-minute stretch on the report review from 9:00 to 10:00. Your 20-minute break afterward was well timed, and you followed it with 40 more minutes of client replies.\n\nYour focus score of 63 and 12 tab switches suggest some fragmentation. Tracking also stopped at 11:00am, so about four hours are unaccounted for, and you're at 100 of your 360 work minutes.\n\nThe report review is still due, with a 60-minute estimate. Start a single focused block on it now, close extra tabs, and you'd add an hour toward your 240-minute focus goal."
+  },
+  {
+   "case": "c40",
+   "rep": 2,
+   "failed": [],
+   "ungrounded": [
+    "20"
+   ],
+   "text": "You've put in 100 focus minutes on Réviser le mémoire this morning, two solid 50-minute stretches with a 10-minute break between them. That's 42% of your focus goal, and a 69 focus score with only 5 tab switches is a good start.\n\nOne thing I notice: tracking stopped at 10:50am, so about two hours are unaccounted for. If you were working, a quick restart will keep today's numbers honest.\n\nRéviser le mémoire is estimated at 120 minutes, so about 20 remain. Start a 25-minute session after lunch to finish it, then use your remaining focus time on something new."
+  },
+  {
+   "case": "c45",
+   "rep": 1,
+   "failed": [],
+   "ungrounded": [
+    "95 minutes"
+   ],
+   "text": "Nice steady morning: you logged 180 focus minutes across six 30-minute blocks, with a 74 focus score and short 5-minute breaks between each. That's 75% of your 240-minute focus goal.\n\nOne thing I noticed: all 180 minutes went to Email, and you switched tabs 30 times. Tracking also stopped at 12:25pm, so the last 95 minutes are unaccounted for.\n\nFor this afternoon, start your last Email task (15 minutes, priority 1) and close extra tabs first. That leaves you about 45 focus minutes from your goal."
+  },
+  {
+   "case": "c45",
+   "rep": 3,
+   "failed": [],
+   "ungrounded": [
+    "95 minutes"
+   ],
+   "text": "Nice steady morning: you logged 180 focus minutes across six 30-minute sessions, with a focus score of 74. That's 75% of your 240-minute focus goal and half of your 360-minute work goal.\n\nOne thing I noticed: all of it went to Email, with 30 tab switches and nothing tracked since 12:25pm, so about 95 minutes are unaccounted for.\n\nFor this afternoon, start by clearing the last Email task (15 minutes, priority 1). Then use a 30-minute block on something that moves a bigger project forward."
+  }
+ ]
+}

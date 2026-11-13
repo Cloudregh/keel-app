@@ -1,0 +1,156 @@
+{
+ "runId": "run-20261112231144",
+ "rubric": "coach-rubric-v2",
+ "promptVersion": "coach-v2",
+ "stopClaims": {
+  "claims": 119,
+  "wrong": []
+ },
+ "pctClaims": {
+  "claims": 45,
+  "wrong": [
+   "c03#3 \"90% of your 240-minute focus (real 88%)\"",
+   "c04#2 \"40% of your 240-minute focus (real 60%)\""
+  ]
+ },
+ "projectionClaims": {
+  "claims": 5,
+  "wrong": [
+   "c28#2 \"hit your focus goal (120 + 60 = 180 of 240)\""
+  ],
+  "loose": []
+ },
+ "literalTaskRulePassRate": 0.8866666666666667,
+ "evalSet": "coach-eval-v2",
+ "n": 150,
+ "passRate": 0.9866666666666667,
+ "ungroundedRate": 0.04,
+ "strictUngroundedRate": 0.3,
+ "byCheck": {
+  "nonEmpty": 0,
+  "noRefusal": 0,
+  "plainText": 0,
+  "length": 0,
+  "paragraphs": 0,
+  "english": 0,
+  "citesNumber": 0,
+  "namesDueTask": 2,
+  "emptyDayAck": 0
+ },
+ "byCat": {
+  "typical": [
+   42,
+   42
+  ],
+  "empty": [
+   12,
+   12
+  ],
+  "low": [
+   12,
+   12
+  ],
+  "long-stretch": [
+   12,
+   12
+  ],
+  "many-switch": [
+   12,
+   12
+  ],
+  "overdue": [
+   15,
+   15
+  ],
+  "multilingual": [
+   13,
+   15
+  ],
+  "edge": [
+   18,
+   18
+  ],
+  "ambiguous": [
+   12,
+   12
+  ]
+ },
+ "inconsistent": [
+  "c38 (1/3)"
+ ],
+ "alwaysFail": [],
+ "failures": [
+  {
+   "case": "c14",
+   "rep": 3,
+   "failed": [],
+   "ungrounded": [
+    "80 minute"
+   ],
+   "text": "You've logged 190 minutes of work so far, about half your 360 minute goal, and you finished Lesson planning. Your longest stretch was 150 minutes, which is solid stamina.\n\nYour focus time is 70 of 240 minutes, with a focus score of 42. The 2 hour meeting took most of your morning, and nothing has been tracked since 12:40pm, so the afternoon is still open.\n\nMark essays still needs about 120 minutes, and you've already done 40 on it. Start a focus session on it now, and a 60 to 80 minute block would put you close to your focus goal."
+  },
+  {
+   "case": "c19",
+   "rep": 2,
+   "failed": [],
+   "ungrounded": [
+    "14 minutes"
+   ],
+   "text": "Not much is tracked yet, and that's okay, since it's only 11:00am. You logged a 6-minute focus session on email at 10:40, which is a real start toward your 240-minute focus goal.\n\nFour tab switches in six minutes pulled your focus score down to 41. Tracking also stopped at 10:46, so the last 14 minutes are unaccounted for.\n\nTry starting a timer now on one specific task, with extra tabs closed, and aim for a 25-minute stretch. Nothing is due today, so pick your most important project and give it that first block."
+  },
+  {
+   "case": "c35",
+   "rep": 1,
+   "failed": [],
+   "ungrounded": [
+    "150"
+   ],
+   "text": "You've logged 130 minutes so far, with 100 of them focused on Refactor billing. Your longest stretch ran 80 minutes, which is solid, and you're already at 42% of your focus goal.\n\nOne honest note: your focus score is 56 with 13 tab switches, and nothing has been tracked since 11:20am. It's 2:30pm now, so a few hours may be unrecorded.\n\nStart a 50-minute focus block on Refactor billing now, with extra tabs closed. That would put you near 150 focus minutes. Then give the Security patch its 60 minutes before you finish."
+  },
+  {
+   "case": "c36",
+   "rep": 1,
+   "failed": [],
+   "ungrounded": [
+    "45"
+   ],
+   "text": "You tracked 110 minutes of focused work today, all on Trabajo, and your longest stretch was a solid 60 minutes on Preparar presentación. You also finished Revisar contrato, and your focus score of 68 is decent.\n\nYou're at 110 of your 360-minute work goal, and nothing has been tracked since 11:05am. With 9 tab switches, your focus was reasonably steady, but the long gap suggests the afternoon got away from you.\n\nWith the rest of today, start a 90-minute block on Preparar presentación, since it's still due. Even 45 focused minutes now would make tomorrow easier."
+  },
+  {
+   "case": "c36",
+   "rep": 3,
+   "failed": [],
+   "ungrounded": [
+    "200 minutes"
+   ],
+   "text": "You got 110 minutes of focused work in today, with a 60-minute stretch on your presentation and a finished contract review. Your focus score of 68 is solid for a morning like that.\n\nNothing has been tracked since 11:05am, so you're at 110 of your 360 work minutes. With 9 tab switches, your attention held up reasonably well while you were tracking.\n\nTry a 90-minute block on \"Preparar presentación\" now. It's still due, and that block would bring you close to 200 minutes of work today."
+  },
+  {
+   "case": "c38",
+   "rep": 1,
+   "failed": [
+    "namesDueTask"
+   ],
+   "ungrounded": [],
+   "text": "You got 100 focused minutes in today, with a solid 60-minute stretch on the report review from 9:00 to 10:00. That's your longest run, and it makes up more than half of your focus time.\n\nTracking stopped at 11:00am, so you're at 100 of your 360 work minutes, with 12 tab switches and a focus score of 63. If you kept working after 11, those hours weren't captured.\n\nThe report review is still due, estimated at 60 minutes. Start a timer on it now and aim for another 60-minute block."
+  },
+  {
+   "case": "c38",
+   "rep": 3,
+   "failed": [
+    "namesDueTask"
+   ],
+   "ungrounded": [],
+   "text": "You got 100 minutes of focused work in, all of it on your work project. That includes a strong 60-minute stretch on the report review, and your focus score landed at 63.\n\nTracking stopped at 11:00am, so about four hours are unaccounted for. You're at 100 of your 360-minute work goal, and 12 tab switches suggest your attention was pulled around a bit.\n\nThe report review is still due and estimated at 60 minutes. Start it now with one distraction-free block, and you'll close the gap on your focus goal."
+  },
+  {
+   "case": "c40",
+   "rep": 3,
+   "failed": [],
+   "ungrounded": [
+    "20"
+   ],
+   "text": "You've logged 100 focus minutes on Réviser le mémoire, two clean 50-minute stretches with a 10-minute break between them. Your focus score of 69 with only 5 tab switches is a solid start toward your 240-minute focus goal.\n\nOne thing to notice: tracking stopped at 10:50am, over two hours ago. If you've been working untracked, you may be undercounting, and if not, the gap is worth knowing about.\n\nThe mémoire has an estimate of 120 minutes, so about 20 remain. Start another 50-minute session this afternoon, finish it, and you'll be past your estimate and ready to close it out."
+  }
+ ]
+}

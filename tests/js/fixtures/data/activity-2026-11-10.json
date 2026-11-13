@@ -1,0 +1,37 @@
+{
+ "source": "keel-tracker",
+ "version": 2,
+ "device": "test-mac",
+ "updatedAt": 1794308100000,
+ "days": {
+  "2026-11-10": [
+   {
+    "s": 1794301200000,
+    "e": 1794303600000,
+    "app": "Code"
+   },
+   {
+    "s": 1794303600000,
+    "e": 1794304500000,
+    "app": "Google Chrome",
+    "domain": "youtube.com"
+   },
+   {
+    "s": 1794304500000,
+    "e": 1794305100000,
+    "app": "Slack"
+   },
+   {
+    "s": 1794305100000,
+    "e": 1794306900000,
+    "app": "Figma"
+   },
+   {
+    "s": 1794306900000,
+    "e": 1794308100000,
+    "app": "Google Chrome",
+    "domain": "github.com"
+   }
+  ]
+ }
+}

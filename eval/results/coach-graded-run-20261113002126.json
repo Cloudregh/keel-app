@@ -1,0 +1,122 @@
+{
+ "runId": "run-20261113002126",
+ "rubric": "coach-rubric-v2",
+ "promptVersion": "coach-v3",
+ "stopClaims": {
+  "claims": 122,
+  "wrong": []
+ },
+ "pctClaims": {
+  "claims": 204,
+  "wrong": []
+ },
+ "projectionClaims": {
+  "claims": 7,
+  "wrong": [
+   "c21#3 \"well over a third of your work goal (10 + 90 = 100 of 360)\"",
+   "c47#3 \"past your 240-minute focus goal (160 + 60 = 220 of 240)\""
+  ],
+  "loose": [
+   "c09#2 \"past the 240-minute goal (180 + 60 = 240 of 240)\"",
+   "c50#2 \"pass your 240-minute focus goal (180 + 60 = 240 of 240)\"",
+   "c50#3 \"past your 240-minute focus goal (180 + 60 = 240 of 240)\""
+  ]
+ },
+ "literalTaskRulePassRate": 0.9066666666666666,
+ "evalSet": "coach-eval-v3",
+ "n": 150,
+ "passRate": 0.9866666666666667,
+ "ungroundedRate": 0.013333333333333334,
+ "strictUngroundedRate": 0.24666666666666667,
+ "byCheck": {
+  "nonEmpty": 0,
+  "noRefusal": 0,
+  "plainText": 0,
+  "length": 0,
+  "paragraphs": 0,
+  "english": 0,
+  "citesNumber": 0,
+  "namesDueTask": 2,
+  "emptyDayAck": 0
+ },
+ "byCat": {
+  "typical": [
+   42,
+   42
+  ],
+  "empty": [
+   12,
+   12
+  ],
+  "low": [
+   12,
+   12
+  ],
+  "long-stretch": [
+   12,
+   12
+  ],
+  "many-switch": [
+   12,
+   12
+  ],
+  "overdue": [
+   15,
+   15
+  ],
+  "multilingual": [
+   13,
+   15
+  ],
+  "edge": [
+   18,
+   18
+  ],
+  "ambiguous": [
+   12,
+   12
+  ]
+ },
+ "inconsistent": [
+  "c38 (1/3)"
+ ],
+ "alwaysFail": [],
+ "failures": [
+  {
+   "case": "c14",
+   "rep": 3,
+   "failed": [],
+   "ungrounded": [
+    "80 minute"
+   ],
+   "text": "You've logged 190 minutes of work today, which is 53% of your work goal, and you finished Lesson planning. Your 30-minute break was well timed after a long morning.\n\nFocus is the gap: 70 minutes puts you at 29% of your focus goal, with a focus score of 42. Most of your longest 150-minute stretch was meeting time (the 2-hour meeting plus lesson planning), not deep work. Tracking also stopped at 12:40pm.\n\nSince it's 3:00pm, start a focused block on Mark essays now. It's due and estimated at 120 minutes, and you've already done 40, so a 60 to 80 minute session would close most of the gap."
+  },
+  {
+   "case": "c35",
+   "rep": 2,
+   "failed": [],
+   "ungrounded": [
+    "3.5 hours"
+   ],
+   "text": "You logged 130 minutes of work by 11:20am, including 100 focused minutes on Refactor billing. That's 36% of your work goal and 42% of your focus goal, and your longest stretch ran 80 minutes.\n\nYour focus score is 56 with 13 tab switches, so attention was fairly fragmented. Nothing has been tracked since 11:20am, so the afternoon is still open.\n\nWith 3.5 hours of the workday possibly left, start a 50-minute Refactor billing block now. Then take the Security patch (60 minutes) before the day ends."
+  },
+  {
+   "case": "c38",
+   "rep": 2,
+   "failed": [
+    "namesDueTask"
+   ],
+   "ungrounded": [],
+   "text": "You put in 100 minutes of focused work today, including a solid 60-minute stretch reviewing the report. That puts you at 28% of your work goal and 42% of your focus goal, a decent start.\n\nOne thing I noticed: nothing has been tracked since 11:00am, and your focus score of 63 with 12 tab switches suggests some scattered attention along the way.\n\nSince the report review is still due and estimated at 60 minutes, start a single focused block on it now, close extra tabs, and aim to finish it before the end of the afternoon."
+  },
+  {
+   "case": "c38",
+   "rep": 3,
+   "failed": [
+    "namesDueTask"
+   ],
+   "ungrounded": [],
+   "text": "You started strong: 100 minutes of focused work by 11:00am, including a solid 60-minute stretch on the report review. That puts you at 28% of your work goal and 42% of your focus goal.\n\nTracking stopped at 11:00am, so about four hours are unaccounted for. Your focus score of 63 and 12 tab switches suggest some drifting, even in the good stretches.\n\nSince the report review is still listed as due, block 60 minutes on it this afternoon, close extra tabs, and start the timer before you begin."
+  }
+ ]
+}

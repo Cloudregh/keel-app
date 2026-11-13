@@ -1,0 +1,14 @@
+.DS_Store
+*.log
+keel-activity.json
+config.json
+__pycache__/
+node_modules/
+.venv/
+test-results/
+playwright-report/
+coverage/
+.coverage
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/

@@ -1,0 +1,1119 @@
+{
+ "timezone": "UTC",
+ "trueCurve": [
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0.05,
+  0.2,
+  0.7,
+  1,
+  0.95,
+  0.7,
+  0.35,
+  0.25,
+  0.45,
+  0.6,
+  0.55,
+  0.35,
+  0.2,
+  0.25,
+  0.3,
+  0.15,
+  0.05,
+  0
+ ],
+ "sessions": [
+  {
+   "id": "en-1",
+   "type": "focus",
+   "start": 1790845380000,
+   "end": 1790846820000,
+   "dur": 1440000,
+   "split": "history"
+  },
+  {
+   "id": "en-2",
+   "type": "focus",
+   "start": 1790871540000,
+   "end": 1790873520000,
+   "dur": 1980000,
+   "split": "history"
+  },
+  {
+   "id": "en-3",
+   "type": "focus",
+   "start": 1790874000000,
+   "end": 1790875980000,
+   "dur": 1980000,
+   "split": "history"
+  },
+  {
+   "id": "en-4",
+   "type": "focus",
+   "start": 1790888820000,
+   "end": 1790891400000,
+   "dur": 2580000,
+   "split": "history"
+  },
+  {
+   "id": "en-5",
+   "type": "focus",
+   "start": 1790924520000,
+   "end": 1790925780000,
+   "dur": 1260000,
+   "split": "history"
+  },
+  {
+   "id": "en-6",
+   "type": "focus",
+   "start": 1790931600000,
+   "end": 1790932800000,
+   "dur": 1200000,
+   "split": "history"
+  },
+  {
+   "id": "en-7",
+   "type": "focus",
+   "start": 1790935560000,
+   "end": 1790936760000,
+   "dur": 1200000,
+   "split": "history"
+  },
+  {
+   "id": "en-8",
+   "type": "focus",
+   "start": 1790939760000,
+   "end": 1790940960000,
+   "dur": 1200000,
+   "split": "history"
+  },
+  {
+   "id": "en-9",
+   "type": "focus",
+   "start": 1790949600000,
+   "end": 1790950980000,
+   "dur": 1380000,
+   "split": "history"
+  },
+  {
+   "id": "en-10",
+   "type": "focus",
+   "start": 1790953800000,
+   "end": 1790956080000,
+   "dur": 2280000,
+   "split": "history"
+  },
+  {
+   "id": "en-11",
+   "type": "focus",
+   "start": 1790968500000,
+   "end": 1790971440000,
+   "dur": 2940000,
+   "split": "history"
+  },
+  {
+   "id": "en-12",
+   "type": "focus",
+   "start": 1790975880000,
+   "end": 1790977200000,
+   "dur": 1320000,
+   "split": "history"
+  },
+  {
+   "id": "en-13",
+   "type": "focus",
+   "start": 1791187500000,
+   "end": 1791188700000,
+   "dur": 1200000,
+   "split": "history"
+  },
+  {
+   "id": "en-14",
+   "type": "focus",
+   "start": 1791191160000,
+   "end": 1791193320000,
+   "dur": 2160000,
+   "split": "history"
+  },
+  {
+   "id": "en-15",
+   "type": "focus",
+   "start": 1791195240000,
+   "end": 1791196560000,
+   "dur": 1320000,
+   "split": "history"
+  },
+  {
+   "id": "en-16",
+   "type": "focus",
+   "start": 1791198420000,
+   "end": 1791200040000,
+   "dur": 1620000,
+   "split": "history"
+  },
+  {
+   "id": "en-17",
+   "type": "focus",
+   "start": 1791209160000,
+   "end": 1791212040000,
+   "dur": 2880000,
+   "split": "history"
+  },
+  {
+   "id": "en-18",
+   "type": "focus",
+   "start": 1791281400000,
+   "end": 1791283920000,
+   "dur": 2520000,
+   "split": "history"
+  },
+  {
+   "id": "en-19",
+   "type": "focus",
+   "start": 1791285480000,
+   "end": 1791287220000,
+   "dur": 1740000,
+   "split": "history"
+  },
+  {
+   "id": "en-20",
+   "type": "focus",
+   "start": 1791363780000,
+   "end": 1791366120000,
+   "dur": 2340000,
+   "split": "history"
+  },
+  {
+   "id": "en-21",
+   "type": "focus",
+   "start": 1791367980000,
+   "end": 1791369420000,
+   "dur": 1440000,
+   "split": "history"
+  },
+  {
+   "id": "en-22",
+   "type": "focus",
+   "start": 1791378780000,
+   "end": 1791381780000,
+   "dur": 3000000,
+   "split": "history"
+  },
+  {
+   "id": "en-23",
+   "type": "focus",
+   "start": 1791386340000,
+   "end": 1791387960000,
+   "dur": 1620000,
+   "split": "history"
+  },
+  {
+   "id": "en-24",
+   "type": "focus",
+   "start": 1791446700000,
+   "end": 1791449280000,
+   "dur": 2580000,
+   "split": "history"
+  },
+  {
+   "id": "en-25",
+   "type": "focus",
+   "start": 1791454020000,
+   "end": 1791457080000,
+   "dur": 3060000,
+   "split": "history"
+  },
+  {
+   "id": "en-26",
+   "type": "focus",
+   "start": 1791533400000,
+   "end": 1791535860000,
+   "dur": 2460000,
+   "split": "history"
+  },
+  {
+   "id": "en-27",
+   "type": "focus",
+   "start": 1791540480000,
+   "end": 1791542220000,
+   "dur": 1740000,
+   "split": "history"
+  },
+  {
+   "id": "en-28",
+   "type": "focus",
+   "start": 1791544020000,
+   "end": 1791546600000,
+   "dur": 2580000,
+   "split": "history"
+  },
+  {
+   "id": "en-29",
+   "type": "focus",
+   "start": 1791576180000,
+   "end": 1791579000000,
+   "dur": 2820000,
+   "split": "history"
+  },
+  {
+   "id": "en-30",
+   "type": "focus",
+   "start": 1791788520000,
+   "end": 1791790560000,
+   "dur": 2040000,
+   "split": "history"
+  },
+  {
+   "id": "en-31",
+   "type": "focus",
+   "start": 1791796200000,
+   "end": 1791799320000,
+   "dur": 3120000,
+   "split": "history"
+  },
+  {
+   "id": "en-32",
+   "type": "focus",
+   "start": 1791799440000,
+   "end": 1791800760000,
+   "dur": 1320000,
+   "split": "history"
+  },
+  {
+   "id": "en-33",
+   "type": "focus",
+   "start": 1791803520000,
+   "end": 1791806040000,
+   "dur": 2520000,
+   "split": "history"
+  },
+  {
+   "id": "en-34",
+   "type": "focus",
+   "start": 1791817980000,
+   "end": 1791820980000,
+   "dur": 3000000,
+   "split": "history"
+  },
+  {
+   "id": "en-35",
+   "type": "focus",
+   "start": 1791835440000,
+   "end": 1791838020000,
+   "dur": 2580000,
+   "split": "history"
+  },
+  {
+   "id": "en-36",
+   "type": "focus",
+   "start": 1791879480000,
+   "end": 1791882360000,
+   "dur": 2880000,
+   "split": "history"
+  },
+  {
+   "id": "en-37",
+   "type": "focus",
+   "start": 1791883020000,
+   "end": 1791886020000,
+   "dur": 3000000,
+   "split": "history"
+  },
+  {
+   "id": "en-38",
+   "type": "focus",
+   "start": 1791885780000,
+   "end": 1791888240000,
+   "dur": 2460000,
+   "split": "history"
+  },
+  {
+   "id": "en-39",
+   "type": "focus",
+   "start": 1791890220000,
+   "end": 1791891420000,
+   "dur": 1200000,
+   "split": "history"
+  },
+  {
+   "id": "en-40",
+   "type": "focus",
+   "start": 1791904080000,
+   "end": 1791906180000,
+   "dur": 2100000,
+   "split": "history"
+  },
+  {
+   "id": "en-41",
+   "type": "focus",
+   "start": 1791908220000,
+   "end": 1791911340000,
+   "dur": 3120000,
+   "split": "history"
+  },
+  {
+   "id": "en-42",
+   "type": "focus",
+   "start": 1791915240000,
+   "end": 1791916560000,
+   "dur": 1320000,
+   "split": "history"
+  },
+  {
+   "id": "en-43",
+   "type": "focus",
+   "start": 1791918420000,
+   "end": 1791921360000,
+   "dur": 2940000,
+   "split": "history"
+  },
+  {
+   "id": "en-44",
+   "type": "focus",
+   "start": 1791922140000,
+   "end": 1791923880000,
+   "dur": 1740000,
+   "split": "history"
+  },
+  {
+   "id": "en-45",
+   "type": "focus",
+   "start": 1791969360000,
+   "end": 1791971220000,
+   "dur": 1860000,
+   "split": "history"
+  },
+  {
+   "id": "en-46",
+   "type": "focus",
+   "start": 1791972600000,
+   "end": 1791973920000,
+   "dur": 1320000,
+   "split": "history"
+  },
+  {
+   "id": "en-47",
+   "type": "focus",
+   "start": 1791982860000,
+   "end": 1791984360000,
+   "dur": 1500000,
+   "split": "history"
+  },
+  {
+   "id": "en-48",
+   "type": "focus",
+   "start": 1791986640000,
+   "end": 1791988140000,
+   "dur": 1500000,
+   "split": "history"
+  },
+  {
+   "id": "en-49",
+   "type": "focus",
+   "start": 1791994380000,
+   "end": 1791997200000,
+   "dur": 2820000,
+   "split": "history"
+  },
+  {
+   "id": "en-50",
+   "type": "focus",
+   "start": 1791997740000,
+   "end": 1791999420000,
+   "dur": 1680000,
+   "split": "history"
+  },
+  {
+   "id": "en-51",
+   "type": "focus",
+   "start": 1792008540000,
+   "end": 1792010160000,
+   "dur": 1620000,
+   "split": "history"
+  },
+  {
+   "id": "en-52",
+   "type": "focus",
+   "start": 1792015200000,
+   "end": 1792016880000,
+   "dur": 1680000,
+   "split": "history"
+  },
+  {
+   "id": "en-53",
+   "type": "focus",
+   "start": 1792047720000,
+   "end": 1792049760000,
+   "dur": 2040000,
+   "split": "history"
+  },
+  {
+   "id": "en-54",
+   "type": "focus",
+   "start": 1792055820000,
+   "end": 1792057620000,
+   "dur": 1800000,
+   "split": "history"
+  },
+  {
+   "id": "en-55",
+   "type": "focus",
+   "start": 1792059240000,
+   "end": 1792061160000,
+   "dur": 1920000,
+   "split": "history"
+  },
+  {
+   "id": "en-56",
+   "type": "focus",
+   "start": 1792062420000,
+   "end": 1792064160000,
+   "dur": 1740000,
+   "split": "history"
+  },
+  {
+   "id": "en-57",
+   "type": "focus",
+   "start": 1792065840000,
+   "end": 1792067700000,
+   "dur": 1860000,
+   "split": "history"
+  },
+  {
+   "id": "en-58",
+   "type": "focus",
+   "start": 1792072920000,
+   "end": 1792075860000,
+   "dur": 2940000,
+   "split": "history"
+  },
+  {
+   "id": "en-59",
+   "type": "focus",
+   "start": 1792076940000,
+   "end": 1792079400000,
+   "dur": 2460000,
+   "split": "history"
+  },
+  {
+   "id": "en-60",
+   "type": "focus",
+   "start": 1792081020000,
+   "end": 1792083660000,
+   "dur": 2640000,
+   "split": "history"
+  },
+  {
+   "id": "en-61",
+   "type": "focus",
+   "start": 1792083660000,
+   "end": 1792086720000,
+   "dur": 3060000,
+   "split": "history"
+  },
+  {
+   "id": "en-62",
+   "type": "focus",
+   "start": 1792098480000,
+   "end": 1792101000000,
+   "dur": 2520000,
+   "split": "history"
+  },
+  {
+   "id": "en-63",
+   "type": "focus",
+   "start": 1792142160000,
+   "end": 1792144140000,
+   "dur": 1980000,
+   "split": "history"
+  },
+  {
+   "id": "en-64",
+   "type": "focus",
+   "start": 1792145280000,
+   "end": 1792148100000,
+   "dur": 2820000,
+   "split": "history"
+  },
+  {
+   "id": "en-65",
+   "type": "focus",
+   "start": 1792148700000,
+   "end": 1792151580000,
+   "dur": 2880000,
+   "split": "history"
+  },
+  {
+   "id": "en-66",
+   "type": "focus",
+   "start": 1792155600000,
+   "end": 1792157760000,
+   "dur": 2160000,
+   "split": "history"
+  },
+  {
+   "id": "en-67",
+   "type": "focus",
+   "start": 1792159680000,
+   "end": 1792162800000,
+   "dur": 3120000,
+   "split": "history"
+  },
+  {
+   "id": "en-68",
+   "type": "focus",
+   "start": 1792180920000,
+   "end": 1792184040000,
+   "dur": 3120000,
+   "split": "history"
+  },
+  {
+   "id": "en-69",
+   "type": "focus",
+   "start": 1792401420000,
+   "end": 1792404240000,
+   "dur": 2820000,
+   "split": "history"
+  },
+  {
+   "id": "en-70",
+   "type": "focus",
+   "start": 1792404000000,
+   "end": 1792405260000,
+   "dur": 1260000,
+   "split": "history"
+  },
+  {
+   "id": "en-71",
+   "type": "focus",
+   "start": 1792407660000,
+   "end": 1792409340000,
+   "dur": 1680000,
+   "split": "history"
+  },
+  {
+   "id": "en-72",
+   "type": "focus",
+   "start": 1792414860000,
+   "end": 1792417680000,
+   "dur": 2820000,
+   "split": "history"
+  },
+  {
+   "id": "en-73",
+   "type": "focus",
+   "start": 1792422420000,
+   "end": 1792424640000,
+   "dur": 2220000,
+   "split": "history"
+  },
+  {
+   "id": "en-74",
+   "type": "focus",
+   "start": 1792426500000,
+   "end": 1792429740000,
+   "dur": 3240000,
+   "split": "history"
+  },
+  {
+   "id": "en-75",
+   "type": "focus",
+   "start": 1792429200000,
+   "end": 1792431960000,
+   "dur": 2760000,
+   "split": "history"
+  },
+  {
+   "id": "en-76",
+   "type": "focus",
+   "start": 1792433040000,
+   "end": 1792435440000,
+   "dur": 2400000,
+   "split": "history"
+  },
+  {
+   "id": "en-77",
+   "type": "focus",
+   "start": 1792483500000,
+   "end": 1792486020000,
+   "dur": 2520000,
+   "split": "history"
+  },
+  {
+   "id": "en-78",
+   "type": "focus",
+   "start": 1792487340000,
+   "end": 1792489860000,
+   "dur": 2520000,
+   "split": "history"
+  },
+  {
+   "id": "en-79",
+   "type": "focus",
+   "start": 1792491240000,
+   "end": 1792493760000,
+   "dur": 2520000,
+   "split": "history"
+  },
+  {
+   "id": "en-80",
+   "type": "focus",
+   "start": 1792494900000,
+   "end": 1792497000000,
+   "dur": 2100000,
+   "split": "history"
+  },
+  {
+   "id": "en-81",
+   "type": "focus",
+   "start": 1792505280000,
+   "end": 1792506900000,
+   "dur": 1620000,
+   "split": "history"
+  },
+  {
+   "id": "en-82",
+   "type": "focus",
+   "start": 1792509240000,
+   "end": 1792512120000,
+   "dur": 2880000,
+   "split": "history"
+  },
+  {
+   "id": "en-83",
+   "type": "focus",
+   "start": 1792512360000,
+   "end": 1792513920000,
+   "dur": 1560000,
+   "split": "history"
+  },
+  {
+   "id": "en-84",
+   "type": "focus",
+   "start": 1792574160000,
+   "end": 1792577400000,
+   "dur": 3240000,
+   "split": "history"
+  },
+  {
+   "id": "en-85",
+   "type": "focus",
+   "start": 1792577640000,
+   "end": 1792580640000,
+   "dur": 3000000,
+   "split": "history"
+  },
+  {
+   "id": "en-86",
+   "type": "focus",
+   "start": 1792580400000,
+   "end": 1792582020000,
+   "dur": 1620000,
+   "split": "history"
+  },
+  {
+   "id": "en-87",
+   "type": "focus",
+   "start": 1792595820000,
+   "end": 1792598820000,
+   "dur": 3000000,
+   "split": "history"
+  },
+  {
+   "id": "en-88",
+   "type": "focus",
+   "start": 1792599480000,
+   "end": 1792600740000,
+   "dur": 1260000,
+   "split": "history"
+  },
+  {
+   "id": "en-89",
+   "type": "focus",
+   "start": 1792609440000,
+   "end": 1792610760000,
+   "dur": 1320000,
+   "split": "history"
+  },
+  {
+   "id": "en-90",
+   "type": "focus",
+   "start": 1792613820000,
+   "end": 1792615320000,
+   "dur": 1500000,
+   "split": "history"
+  },
+  {
+   "id": "en-91",
+   "type": "focus",
+   "start": 1792659840000,
+   "end": 1792661820000,
+   "dur": 1980000,
+   "split": "test"
+  },
+  {
+   "id": "en-92",
+   "type": "focus",
+   "start": 1792663920000,
+   "end": 1792666140000,
+   "dur": 2220000,
+   "split": "test"
+  },
+  {
+   "id": "en-93",
+   "type": "focus",
+   "start": 1792666980000,
+   "end": 1792669740000,
+   "dur": 2760000,
+   "split": "test"
+  },
+  {
+   "id": "en-94",
+   "type": "focus",
+   "start": 1792677660000,
+   "end": 1792680780000,
+   "dur": 3120000,
+   "split": "test"
+  },
+  {
+   "id": "en-95",
+   "type": "focus",
+   "start": 1792685100000,
+   "end": 1792686840000,
+   "dur": 1740000,
+   "split": "test"
+  },
+  {
+   "id": "en-96",
+   "type": "focus",
+   "start": 1792739100000,
+   "end": 1792741140000,
+   "dur": 2040000,
+   "split": "test"
+  },
+  {
+   "id": "en-97",
+   "type": "focus",
+   "start": 1792743120000,
+   "end": 1792745340000,
+   "dur": 2220000,
+   "split": "test"
+  },
+  {
+   "id": "en-98",
+   "type": "focus",
+   "start": 1792747140000,
+   "end": 1792749480000,
+   "dur": 2340000,
+   "split": "test"
+  },
+  {
+   "id": "en-99",
+   "type": "focus",
+   "start": 1792750320000,
+   "end": 1792752660000,
+   "dur": 2340000,
+   "split": "test"
+  },
+  {
+   "id": "en-100",
+   "type": "focus",
+   "start": 1792753980000,
+   "end": 1792756200000,
+   "dur": 2220000,
+   "split": "test"
+  },
+  {
+   "id": "en-101",
+   "type": "focus",
+   "start": 1792771740000,
+   "end": 1792774500000,
+   "dur": 2760000,
+   "split": "test"
+  },
+  {
+   "id": "en-102",
+   "type": "focus",
+   "start": 1792789500000,
+   "end": 1792790880000,
+   "dur": 1380000,
+   "split": "test"
+  },
+  {
+   "id": "en-103",
+   "type": "focus",
+   "start": 1792995120000,
+   "end": 1792997220000,
+   "dur": 2100000,
+   "split": "test"
+  },
+  {
+   "id": "en-104",
+   "type": "focus",
+   "start": 1792998780000,
+   "end": 1793001240000,
+   "dur": 2460000,
+   "split": "test"
+  },
+  {
+   "id": "en-105",
+   "type": "focus",
+   "start": 1793001660000,
+   "end": 1793003400000,
+   "dur": 1740000,
+   "split": "test"
+  },
+  {
+   "id": "en-106",
+   "type": "focus",
+   "start": 1793005620000,
+   "end": 1793008560000,
+   "dur": 2940000,
+   "split": "test"
+  },
+  {
+   "id": "en-107",
+   "type": "focus",
+   "start": 1793023920000,
+   "end": 1793026440000,
+   "dur": 2520000,
+   "split": "test"
+  },
+  {
+   "id": "en-108",
+   "type": "focus",
+   "start": 1793027160000,
+   "end": 1793028600000,
+   "dur": 1440000,
+   "split": "test"
+  },
+  {
+   "id": "en-109",
+   "type": "focus",
+   "start": 1793031120000,
+   "end": 1793033940000,
+   "dur": 2820000,
+   "split": "test"
+  },
+  {
+   "id": "en-110",
+   "type": "focus",
+   "start": 1793034600000,
+   "end": 1793036640000,
+   "dur": 2040000,
+   "split": "test"
+  },
+  {
+   "id": "en-111",
+   "type": "focus",
+   "start": 1793048700000,
+   "end": 1793050380000,
+   "dur": 1680000,
+   "split": "test"
+  },
+  {
+   "id": "en-112",
+   "type": "focus",
+   "start": 1793085480000,
+   "end": 1793087700000,
+   "dur": 2220000,
+   "split": "test"
+  },
+  {
+   "id": "en-113",
+   "type": "focus",
+   "start": 1793089080000,
+   "end": 1793091120000,
+   "dur": 2040000,
+   "split": "test"
+  },
+  {
+   "id": "en-114",
+   "type": "focus",
+   "start": 1793092320000,
+   "end": 1793095500000,
+   "dur": 3180000,
+   "split": "test"
+  },
+  {
+   "id": "en-115",
+   "type": "focus",
+   "start": 1793096220000,
+   "end": 1793098620000,
+   "dur": 2400000,
+   "split": "test"
+  },
+  {
+   "id": "en-116",
+   "type": "focus",
+   "start": 1793099280000,
+   "end": 1793101200000,
+   "dur": 1920000,
+   "split": "test"
+  },
+  {
+   "id": "en-117",
+   "type": "focus",
+   "start": 1793113200000,
+   "end": 1793114820000,
+   "dur": 1620000,
+   "split": "test"
+  },
+  {
+   "id": "en-118",
+   "type": "focus",
+   "start": 1793174640000,
+   "end": 1793176440000,
+   "dur": 1800000,
+   "split": "test"
+  },
+  {
+   "id": "en-119",
+   "type": "focus",
+   "start": 1793178540000,
+   "end": 1793181060000,
+   "dur": 2520000,
+   "split": "test"
+  },
+  {
+   "id": "en-120",
+   "type": "focus",
+   "start": 1793182740000,
+   "end": 1793185440000,
+   "dur": 2700000,
+   "split": "test"
+  },
+  {
+   "id": "en-121",
+   "type": "focus",
+   "start": 1793185260000,
+   "end": 1793187240000,
+   "dur": 1980000,
+   "split": "test"
+  },
+  {
+   "id": "en-122",
+   "type": "focus",
+   "start": 1793196600000,
+   "end": 1793197980000,
+   "dur": 1380000,
+   "split": "test"
+  },
+  {
+   "id": "en-123",
+   "type": "focus",
+   "start": 1793200680000,
+   "end": 1793202660000,
+   "dur": 1980000,
+   "split": "test"
+  },
+  {
+   "id": "en-124",
+   "type": "focus",
+   "start": 1793264640000,
+   "end": 1793266140000,
+   "dur": 1500000,
+   "split": "test"
+  },
+  {
+   "id": "en-125",
+   "type": "focus",
+   "start": 1793268240000,
+   "end": 1793270340000,
+   "dur": 2100000,
+   "split": "test"
+  },
+  {
+   "id": "en-126",
+   "type": "focus",
+   "start": 1793290740000,
+   "end": 1793291940000,
+   "dur": 1200000,
+   "split": "test"
+  },
+  {
+   "id": "en-127",
+   "type": "focus",
+   "start": 1793297700000,
+   "end": 1793300640000,
+   "dur": 2940000,
+   "split": "test"
+  },
+  {
+   "id": "en-128",
+   "type": "focus",
+   "start": 1793300760000,
+   "end": 1793303400000,
+   "dur": 2640000,
+   "split": "test"
+  },
+  {
+   "id": "en-129",
+   "type": "focus",
+   "start": 1793304780000,
+   "end": 1793305980000,
+   "dur": 1200000,
+   "split": "test"
+  },
+  {
+   "id": "en-130",
+   "type": "focus",
+   "start": 1793348040000,
+   "end": 1793349420000,
+   "dur": 1380000,
+   "split": "test"
+  },
+  {
+   "id": "en-131",
+   "type": "focus",
+   "start": 1793351580000,
+   "end": 1793354040000,
+   "dur": 2460000,
+   "split": "test"
+  },
+  {
+   "id": "en-132",
+   "type": "focus",
+   "start": 1793355360000,
+   "end": 1793358420000,
+   "dur": 3060000,
+   "split": "test"
+  },
+  {
+   "id": "en-133",
+   "type": "focus",
+   "start": 1793376600000,
+   "end": 1793378160000,
+   "dur": 1560000,
+   "split": "test"
+  },
+  {
+   "id": "en-134",
+   "type": "focus",
+   "start": 1793380200000,
+   "end": 1793382240000,
+   "dur": 2040000,
+   "split": "test"
+  },
+  {
+   "id": "en-135",
+   "type": "focus",
+   "start": 1793384160000,
+   "end": 1793385720000,
+   "dur": 1560000,
+   "split": "test"
+  },
+  {
+   "id": "en-136",
+   "type": "focus",
+   "start": 1793387220000,
+   "end": 1793388720000,
+   "dur": 1500000,
+   "split": "test"
+  }
+ ]
+}

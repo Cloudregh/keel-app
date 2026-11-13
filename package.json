@@ -1,0 +1,28 @@
+{
+  "name": "keel",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Keel focus & time tracker: test and tooling setup (the app itself has no build step)",
+  "scripts": {
+    "lint": "eslint . && ruff check tracker tests && ruff format --check tracker tests && mypy",
+    "audit": "npm audit --omit=optional && pip-audit -r requirements-dev.txt",
+    "test:py": "pytest --cov=tracker --cov-report=term-missing --cov-fail-under=85",
+    "test:js": "rm -f coverage/js-v8.jsonl && KEEL_COVERAGE=1 playwright test --project=unit && node tests/js/coverage-report.mjs",
+    "test:e2e": "playwright test --project=chromium --project=firefox --project=webkit",
+    "test": "npm run lint && npm run test:py && npm run test:js && npm run test:e2e",
+    "test:all": "npm test",
+    "eval": "node eval/run-evals.mjs",
+    "serve": "python3 -m http.server 8000 --bind 127.0.0.1"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.11.0",
+    "@eslint/js": "9.39.1",
+    "@playwright/test": "1.65.0",
+    "eslint": "9.39.1",
+    "eslint-plugin-html": "8.1.3",
+    "globals": "16.5.0"
+  }
+}

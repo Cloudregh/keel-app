@@ -1,0 +1,227 @@
+{
+  "generatedAt": "2026-11-10",
+  "app": {
+    "file": "index.html",
+    "sha256": "f76929d4a8b6"
+  },
+  "tracker": {
+    "file": "tracker/keel_tracker.py",
+    "version": 2,
+    "sha256": "11eae39747c0"
+  },
+  "models": {
+    "planner": {
+      "version": "planner-v2.1",
+      "sha256": "541b16481e59",
+      "components": [
+        "naive-bayes-effort",
+        "bayes-duration-shrinkage",
+        "energy-curve",
+        "plan-builder",
+        "pairwise-perceptron"
+      ],
+      "randomness": "none (deterministic given inputs and clock)",
+      "shaOf": "index.html from '/* ================= Planner:' up to (not including) '/* ---- UI: plan panel' (method fixed 2026-11-12; the earlier e451ce05c4cb used an unrecorded range)",
+      "changes": [
+        "2026-11-12: fixes 34 (exact untraining) and 36 (Unicode words)",
+        "2026-11-12: fixes 37 (overdue first), 39 (temperature 0.45), 40 (duration buffer only when erratic), 41 (ordering steps)",
+        "2026-11-12: fix 38 (verb feature, weight 3, chosen on validation vocabulary)",
+        "2026-11-12: fixes 44 (model repair), 45 (guards and defaults), 46 (revision cache key), 47 (version stamp), 48 (label pruning); PLANNER_VERSION introduced as planner-v2.0",
+        "2026-11-12: fix 49 (plan overflow is always a boolean) → planner-v2.1"
+      ],
+      "versions": {
+        "planner-v1": "e451ce05c4cb (range not recorded)",
+        "planner-v2.0": "d2ce6766d811",
+        "planner-v2.1": "541b16481e59"
+      }
+    }
+  },
+  "prompts": {
+    "dailyCoach": {
+      "version": "coach-v4",
+      "sha256": "b2843a99061e",
+      "shaOf": "the instruction text before \"\\n\\nDATA:\\n\" in index.html, i.e. INSTRUCTION in eval/coach/prompt.mjs (method fixed 2026-11-12; the earlier 75cfb7c53c58 used an unrecorded method)",
+      "model": "platform-selected via the claude.ai sample capability (not pinnable); each result records modelApplied when sample reports it",
+      "versions": {
+        "coach-v1": "02353b9f1666",
+        "coach-v2": "1a6ad23d2536",
+        "coach-v3": "4c4fc1d9d0da",
+        "coach-v4": "b2843a99061e"
+      },
+      "rubric": "coach-rubric-v2 (eval/coach/rubric.mjs; task-name rule loosened by owner decision 52; v1 to v1.2 results kept in docs/ai-eval.md) + stopClaims, pctClaims and projectionClaims checks (reported, not locked)",
+      "changes": [
+        "2026-11-12: coach-v2 (fixes 50–51): at most 90 words; sessions carry end times and the day carries lastTrackedEnd; eval set coach-eval-v2",
+        "2026-11-13: coach-v3 (fix 54): data gains workPct and focusPct; the prompt says to use them instead of calculating percentages; eval set coach-eval-v3",
+        "2026-11-13: coach-v4 (fix 55): data gains workLeftMin and focusLeftMin; the prompt says to check any claim about where a suggested block would take the user against them; eval set coach-eval-v4"
+      ]
+    }
+  },
+  "datasets": {
+    "effort-v1": {
+      "file": "eval/data/effort-v1.jsonl",
+      "sha256": "286e4ee9c9d1",
+      "rows": 300,
+      "splits": {
+        "train": 102,
+        "val": 48,
+        "test": 150
+      },
+      "frozen": "2026-11-12"
+    },
+    "duration-v1": {
+      "file": "eval/data/duration-v1.json",
+      "sha256": "3eefa22e8f34",
+      "rows": 150,
+      "splits": {
+        "history": 100,
+        "test": 50
+      },
+      "frozen": "2026-11-12"
+    },
+    "energy-v1": {
+      "file": "eval/data/energy-v1.json",
+      "sha256": "fc5f409702bb",
+      "sessions": 136,
+      "splits": {
+        "history": 90,
+        "test": 46
+      },
+      "frozen": "2026-11-12"
+    },
+    "effort-newvocab-v1": {
+      "file": "eval/data/effort-newvocab-v1.jsonl",
+      "sha256": "43d8852b653e",
+      "rows": 60,
+      "splits": {
+        "corrections": 20,
+        "test": 40
+      },
+      "frozen": "2026-11-12"
+    },
+    "duration-users-v1": {
+      "file": "eval/data/duration-users-v1.json",
+      "sha256": "f6a7a9cf3aeb",
+      "users": 20,
+      "tasksPerUser": 60,
+      "splits": {
+        "history": 40,
+        "test": 20
+      },
+      "frozen": "2026-11-12"
+    },
+    "effort-newvocab-v2": {
+      "file": "eval/data/effort-newvocab-v2.jsonl",
+      "sha256": "6096dfc0a5f6",
+      "rows": 60,
+      "splits": {
+        "corrections": 20,
+        "test": 40
+      },
+      "frozen": "2026-11-12",
+      "note": "corrections cover every first-word verb (finding 38, option B); designed after v1"
+    },
+    "effort-v2": {
+      "file": "eval/data/effort-v2.jsonl",
+      "sha256": "1a057392bd27",
+      "rows": 300,
+      "splits": {
+        "train": 102,
+        "val": 48,
+        "test": 150
+      },
+      "frozen": "2026-11-12",
+      "note": "effort-v1 with label-neutral notes (finding 42)"
+    },
+    "effort-newvocab-val-v1": {
+      "file": "eval/data/effort-newvocab-val-v1.jsonl",
+      "sha256": "9d24dc5cf0ef",
+      "rows": 60,
+      "splits": {
+        "corrections": 20,
+        "val": 40
+      },
+      "frozen": "2026-11-12",
+      "note": "validation only, for choosing the verb weight (finding 38, addendum 2)"
+    },
+    "coach-eval-v1": {
+      "file": "eval/data/coach-eval-v1.jsonl",
+      "sha256": "263c88268105",
+      "rows": 50,
+      "categories": {
+        "typical": 14,
+        "empty": 4,
+        "low": 4,
+        "long-stretch": 4,
+        "many-switch": 4,
+        "overdue": 5,
+        "multilingual": 5,
+        "edge": 6,
+        "ambiguous": 4
+      },
+      "frozen": "2026-11-12",
+      "note": "synthetic days for the Daily coach (Phase 10); built by eval/data/coach-cases.mjs"
+    },
+    "coach-eval-v2": {
+      "file": "eval/data/coach-eval-v2.jsonl",
+      "sha256": "c1c4fd724e3a",
+      "rows": 50,
+      "categories": {
+        "typical": 14,
+        "empty": 4,
+        "low": 4,
+        "long-stretch": 4,
+        "many-switch": 4,
+        "overdue": 5,
+        "multilingual": 5,
+        "edge": 6,
+        "ambiguous": 4
+      },
+      "frozen": "2026-11-12",
+      "note": "the 50 days of coach-eval-v1 in the coach-v2 data shape (each session gains end; the day gains lastTrackedEnd); nothing else differs (tested)"
+    },
+    "coach-eval-v3": {
+      "file": "eval/data/coach-eval-v3.jsonl",
+      "sha256": "d8e9ff910994",
+      "rows": 50,
+      "categories": {
+        "typical": 14,
+        "empty": 4,
+        "low": 4,
+        "long-stretch": 4,
+        "many-switch": 4,
+        "overdue": 5,
+        "multilingual": 5,
+        "edge": 6,
+        "ambiguous": 4
+      },
+      "frozen": "2026-11-13",
+      "note": "the coach-eval-v2 days plus workPct and focusPct (fix 54); nothing else differs (tested)"
+    },
+    "coach-eval-v4": {
+      "file": "eval/data/coach-eval-v4.jsonl",
+      "sha256": "98c97dd250a7",
+      "rows": 50,
+      "categories": {
+        "typical": 14,
+        "empty": 4,
+        "low": 4,
+        "long-stretch": 4,
+        "many-switch": 4,
+        "overdue": 5,
+        "multilingual": 5,
+        "edge": 6,
+        "ambiguous": 4
+      },
+      "frozen": "2026-11-13",
+      "note": "the coach-eval-v3 days plus workLeftMin and focusLeftMin (fix 55); nothing else differs (tested)"
+    }
+  },
+  "seeds": {
+    "default": 20261110
+  },
+  "tooling": {
+    "node": "v22.23.4",
+    "playwright": "1.65.0",
+    "python": "see requirements-dev.lock"
+  }
+}

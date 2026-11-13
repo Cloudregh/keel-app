@@ -1,0 +1,455 @@
+{
+ "runId": "run-20261112193429",
+ "rubric": "coach-rubric-v2",
+ "promptVersion": "coach-v1",
+ "stopClaims": {
+  "claims": 63,
+  "wrong": [
+   "c01#2 \"since 1:05pm\"",
+   "c07#2 \"since 11:40am\"",
+   "c27#2 \"since 11:40am\"",
+   "c28#2 \"stops at 10:15am\"",
+   "c30#3 \"since 9:00\"",
+   "c31#1 \"since 10:15am\""
+  ]
+ },
+ "pctClaims": {
+  "claims": 42,
+  "wrong": []
+ },
+ "projectionClaims": {
+  "claims": 7,
+  "wrong": [],
+  "loose": []
+ },
+ "literalTaskRulePassRate": 0.74,
+ "evalSet": "coach-eval-v1",
+ "n": 150,
+ "passRate": 0.8066666666666666,
+ "ungroundedRate": 0.08,
+ "strictUngroundedRate": 0.31333333333333335,
+ "byCheck": {
+  "nonEmpty": 0,
+  "noRefusal": 0,
+  "plainText": 0,
+  "length": 29,
+  "paragraphs": 0,
+  "english": 0,
+  "citesNumber": 0,
+  "namesDueTask": 0,
+  "emptyDayAck": 0
+ },
+ "byCat": {
+  "typical": [
+   30,
+   42
+  ],
+  "empty": [
+   12,
+   12
+  ],
+  "low": [
+   11,
+   12
+  ],
+  "long-stretch": [
+   11,
+   12
+  ],
+  "many-switch": [
+   11,
+   12
+  ],
+  "overdue": [
+   13,
+   15
+  ],
+  "multilingual": [
+   11,
+   15
+  ],
+  "edge": [
+   13,
+   18
+  ],
+  "ambiguous": [
+   9,
+   12
+  ]
+ },
+ "inconsistent": [
+  "c03 (2/3)",
+  "c04 (2/3)",
+  "c05 (1/3)",
+  "c06 (2/3)",
+  "c08 (1/3)",
+  "c09 (2/3)",
+  "c10 (2/3)",
+  "c12 (1/3)",
+  "c13 (2/3)",
+  "c20 (2/3)",
+  "c26 (2/3)",
+  "c30 (2/3)",
+  "c33 (2/3)",
+  "c35 (2/3)",
+  "c37 (2/3)",
+  "c39 (1/3)",
+  "c40 (2/3)",
+  "c45 (1/3)",
+  "c47 (1/3)",
+  "c50 (2/3)"
+ ],
+ "alwaysFail": [
+  "c46"
+ ],
+ "failures": [
+  {
+   "case": "c02",
+   "rep": 1,
+   "failed": [],
+   "ungrounded": [
+    "11:15am"
+   ],
+   "text": "You put in 125 focused minutes on Study today, with a best stretch of 50 minutes on Problem set 3 and Flashcards finished. A focus score of 71 is a solid base, and you kept a steady rhythm through the morning.\n\nOne thing stands out: nothing has been tracked since 11:15am, and you're at about half your 240-minute focus goal with 360 work minutes targeted. Your 11 tab switches suggest your attention drifted a bit, even in the stronger blocks.\n\nProblem set 3 is still due and needs about 90 minutes. Try a 50-minute block now with distractions closed, then a short break and a second block to finish it. That would also bring you close to your focus goal."
+  },
+  {
+   "case": "c02",
+   "rep": 2,
+   "failed": [],
+   "ungrounded": [
+    "11:15am"
+   ],
+   "text": "You've put in 125 focused minutes on Study today, with a 71 focus score and a 50-minute stretch on Problem set 3 that was your best of the day. You also finished Flashcards, and your morning rhythm of 25 minutes on, 5 off was steady.\n\nOne honest note: nothing has been tracked since 11:15am, and you're at 125 of your 360 work minutes and 240 focus minutes. The 11 tab switches suggest some drifting, too.\n\nProblem set 3 is still due and needs about 90 minutes. You've already done 50, so try one more 50-minute block this afternoon with distracting tabs closed, and you'll likely finish it."
+  },
+  {
+   "case": "c02",
+   "rep": 3,
+   "failed": [],
+   "ungrounded": [
+    "11:15am"
+   ],
+   "text": "You put in 125 focused minutes today, all on Study, with a 50-minute stretch on Problem set 3 as your longest. Your focus score of 71 is solid, and you finished Flashcards.\n\nOne thing stands out: you're at 125 of your 240 focus minutes and nothing has been logged since 11:15am. Eleven tab switches suggests some pulling away, though your sessions themselves were steady.\n\nWith the afternoon still open, restart Problem set 3 now. It needs about 90 minutes, so try two 45-minute blocks with a short break between. That would put you near your 240-minute focus goal."
+  },
+  {
+   "case": "c03",
+   "rep": 3,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You put in 270 minutes of work today, with 210 of them focused, which is solidly toward your 240-minute focus goal. Your longest stretch ran 105 minutes, and you finished \"Update roadmap\" along the way. A 74 focus score is a good result.\n\nOne honest observation: 29 tab switches is a fair amount of jumping around, and your 45-minute lunch break plus a 15-minute earlier one added up to a full hour away. That's healthy, but it likely nudged you just short of your 360-minute work goal.\n\nNothing is still due today, so you could stop here. If you want to close the gap, a 30-minute focused block on \"Design onboarding flow\" would hit your focus goal. Otherwise, start tomorrow with that task while you're fresh, with your browser tabs trimmed down first."
+  },
+  {
+   "case": "c04",
+   "rep": 1,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [
+    "75 minutes"
+   ],
+   "text": "You're off to a solid start: 145 minutes tracked by 12:15pm, all of it focused, including a 60-minute unbroken stretch on the budget spreadsheet. That's about 40% of your 360-minute work goal, and 105 of those minutes went to Finance.\n\nOne honest observation: your focus score of 67 and 27 tab switches suggest your attention was getting pulled around, even though your sessions were long. Your two 10-minute breaks were well placed, so the switching is the thing to watch.\n\nNext, knock out \"Call the bank\" first, since it's your priority 1 and only takes about 15 minutes. Then return to the budget spreadsheet with notifications off and only the tabs you need open. You have roughly 75 minutes of estimated work left on it, so a focused afternoon block should finish it."
+  },
+  {
+   "case": "c05",
+   "rep": 1,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've put in 155 minutes of work today, and 140 of those were focused, which is strong. Your longest stretch ran 70 minutes, and both the login bug and the release notes are finished. You're at 58% of your focus goal of 240 minutes.\n\nOne honest note: you took 70 minutes of breaks, including a 60-minute one at 10am, and nothing has been tracked since 11:30am. With 13 tab switches and a focus score of 70, your focus held up, but the long gap is what's keeping you short of your 360-minute work goal.\n\nWith nothing left due, pick one useful task for a 90-minute focus block this afternoon, like planning tomorrow's first priority. That would put you close to your focus goal."
+  },
+  {
+   "case": "c05",
+   "rep": 3,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've put in 155 minutes of work today, and 140 of those were focused, which is about 90 percent. You also finished both Fix login bug and Write release notes, and your longest stretch ran 70 minutes. That's a strong morning.\n\nOne honest observation: you're at 155 of your 360 work minutes, and your 60-minute break at 10:00am was the biggest gap in the day. Nothing has been tracked since 11:30am. Your 13 tab switches are modest, so focus quality wasn't the issue; it's momentum.\n\nWith no tasks still due, use the afternoon to pick one small next item for the App project and give it a single 45-minute focus block starting now. That would bring you closer to your 240 focus-minute goal."
+  },
+  {
+   "case": "c06",
+   "rep": 3,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You logged 295 minutes of work today, with 220 of those in focus, so you're about 75 minutes short of your 300-minute focus goal. You also finished Invoice clients and put 245 minutes into Agency work, which is a solid base.\n\nOne honest observation: your focus score of 68 and 28 tab switches suggest your attention got split, even though your longest stretch hit 105 minutes. Your 50-minute break at 10:55am was also the biggest gap in an otherwise steady morning.\n\nClient proposal is still due and is your top priority at an estimated 60 minutes. If you have energy left tonight, do one focused block now with notifications off. Otherwise, make it your first task tomorrow at 8:00am, when your focus was strongest."
+  },
+  {
+   "case": "c08",
+   "rep": 1,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You logged 240 minutes of work today, two thirds of your 360 goal, and you took a proper 30-minute break at 11:30. You also put 75 minutes into Prepare slides, with sessions at 10:15 and 1:00.\n\nMeetings took 165 minutes, which left little room for deep work. Your focus time landed at 75 of 240 minutes, and your focus score of 37 reflects that. Your longest stretch of 135 minutes was mostly meeting-heavy, so it was likely more tiring than productive.\n\nPrepare slides is still due with about 60 minutes estimated. You have already put in 75 minutes on it, so try one last 30-minute push before you wrap up. Otherwise, block the first slot tomorrow morning, before meetings can claim it."
+  },
+  {
+   "case": "c08",
+   "rep": 2,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You put in 240 minutes of work today, two-thirds of your 360 goal, and 75 of those were real focus time on Prepare slides. You also took a 30-minute break at 11:30, which is a healthy pause in a meeting-heavy day.\n\nHere's the honest part: 165 of your 240 minutes went to meetings, so focus time reached only 75 against your 240 goal. Your focus score of 37 reflects that, and your longest stretch of 135 minutes was mostly back-to-back meetings with little room to recharge.\n\nPrepare slides is still due with about 60 minutes estimated. You've already put 75 minutes into it, so try a final 30 to 45 minute block now, or first thing tomorrow, to wrap it up and mark it done."
+  },
+  {
+   "case": "c09",
+   "rep": 1,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've put in 180 minutes of focused work by 1:20pm, which is half your 360-minute work goal. Your focus score is 85, and you managed two 90-minute stretches on the Thesis literature review with only 7 tab switches. That's strong, steady concentration.\n\nOne honest observation: you took just one 20-minute break across three hours of work, and nothing has been logged since about 11:20am. Long 90-minute blocks are great, but a gap that long suggests you may have drifted off tracking or are due a proper rest.\n\nFor the rest of today, try one more 60-minute focus session on the literature review after a real break. That would bring you to 240 focus minutes, hitting your goal and covering most of its 240-minute estimate."
+  },
+  {
+   "case": "c10",
+   "rep": 2,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You logged 190 minutes of focused work today, with a focus score of 76 and a 60-minute stretch on the knowledge base article. You also finished both the knowledge base article and bug triage, which is a solid result.\n\nOne honest observation: 53 tab switches is a lot for 190 minutes, roughly one every three to four minutes. That likely chipped away at your focus, even though your sessions were well structured with breaks in between.\n\nYou're about 170 minutes short of your 360-minute work goal and 50 short of your focus goal, and nothing is still due. Since the day is winding down, consider stopping here. Tomorrow, try a 45-minute block on customer emails with only your inbox open to see if switches drop."
+  },
+  {
+   "case": "c12",
+   "rep": 1,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've put in 250 of your 420 work minutes today, and 220 of those were focused, which is close to your 240-minute focus goal. A focus score of 82, a 110-minute longest stretch, and finished data cleaning make this a solid day.\n\nOne honest observation: your 45-minute break at 10:45am was the longest gap of the day, and 20 tab switches is modest but worth watching. Your focus blocks of 70 to 80 minutes worked well, so the rhythm is sound.\n\nFor the rest of today, send the 10-minute email to your supervisor first as a quick win. Then spend what time you have left on Regression models, which still needs about 120 minutes and is your top-priority task. If it doesn't fit today, start it first thing tomorrow."
+  },
+  {
+   "case": "c12",
+   "rep": 3,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've put in 250 of your 420 work minutes today, and 220 of those were focused, which is close to your 240-minute focus goal. Your focus score of 82 is solid, you finished Data cleaning, and your longest stretch ran 110 minutes.\n\nOne thing to notice: 20 tab switches is modest, but your break time was uneven, with a quick 15 minutes followed by a 45-minute gap mid-morning. A steadier rhythm might help you keep momentum.\n\nFor the rest of today, send the 10-minute email to your supervisor first as a quick win. Then, if energy allows, start another block on Regression models, which still has about 120 minutes estimated. You'd likely only need a short block to hit your focus goal."
+  },
+  {
+   "case": "c13",
+   "rep": 1,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You tracked 195 minutes today, with 165 of them in focus time. That's a solid 75-minute longest stretch, and you finished Set up analytics after two full hours on Landing page copy. All of it went to Launch.\n\nYou're at about 54% of your 360-minute work goal and 69% of your 240-minute focus goal. Your focus score of 67 and 28 tab switches suggest some drifting, even though your sessions were long. Your breaks were short and well spaced, which helped.\n\nLanding page copy is still due, with an estimate of just 30 minutes. Since it's 8:00pm, consider a quick 30-minute push tonight to wrap it up, or make it your first task tomorrow with your notifications off and extra tabs closed."
+  },
+  {
+   "case": "c14",
+   "rep": 2,
+   "failed": [],
+   "ungrounded": [
+    "80"
+   ],
+   "text": "You've logged 190 minutes of work by 3pm, which is over halfway to your 360-minute goal, and you finished Lesson planning. Your 30-minute break was well placed after a long morning.\n\nOne honest note: only 70 of your 240 focus minutes are in so far, and a 120-minute meeting took up most of the morning. Your longest stretch was 150 minutes, so that block likely left little room for deep work. Your 3 tab switches are low, which is a good sign.\n\nFor the rest of today, set aside a protected block for Mark essays. You've done 40 minutes of the 120 estimated, so about 80 remain. Try one 45-minute push now and finish the rest tomorrow morning."
+  },
+  {
+   "case": "c20",
+   "rep": 1,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "Not much got tracked today, and that's okay. You did put in 12 focused minutes on your side project, sketching the logo, with only 2 tab switches and a 5-minute break afterward. That's a clean, distraction-light start.\n\nThe honest picture is that 12 minutes is a small slice of your 360-minute work goal and 240-minute focus goal, and your session ended at 2:12pm. Your focus score of 45 likely reflects how short the stretch was rather than a lack of concentration.\n\nWith the evening still ahead, pick the logo sketch back up. It's your priority 1 task and has about 45 minutes estimated. Set a timer for one 30-minute block, silence notifications, and start the session as soon as you sit down."
+  },
+  {
+   "case": "c24",
+   "rep": 2,
+   "failed": [],
+   "ungrounded": [
+    "50%"
+   ],
+   "text": "You hit your 360-minute work goal exactly, and your focus time came in at 360 against a 240 target. That's 50% over. A focus score of 89 with only 11 tab switches is excellent, and all of it went into Study.\n\nOne honest observation: your longest stretch was 200 minutes with a single 15-minute break all day. That's a lot of sustained effort, and long runs without rest tend to cost you retention and energy later on.\n\nExam revision still has about 480 minutes estimated. For tomorrow, split it into blocks of 50 to 90 minutes with a 10-minute break between each, so you keep this quality of focus without the long unbroken stretch."
+  },
+  {
+   "case": "c26",
+   "rep": 3,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You hit both goals today: 390 minutes worked against a 360 target, and 390 focus minutes against 240. A focus score of 85 with only 20 tab switches is strong, and a 300-minute stretch on the game jam build shows real commitment.\n\nOne honest note: that 300-minute stretch ran from 3:00pm to 8:00pm with no break until the 30-minute pause. Long unbroken blocks tend to dull judgment, which matters when you're close to a deadline.\n\nIt's 11:00pm and \"Submit game jam entry\" is still due, about 30 minutes of work. If you can, do it now while the build is fresh, or first thing tomorrow after a rested start. Either way, schedule it as its own short session so it doesn't get lost."
+  },
+  {
+   "case": "c29",
+   "rep": 3,
+   "failed": [],
+   "ungrounded": [
+    "1.2"
+   ],
+   "text": "You logged 135 minutes of focused work on Marketing today, with every minute counted as focus. You wrapped up Social media posts across two 45-minute sessions, and your longest stretch of 45 minutes shows steady discipline.\n\nOne honest observation: 165 tab switches over 135 minutes is about 1.2 per minute, which likely explains the focus score of 65. Also, nothing was tracked after 12:45pm, so you're at 135 of your 360 work minutes and 135 of your 240 focus minutes.\n\nWith nothing due, you could use this evening or tomorrow morning to do one 45-minute block on the Newsletter, which you started but didn't mark complete. Close extra tabs before you begin to see if your score climbs."
+  },
+  {
+   "case": "c30",
+   "rep": 2,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've put in 75 minutes of focused work on the App project by noon, all of it on debugging the flaky test, in three tidy 25-minute sessions with 5-minute breaks between them. That's a steady, disciplined start, and you're about 31% of the way to your 240-minute focus goal.\n\nOne honest observation: 164 tab switches is a lot for 75 minutes, and it likely explains your focus score of 54. Your longest stretch was 25 minutes, so the rhythm is good, but something kept pulling your attention away inside those blocks.\n\nSince the flaky test is still open and estimated at an hour, start there this afternoon. Close extra tabs before you begin and aim for one 25-minute block with fewer switches than this morning."
+  },
+  {
+   "case": "c33",
+   "rep": 1,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You're off to a good start: you logged a 20-minute focus session on Morning planning at 9:00am and finished it. All 20 tracked minutes were focus time, with just one tab switch, which is a clean way to begin the day.\n\nOne honest observation: a focus score of 54 is middling despite the low switching, and with 20 of your 360 work minutes done, there's a lot of day left to cover. No breaks yet is fine so far, but it's worth planning one once you pass the 90-minute mark.\n\nSince it's only 9:30, use this fresh window for Quarterly OKRs, your top priority at 120 minutes. Try a 50-minute first block now, then knock out Interview feedback (15 minutes) as a quick win afterward."
+  },
+  {
+   "case": "c35",
+   "rep": 2,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've put in 130 minutes so far, with 100 of those in focus on the billing refactor. That's two solid 50-minute blocks starting at 9:00am, and your longest stretch of 80 minutes shows you can hold concentration when it counts.\n\nOne honest observation: your focus score is 56 with 13 tab switches, and nothing has been tracked since the meeting ended at 11:20am. That's a long gap, and you're at about a third of your 360-minute work goal.\n\nFor the rest of today, start with the security patch. It's the higher priority and only needs 60 minutes, so you could finish it by mid-afternoon. Close extra tabs first. Tomorrow morning, return to the billing refactor, which still has a 240-minute estimate."
+  },
+  {
+   "case": "c37",
+   "rep": 1,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You put in 120 minutes of focused work today, all of it on 仕事, and your longest stretch hit 45 minutes. You also finished メール返信 and spent 90 minutes on 企画書を書く across two solid sessions, which is real progress on a big task.\n\nOne honest note: you're at 120 of your 360 work minutes and 120 of your 240 focus minutes, with a focus score of 63 and 19 tab switches. Nothing has been tracked since 12:45pm, so the afternoon has been quiet.\n\nIt's 5:00pm, so a full 2-hour block isn't realistic today. Try one 45-minute session on 企画書を書く now, with other tabs closed, to move it forward. Or start tomorrow morning with it at 10:00, since that slot worked well today."
+  },
+  {
+   "case": "c38",
+   "rep": 3,
+   "failed": [],
+   "ungrounded": [
+    "160 minutes"
+   ],
+   "text": "You put in 100 minutes of focused work today, and your longest stretch was a solid 60 minutes on the report review. Every minute you tracked was focus time, and you took a sensible 20-minute break after that first session.\n\nIt's 3:00pm and you're at 100 of your 360 work minutes, with 100 of your 240 focus minutes done. Your focus score of 63 and 12 tab switches suggest your attention got pulled around, especially during the client replies.\n\nFor the rest of today, try one 60-minute block on \"مراجعة التقرير\", which is still due and estimated at 60 minutes. Close extra tabs and silence notifications first. That would bring your focus total to 160 minutes."
+  },
+  {
+   "case": "c39",
+   "rep": 1,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [
+    "12:25pm"
+   ],
+   "text": "You put in 180 minutes of work today, all of it focused, which is 75% of your focus goal of 240. Your focus score of 83 is solid, your longest stretch ran 75 minutes on the Steuererklärung, and you finished Übersetzung prüfen. Büro got 105 minutes and Privat 75.\n\nOne honest note: you were at 180 of 360 work minutes by midday, and nothing has been logged since 12:25pm. Twelve tab switches is modest, so the gap looks like time away rather than distraction.\n\nThe Steuererklärung is still due and is your top priority at about 120 minutes. Since your best stretch today was on it, try a fresh 60-minute block this evening or first thing tomorrow at 8:30am, and finish the rest in a second block."
+  },
+  {
+   "case": "c39",
+   "rep": 2,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [
+    "12:25pm"
+   ],
+   "text": "You put in 180 minutes today, all of it focused, with a focus score of 83 and only 12 tab switches. Your longest stretch was 75 minutes on the Steuererklärung, and you finished Übersetzung prüfen. That's 75% of your focus goal.\n\nOne honest note: you're at 180 of your 360 work minutes, and nothing was tracked after 12:25pm. Your 40-minute break late morning was the longest gap, and the day seems to have stalled after it.\n\nSince it's 6:00pm, don't force a long session now. Tomorrow, start with the Steuererklärung (priority 3, about 120 minutes) while your focus is fresh. You already have 75 minutes in on it, so a first block of 60 to 75 minutes should get you well along."
+  },
+  {
+   "case": "c39",
+   "rep": 3,
+   "failed": [],
+   "ungrounded": [
+    "12:25pm"
+   ],
+   "text": "You put in 180 minutes of work today, all of it focused, which is 75% of your 240-minute focus goal. A focus score of 83, just 12 tab switches, and a 75-minute stretch on Steuererklärung are solid numbers, and you finished Übersetzung prüfen.\n\nOne honest observation: you tracked nothing after 12:25pm, so you're at half of your 360-minute work goal. Your longer break of 40 minutes also came after only 60 minutes of focus, which may have broken your momentum.\n\nSteuererklärung is still due and needs about 120 minutes. If you have energy this evening, do a 45-minute block on it now. Otherwise, start it first thing tomorrow at 8:30am, when it worked well today."
+  },
+  {
+   "case": "c40",
+   "rep": 2,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've put in 100 minutes of focused work on your mémoire this morning, all of it in two clean 50-minute sessions with a proper 10-minute break between them. A focus score of 69 and only 5 tab switches shows you can hold your attention well when you sit down to work.\n\nOne honest note: you're at 100 of your 240 focus minutes and 100 of 360 work minutes, and nothing has been tracked since 10:50am. The gap is a bit wide for 1:00pm, so the afternoon will need to carry more.\n\nRéviser le mémoire is still due, with an estimate of 120 minutes. Start a 50-minute session on it after lunch. That would put you past that estimate and make a real dent in today's focus goal."
+  },
+  {
+   "case": "c45",
+   "rep": 1,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've put in 180 minutes of focused work by 2:00pm, which is half your 360-minute work goal and 75% of your 240-minute focus goal. Six steady 30-minute sessions with 5-minute breaks between them is a lovely, consistent rhythm, and your focus score of 74 backs it up.\n\nOne honest observation: you switched tabs 30 times across those 180 minutes, about once every six minutes, and all of it went to email with no project attached. That likely means email is fragmenting your attention a bit.\n\nFor the rest of today, knock out the last priority 1 Email task. It's only a 15-minute estimate, so you can finish it in one short sitting. Then try assigning your next session to a project so tomorrow's tracking shows where your time really goes."
+  },
+  {
+   "case": "c45",
+   "rep": 2,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've put in 180 minutes of focused work by 2pm, which is half your 360-minute work goal and 75% of your 240-minute focus goal. Six steady 30-minute sessions with 5-minute breaks between them show a really consistent rhythm, and your focus score of 74 is solid.\n\nOne honest note: all 180 minutes went to Email with 30 tab switches, so it's worth asking whether that time was spent on one big task or scattered across many small ones. Nothing is logged to a project either, which makes it hard to see where the time went.\n\nFor this afternoon, knock out the priority 1 Email task still due. It's estimated at just 15 minutes. Then start a session on a different task and assign it to a project."
+  },
+  {
+   "case": "c46",
+   "rep": 1,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've logged 210 minutes of work so far today, all of it focused, with a focus score of 88 and just 5 tab switches. That's 58% of your 360-minute work goal and 88% of your 240-minute focus goal, and you've already finished the night shift handover.\n\nOne honest observation: your longest stretch was 120 minutes on patient charts, with only a single 30-minute break before it. That's deep concentration, but long runs without a pause can quietly drain you, especially after a night shift.\n\nSince it's 10:00am and nothing is still due, consider resting first. If you want to add more, a 30-minute focus block would close your focus goal gap, and a short break beforehand will help you do it well."
+  },
+  {
+   "case": "c46",
+   "rep": 2,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've put in 210 minutes of focused work already, and it's only 10:00am. That's 88 percent of the way to your 240-minute focus goal and 58 percent of your 360-minute work goal. Your focus score of 88, with just 5 tab switches and a 120-minute unbroken stretch on patient charts, is impressive, and you finished the night shift handover.\n\nOne honest observation: after a 30-minute break at 1:30am, you went straight into a two-hour block with no pause. That's strong concentration, but long stretches after a night shift can quietly drain you.\n\nNothing is listed as due, so your next step is easy: log about 30 more focus minutes to hit your 240 goal, then rest. If you work more later, try a short break every 60 to 90 minutes."
+  },
+  {
+   "case": "c46",
+   "rep": 3,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've put in 210 minutes of focused work by 10:00am, which is already 88% of your 240-minute focus goal and 58% of your 360-minute work goal. A focus score of 88 with only 5 tab switches is impressive, and finishing the night shift handover is a clear win.\n\nOne honest observation: your longest stretch was 120 minutes, and your only break was 30 minutes in the middle. Long runs like that are great for depth, but they can quietly drain you, especially after a night shift.\n\nNothing is listed as still due, so your best next step is to rest. If you want to add more time today, keep it short, around 30 minutes, to close your focus gap, and then call it a day."
+  },
+  {
+   "case": "c47",
+   "rep": 1,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You logged 160 minutes of work by 4:00pm, all of it focused time, which is 67% of your 240-minute focus goal. Your longest stretch was 100 minutes (10:15 to 11:55, counting the 40-minute session that followed), and a focus score of 70 is a decent base.\n\nOne honest observation: 24 tab switches is a lot for 160 minutes, and nothing has been tracked since about 11:55am. You're at 160 of 360 work minutes, so the afternoon has been quiet.\n\nFor the rest of today, start one 60-minute focus session now and give it a task name. None of your sessions have a project or task attached, and naming one will make tomorrow's review much more useful. Closing extra tabs first should help with the switching."
+  },
+  {
+   "case": "c47",
+   "rep": 2,
+   "failed": [],
+   "ungrounded": [
+    "220 minutes"
+   ],
+   "text": "You logged 160 minutes of work today, all of it focused, with a solid 100-minute stretch from 10:15 to 11:55 that shows you can settle in deeply. Your focus score of 70 is respectable.\n\nOne honest note: you're at 160 of your 360-minute goal, and nothing has been tracked since late morning. With 24 tab switches, some of your attention was likely splitting even in good stretches. Also, none of your sessions have a task or project attached, so it's hard to see where the time went.\n\nWith the afternoon still open, start one 60-minute focus session now and name the task before you begin. That would put you at 220 minutes and close in on your 240-minute focus goal."
+  },
+  {
+   "case": "c47",
+   "rep": 3,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You've logged 160 minutes of focused work by 4:00pm, and all of it counted as focus time. Your longest stretch ran 100 minutes (10:15 to 12:55 across your last two sessions), and you took a 15-minute break after your first hour, which is a good rhythm.\n\nOne honest observation: you're at 160 of your 360-minute work goal, and nothing has been tracked since about 11:55am. Your 24 tab switches and a focus score of 70 suggest some scattering, and none of your sessions have a task or project attached, so it's hard to see where the time went.\n\nFor the rest of today, start one 45-minute session now and name the task before you begin. That would add to your total and give tomorrow's review something specific to show."
+  },
+  {
+   "case": "c50",
+   "rep": 3,
+   "failed": [
+    "length"
+   ],
+   "ungrounded": [],
+   "text": "You put in 180 focused minutes today, with a focus score of 81 and a solid 60-minute longest stretch. All of your work went to Project, and your three sessions were nicely consistent. That's 75% of your focus goal of 240 minutes, and half of your 360-minute work goal.\n\nOne honest observation: your tracking stops at 12:40pm, and you logged 15 tab switches. Your 30-minute break was longer than the others, so the afternoon may have gotten away from you.\n\nProject is still due with a 60-minute estimate. If you can fit in one more focus session this evening, it would bring you to 240 focus minutes and hit your goal. Start it with a single tab open to keep switching low."
+  }
+ ]
+}
