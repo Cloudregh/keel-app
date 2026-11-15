@@ -126,3 +126,21 @@ test("dashboard: jump to any day from the calendar button", async ({ keel }) => 
   expect(await keel.ev(`() => ui.dashDay`)).toBe("2026-11-03");
   await expect(keel.page.locator(".dash-head h1")).toContainText("3 November");
 });
+
+test("a scroll event that arrives after the picker opened, with the page not moving, doesn't close it; a real scroll does", async ({ keel }) => {
+  // A scroll that ended just before the click (trackpad momentum, or a browser scrolling the button into view) can
+  // deliver its scroll event after the picker opened. Found in Phase 14 (2026-11-15) when the new look made the Tasks
+  // page taller. The picker now closes only if its button actually moved.
+  await keel.ev(reset);
+  await keel.ev(`() => { for (let i = 0; i < 12; i++) state.tasks.push({ id: "t" + i, title: "Task " + i, due: null, done: false, createdAt: 1, subtasks: [] }); ui.view = "tasks"; ui.taskFilter = "open"; ui.expanded = "t0"; render(); }`);
+  await keel.page.locator('[data-dp="due-t0"] .dp-btn').click();
+  await expect(keel.page.locator(".pop")).toBeVisible();
+  await keel.page.evaluate(() => document.dispatchEvent(new Event("scroll")));                 // a late event, nothing moved
+  await expect(keel.page.locator(".pop")).toBeVisible();
+  await keel.page.locator('.pop [data-act="dp-pick"]', { hasText: "Tomorrow" }).click();
+  expect(await keel.ev(`() => state.tasks[0].due`)).toBe("2026-11-11");
+  await keel.page.locator('[data-dp="due-t0"] .dp-btn').click();
+  await expect(keel.page.locator(".pop")).toBeVisible();
+  await keel.page.evaluate(() => { document.documentElement.style.minHeight = "3000px"; window.scrollBy(0, 200); });   // the page really scrolls
+  await expect(keel.page.locator(".pop")).toHaveCount(0);
+});

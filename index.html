@@ -20,7 +20,7 @@ if (!/claude\.ai$|claudeusercontent\.com$|claude\.site$/.test(location.hostname)
 <!-- Fix 68: loaded without blocking the page. A font server that hangs no longer leaves Keel blank; it shows at once in
      system fonts and switches when the fonts arrive (media="print" never blocks; the boot script turns it on, with no
      inline event handler, so the "no inline handlers" XSS baseline still holds). -->
-<link id="fonts-css" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Raleway:wght@600;700&display=swap" rel="stylesheet" media="print">
+<link id="fonts-css" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#09090b">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -548,6 +548,82 @@ h2{font-size:15px;font-weight:700}
 .tp-list button{border:0;background:none;text-align:left;padding:7px 10px;border-radius:8px;font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums}
 .tp-list button:hover{background:var(--panel-3)}
 .tp-list button[aria-selected="true"]{background:var(--accent-2);color:#fff;font-weight:700}
+/* ===== Keel night (2026-11-15): violet-black surfaces, lavender accent, light wide numerals, soft glow ===== */
+:root{
+  color-scheme:light;
+  --f-ui:"Outfit",system-ui,-apple-system,"Segoe UI",sans-serif; --f-disp:"Outfit",system-ui,-apple-system,sans-serif;
+  --bg:#f4f3f9; --side:#fbfaff; --panel:#ffffff; --panel-0:#fcfbff; --panel-2:#f2f0f9; --panel-3:#e7e4f3; --line:#e8e5f1; --line-2:#d9d5e7;
+  --ink:#14111f; --ink-2:#4a4660; --ink-3:#625e79;
+  --accent:#6a58e0; --accent-2:#7a69ee; --accent-ink:#ffffff; --accent-soft:rgba(122,105,238,.12);
+  --cta:#6a58e0; --cta-2:#7a69ee; --cta-ink:#ffffff; --nav-on:#ece9fb; --seg-on:#ffffff;
+  --hi:inset 0 1px 0 rgba(255,255,255,.7); --card-shadow:0 1px 2px rgba(20,17,31,.04),0 12px 32px -20px rgba(64,48,160,.25);
+  --glow:radial-gradient(50% 40% at 80% -8%,rgba(122,105,238,.12),transparent 70%);
+  --promo:linear-gradient(160deg,#ffffff 0%,#f1edff 45%,#d9d0ff 100%); --promo-ink:#14111f; --promo-ink-2:#4a4660;
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#08080c; --side:#0b0b10; --panel:#111117; --panel-0:#0e0e13; --panel-2:#17171f; --panel-3:#22222c; --line:#1d1d26; --line-2:#2b2b37;
+  --ink:#f5f4fb; --ink-2:#b7b4c8; --ink-3:#8f8ca4;
+  --accent:#c3b7ff; --accent-2:#a596ff; --accent-ink:#15112b; --accent-soft:rgba(165,150,255,.15);
+  --cta:#c9beff; --cta-2:#b1a3ff; --cta-ink:#15112b; --nav-on:#18181f; --seg-on:#24242e;
+  --hi:inset 0 1px 0 rgba(255,255,255,.035); --card-shadow:0 20px 40px -28px rgba(0,0,0,.8);
+  --glow:radial-gradient(45% 38% at 82% -10%,rgba(150,128,255,.16),transparent 70%);
+  --promo:radial-gradient(140% 120% at 100% 100%,#9a88ff 0%,#6a55d6 30%,#3b2d86 58%,#1a1430 88%); --promo-ink:#f5f4fb; --promo-ink-2:#cdc7ee;
+}
+body{font-family:var(--f-ui);font-size:14.5px;letter-spacing:0;font-weight:400}
+h1,h2,h3{font-family:var(--f-disp);letter-spacing:-.01em}
+h1{font-size:30px;font-weight:400;letter-spacing:-.02em}
+h2{font-size:16px;font-weight:500}
+h3{font-weight:500}
+.dash-head h1{font-size:30px;font-weight:400}
+.side{background:var(--side);padding:22px 14px;gap:16px}
+.brand b{font-family:var(--f-disp);font-weight:500;font-size:21px;letter-spacing:-.01em}
+.ws{border-radius:14px;padding:9px 12px;background:var(--panel-2);border-color:var(--line-2);color:var(--ink);font-weight:500}
+.nav button{padding:10px 12px;border-radius:12px;font-weight:400;font-size:14.5px;border:1px solid transparent;color:var(--ink-2)}
+.nav button[aria-current="page"]{background:var(--nav-on);border-color:var(--line-2);color:var(--ink);box-shadow:var(--hi)}
+.nav button svg{opacity:.9}
+.nav .grp{margin:10px 8px}
+.panel,.tasks,.trk,.tracker,.qa,.mobile-tracker{border-radius:20px;background:linear-gradient(180deg,var(--panel),var(--panel-0));border-color:var(--line);box-shadow:var(--hi),var(--card-shadow)}
+.rail .panel{padding:18px 18px 20px}
+.rail-h{font-size:13px;font-weight:400;color:var(--ink-2)}
+.big{font-size:36px;font-weight:300;letter-spacing:-.03em}
+.big small{font-size:17px;font-weight:400;color:var(--ink-3)}
+.stat .v{font-weight:300;font-size:28px;letter-spacing:-.025em}
+.stat .l{font-weight:400}
+.stats.mini .v{font-size:24px}
+.tracker .t-time{font-weight:300;font-size:32px;letter-spacing:-.03em}
+.ring .clock{font-weight:200;letter-spacing:-.04em}
+.goal .c b{font-weight:300}
+.delta{font-weight:500}
+.btn{border-radius:12px;background:var(--panel-2);border-color:var(--line-2);font-weight:500;font-size:13.5px;padding:8px 15px}
+.btn.sm{border-radius:10px}
+.btn.primary{background:linear-gradient(180deg,var(--cta),var(--cta-2));border-color:transparent;color:var(--cta-ink);box-shadow:0 8px 24px -12px rgba(150,128,255,.7),inset 0 1px 0 rgba(255,255,255,.35)}
+.btn.primary:hover{opacity:1;filter:brightness(1.05)}
+.btn.violet{background:linear-gradient(180deg,var(--cta),var(--cta-2));border-color:transparent;color:var(--cta-ink)}
+.icon-btn{border-radius:12px}
+.seg{border-radius:14px;padding:4px;background:var(--panel-0);border-color:var(--line-2)}
+.seg button{border-radius:10px;font-weight:400;font-size:13.5px;padding:7px 14px}
+.seg button[aria-pressed="true"]{background:var(--seg-on);color:var(--ink);box-shadow:var(--hi),0 4px 12px -6px rgba(0,0,0,.5)}
+.chip{border-radius:12px;font-weight:400}
+.input,select.input,textarea.input,.dp-btn{border-radius:12px;background:var(--panel-2)}
+.qa{border-radius:16px}
+.today-pill{border-radius:8px;font-weight:500;background:var(--panel-3);color:var(--ink)}
+.hbar .b,.tl-track,.pm-bar{background:var(--panel-2)}
+.hbar .b i{box-shadow:0 0 14px -2px currentColor}
+.score-bar i{box-shadow:0 0 12px rgba(165,150,255,.6)}
+.cal-now,.cal-now::before{box-shadow:0 0 10px rgba(165,150,255,.8)}
+.check[aria-checked="true"],.play.on,.toggle[aria-checked="true"],.cal-days button[aria-selected="true"],.tp-list button[aria-selected="true"]{background:var(--accent-2);border-color:var(--accent-2);color:var(--accent-ink)}
+.group-h{font-weight:400}
+.task .tt{font-weight:500}
+.modal,.pop{border-radius:22px;background:linear-gradient(180deg,var(--panel),var(--panel-0))}
+.toast{border-radius:14px}
+.panel.promo{position:relative;overflow:hidden;background:var(--promo);border-color:color-mix(in srgb,var(--accent-2) 30%,var(--line));color:var(--promo-ink)}
+.panel.promo::before{content:"";position:absolute;inset:0;background-image:radial-gradient(1px 1px at 20% 30%,rgba(255,255,255,.5),transparent),radial-gradient(1px 1px at 70% 20%,rgba(255,255,255,.35),transparent),radial-gradient(1px 1px at 85% 60%,rgba(255,255,255,.3),transparent),radial-gradient(1px 1px at 40% 75%,rgba(255,255,255,.25),transparent);pointer-events:none;opacity:var(--stars,1)}
+:root:not([data-theme="dark"]) .panel.promo::before{opacity:0}
+.panel.promo>*{position:relative}
+.panel.promo .rail-h{color:var(--promo-ink);font-size:20px;font-weight:400;letter-spacing:-.01em;margin-bottom:8px}
+.panel.promo .muted{color:var(--promo-ink-2)!important;font-size:14px!important;margin-bottom:16px!important}
+.panel.promo .btn{width:100%;padding:12px 16px;font-size:14.5px}
 </style>
 </head>
 <body>
@@ -2189,7 +2265,7 @@ function planPanel() {
 function plannerCard(k) {
   if (k !== todayKey()) return "";
   const p = state.plan;
-  if (!p || p.day !== k) return `<section class="panel"><div class="rail-h"><span>Plan</span></div><p class="muted" style="margin:0 0 10px;font-size:13px">Let Keel order today's tasks around your energy.</p><button class="btn sm violet" data-act="plan-go">${ICON.spark} Plan my day</button></section>`;
+  if (!p || p.day !== k) return `<section class="panel promo"><div class="rail-h"><span>Plan your day</span></div><p class="muted" style="margin:0 0 10px;font-size:13px">Let Keel order today's tasks around your energy.</p><button class="btn sm violet" data-act="plan-go">${ICON.spark} Plan my day</button></section>`;
   const next = p.items.find(i => i.kind === "task" && taskById(i.taskId) && !taskById(i.taskId).done);
   const left = p.items.filter(i => i.kind === "task" && taskById(i.taskId) && !taskById(i.taskId).done).length;
   if (!next) return `<section class="panel"><div class="rail-h"><span>Plan</span></div><p style="margin:0;font-size:13px">Plan complete for today.</p></section>`;
@@ -2692,6 +2768,7 @@ function openPicker(btn) {
   PICK.el.setAttribute("aria-label", kind === "time" ? "Choose a time" : "Choose a date");
   document.body.appendChild(PICK.el);
   btn.setAttribute("aria-expanded", "true");
+  const r0 = btn.getBoundingClientRect(); PICK.at = [r0.left, r0.top];   // to tell a real scroll from a late scroll event
   if (kind === "date") { PICK.month = (cur || todayKey()).slice(0, 7); renderCalendar(cur, btn.dataset.clear === "1"); }
   else renderTimes(cur);
   placePicker(btn);
@@ -2750,7 +2827,13 @@ document.addEventListener("keydown", e => {
 }, true);
 document.addEventListener("pointerdown", e => { if (PICK.el && !PICK.el.contains(e.target) && !e.target.closest(".dp-btn")) closePicker(); }, true);
 window.addEventListener("resize", () => closePicker());
-document.addEventListener("scroll", e => { if (PICK.el && !PICK.el.contains(e.target)) closePicker(); }, true);
+// Close on scroll only if the button actually moved: a scroll that ended just before the click (trackpad momentum, or
+// the browser scrolling the button into view) can deliver its event after the picker opened.
+document.addEventListener("scroll", e => {
+  if (!PICK.el || PICK.el.contains(e.target)) return;
+  const b = PICK.key && pickButton(PICK.key), r = b && b.getBoundingClientRect();
+  if (!r || !PICK.at || Math.abs(r.left - PICK.at[0]) > 1 || Math.abs(r.top - PICK.at[1]) > 1) closePicker();
+}, true);
 
 /* ---------------- Modal / toast / tooltip ---------------- */
 let lastFocus = null;

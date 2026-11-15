@@ -4,11 +4,11 @@ Date: 2026-11-15 · QA sign-off run from a clean state · Owner: Cloudregh
 
 ## Verdict
 
-**READY WITH KNOWN ISSUES**, final once the two changes added after the review (Mac notifications; setup without Terminal) pass CI and the Mac checks in "Still to run".
+**READY WITH KNOWN ISSUES**, final once the changes added after the review (Mac notifications, setup without Terminal, the new look) pass CI and the Mac checks in "Still to run".
 
 Why:
 - Every approved Phase 1 target is met. Values were measured from a clean copy or, where noted, in the phase that owns them.
-- No bug is open: 65 of the 67 recorded bugs are fixed and verified, and the other 2 were closed by decision. Each fix has a test that fails on the old code. Bugs 1 and 2 and accepted risks A5 and A6 were fixed on 2026-11-15, after the first sign-off review.
+- No bug is open: 66 of the 68 recorded bugs are fixed and verified, and the other 2 were closed by decision. Each fix has a test that fails on the old code. Bugs 1 and 2 and accepted risks A5 and A6 were fixed on 2026-11-15, after the first sign-off review.
 - The "known issues" are 5 accepted limitations (A1–A4, A7), none of which can lose or expose data.
 - AI spend was $0.
 - CI runs the critical suites on every push and pull request, and its first run passed.
@@ -21,8 +21,8 @@ Why:
 | Chromium on the owner's Mac | **Done** for 5bc1963: security-xss 9/9 (finding 69); long-output 100/100 over 10 repeats |
 | CI | **Passed** on 891306a and 0632a7f. 5bc1963 and f07ed7a: results not yet reported. The setup change needs its own run, plus the new `tracker-app` workflow |
 | Vercel (https://keel-app-five.vercel.app) | **Done** for 5bc1963, checked through the commit status and the live site. `index.html` is byte-identical to the repo's; the page's files return 200; the tracker, `pyproject.toml`, `package.json`, `README.md` and `docs/` return 404; the page loads with no console errors |
-| Real Mac notifications | The tracker accepted the test schedule and marked the notification sent (f07ed7a); **the owner to confirm it appeared on screen** |
-| Keel Tracker.app | **To do:** push, let the `tracker-app` workflow build and check it, tag `tracker-v1.0.0` to publish, then download, open and approve it on the Mac. The first build can only run on GitHub's Mac runners: it couldn't be tried from the test machine |
+| Real Mac notifications | **Done:** with Keel Tracker.app as the running tracker, the test notification sent at 15:45:55 appeared on the owner's screen (confirmed 2026-11-15) |
+| Keel Tracker.app | **Done:** the `tracker-app` build passed on cf61123 (both architectures, signature, self-test natively and under Rosetta); `tracker-v1.0.0` published; on the owner's Mac it was downloaded, approved and opened, and is the running tracker. The first attempt didn't set it up, because the old Python tracker was still connected; it worked on the retry |
 
 ## Change after the review: Mac notifications (2026-11-15, owner's request)
 
@@ -60,6 +60,20 @@ The `tracker-app` workflow builds it on a macOS runner and publishes `Keel-Track
 
 Tests: `test_app.py` (13) and `onboarding.spec` (4). Two existing tests that pinned the default allowed sites were updated. J12 now checks the setup screen's Import button instead of the old heading.
 
+
+## Change after the review: new look (2026-11-15, owner's request)
+
+The owner asked for the look of a dark staking-dashboard design. It isn't a copy of that product; Keel keeps its own content and branding, with the same feel:
+- the Outfit typeface, with light, wide numerals;
+- violet-black surfaces and a lavender accent;
+- rounded cards with a soft top highlight;
+- pill segmented controls and softly glowing bars;
+- the "Plan my day" card as a gradient feature card.
+
+It applies to all 8 views, with a matching light theme; dark stays the default. It's one style layer on top of the existing ones, so the markup is unchanged apart from the feature card.
+
+Checks: `quality.spec` (axe on every view, both themes, at mobile, tablet and desktop sizes) passes, and screenshots of every view in both themes were reviewed. The taller Tasks page exposed finding 70, a date picker that could close as it opened; it's fixed with a regression test.
+
 ## The clean run (2026-11-15)
 
 Fresh copy of the project with no `node_modules`, `.venv`, caches or earlier results. Installed from the lockfiles with `npm ci` and `pip install -r requirements-dev.lock`. Node 22.23.4, Python 3.13.18, Playwright 1.65.0, pytest 9.0.3.
@@ -85,7 +99,7 @@ Fresh copy of the project with no `node_modules`, `.venv`, caches or earlier res
 
 | Area | Target | Threshold | Measured | Result |
 |---|---|---|---|---|
-| All | Test suites pass / flaky | 100% pass, 0 flaky | On the current code (with both changes): 777/777 (389 + 315 + 73) in the cloud, Chromium twice with 0 flaky. For 5bc1963: Firefox and WebKit (Mac) 65/65 twice each, Mac Chromium items fixed. The Mac re-run for notifications is pending | PASS (Mac re-run pending) |
+| All | Test suites pass / flaky | 100% pass, 0 flaky | On the current code (with both changes): 778/778 (389 + 316 + 73) in the cloud, Chromium twice with 0 flaky. For 5bc1963: Firefox and WebKit (Mac) 65/65 twice each, Mac Chromium items fixed. The Mac re-run for notifications is pending | PASS (Mac re-run pending) |
 | Logic | Tracker (Python) line coverage | ≥ 85% | 97% (773 statements, 20 missed) | PASS |
 | Logic | JS business-logic line coverage | ≥ 80% | 100% lines, 96.8% characters (the gate uses the lower) | PASS |
 | Security | Open Critical/High findings | 0 | 0 (both Highs, 26 and 44, fixed) | PASS |
@@ -124,13 +138,13 @@ After the 2026-11-15 fixes (including finding 69) and the notifications change:
 | Tracker notifications | test_notifications | 24 |
 | Tracker app (Keel Tracker.app) | test_app | 13 |
 | **Python total** | | **389** |
-| App logic | logic-core (37), logic-timer-data (20), logic-planner-client (24), pickers (8), smoke (2), bug9 (1), bugs20-25 (7), notify-schedule (8) | 107 |
+| App logic | logic-core (37), logic-timer-data (20), logic-planner-client (24), pickers (9), smoke (2), bug9 (1), bugs20-25 (7), notify-schedule (8) | 108 |
 | Data integrity and pipeline | data-integrity (21), data-pipeline (22) | 43 |
 | ML serving and robustness | serving (21), planner-fixes (7), planner-attack (35) | 63 |
 | AI eval tooling and safety | coach-eval (51), coach-v2 (9), coach-attack (18), ai-safety (11) | 89 |
 | Security (browser) | security-xss | 9 |
 | Performance | perf | 4 |
-| **Unit total** | | **315** |
+| **Unit total** | | **316** |
 | End-to-end | journeys (21), quality (6), csp (3), ai-ui (10), ai-provider (5), model-parity (2), tasks-tick (4), resilience (13), log-privacy (1), notifications (4), onboarding (4) | **73 per browser** |
 
 Flaky tests: **0** in the cloud and in the macOS Firefox/WebKit runs (every suite ran twice); the 2 Chromium-on-macOS failures were explained and fixed (finding 69, and a test timing problem); re-run on the Mac pending. Four test-tooling problems were found and fixed before sign-off:
