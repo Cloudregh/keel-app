@@ -4,7 +4,7 @@ Date: 2026-11-15 · QA sign-off run from a clean state · Owner: Cloudregh
 
 ## Verdict
 
-**READY WITH KNOWN ISSUES**, final once the 2 Mac-Chromium tests pass on re-run, CI is green on the new push, and Vercel builds (see "Still to run").
+**READY WITH KNOWN ISSUES**, final once the notifications change (added after the review, see below) passes CI and the Mac checks in "Still to run".
 
 Why:
 - Every approved Phase 1 target is met. Values were measured from a clean copy or, where noted, in the phase that owns them.
@@ -15,12 +15,29 @@ Why:
 
 ## Still to run
 
-| Item | Status | What's needed |
-|---|---|---|
-| macOS browsers, clean copy (`bash tests/run-mac-browsers.sh`, 2026-11-15) | **Done:** Firefox 65/65, 65/65; WebKit 65/65, 65/65 | - |
-| Chromium on the owner's Mac (local) | Both items explained and fixed: (1) the 26 MB restore paste froze Chrome on macOS before Keel's size check ran. That was a real app issue, recorded as finding 69 and fixed by refusing an oversized paste or drop before it lands in the box. (2) The long-output test spent 9 s or more streaming 20-character pieces before its checks and timed out on a loaded Mac; it now streams the same text in 400-character pieces, with its checks unchanged (100/100 over 10 parallel repeats in the cloud) | Re-run the two tests on the Mac |
-| CI on 891306a and 0632a7f | queued when last reported | the result |
-| Vercel redeploy | not yet checked | the result |
+| Item | Status |
+|---|---|
+| macOS browsers, clean copy | **Done** for 5bc1963: Firefox 65/65 and WebKit 65/65, twice each. **Re-run needed** for the notifications change (69 tests per browser now): `bash tests/run-mac-browsers.sh` |
+| Chromium on the owner's Mac | **Done** for 5bc1963: security-xss 9/9 (finding 69); long-output 100/100 over 10 repeats |
+| CI | **Passed** on 891306a and 0632a7f. 5bc1963 was in progress when last reported; the notifications change needs its own run |
+| Vercel (https://keel-app-five.vercel.app) | **Done** for 5bc1963, checked through the commit status and the live site. `index.html` is byte-identical to the repo's; the page's files return 200; the tracker, `pyproject.toml`, `package.json`, `README.md` and `docs/` return 404; the page loads with no console errors |
+| Real Mac notifications | **To check:** update the installed tracker, then `bash tests/mac-notify-check.sh` and confirm a notification appears |
+
+## Change after the review: Mac notifications (2026-11-15, owner's request)
+
+The tracker now shows macOS notifications, also with no Keel tab open:
+- focus and break ends, plus a break nudge at the break-reminder setting;
+- a reminder 2 minutes before each task in today's accepted plan;
+- an end-of-day summary at the workday end: tracked time, the top 3 apps by name, tasks done;
+- tracker problems: still paused after 2 h, an unclean shutdown, or Keel not connected by midday on a day with 30+ minutes of use.
+
+How it works:
+- Keel sends a short schedule (`POST /schedule`: next 24 h, at most 50 items, titles ≤ 80 characters) on its regular tracker check, only when the schedule changed.
+- **Settings → Notifications** has a switch for each kind, plus "Hide task names".
+- Safety: the schedule endpoint has the same origin and Host protections as the rest of the API. Text is cleaned and capped, and reaches `osascript` only as arguments to a fixed script, so a task title can't run as AppleScript. Notification text is never logged. The schedule file is private (0600). Nothing is sent inside claude.ai.
+- Tests: `test_notifications.py` (24), `notify-schedule.spec` (8), `notifications.spec` (4). All the tracker tests, and 11 of the 12 Keel tests, fail on the previous version; the 12th is a guard that nothing is sent inside claude.ai. Two existing tests that list every tracker request now expect the new `POST /schedule` first.
+- Documented in `docs/tracker-api.md` and the README.
+- The planner code and its predictions are unchanged. The app hash is now 2907a15c4a40.
 
 ## The clean run (2026-11-15)
 
@@ -47,8 +64,8 @@ Fresh copy of the project with no `node_modules`, `.venv`, caches or earlier res
 
 | Area | Target | Threshold | Measured | Result |
 |---|---|---|---|---|
-| All | Test suites pass / flaky | 100% pass, 0 flaky | After the 2026-11-15 fixes: 724/724 (352 + 307 + 65) in the cloud; Chromium (cloud), Firefox and WebKit (Mac) each twice with 0 flaky. Chromium on the owner's Mac: 2 items fixed, re-run pending (see "Still to run") | PASS (Mac Chromium re-run of 2 tests pending) |
-| Logic | Tracker (Python) line coverage | ≥ 85% | 98.6% | PASS |
+| All | Test suites pass / flaky | 100% pass, 0 flaky | With notifications: 760/760 (376 + 315 + 69) in the cloud, Chromium twice with 0 flaky. For 5bc1963: Firefox and WebKit (Mac) 65/65 twice each, Mac Chromium items fixed. The Mac re-run for notifications is pending | PASS (Mac re-run pending) |
+| Logic | Tracker (Python) line coverage | ≥ 85% | 98% (682 statements, 12 missed) | PASS |
 | Logic | JS business-logic line coverage | ≥ 80% | 100% lines, 96.8% characters (the gate uses the lower) | PASS |
 | Security | Open Critical/High findings | 0 | 0 (both Highs, 26 and 44, fixed) | PASS |
 | Security | Disallowed origin / wrong Host requests succeeding | 0% | 0% (84/84 unauthorized calls refused; test_security.py, clean run) | PASS |
@@ -75,7 +92,7 @@ Fresh copy of the project with no `node_modules`, `.venv`, caches or earlier res
 
 ## Test counts
 
-After the 2026-11-15 fixes (including finding 69):
+After the 2026-11-15 fixes (including finding 69) and the notifications change:
 
 | Layer | Suite | Tests |
 |---|---|---|
@@ -83,15 +100,16 @@ After the 2026-11-15 fixes (including finding 69):
 | Tracker API and integration | test_tracker_api (65), test_tracker_integration (17) | 82 |
 | Tracker security | test_security | 123 |
 | Tracker resilience and logs | test_resilience (11), test_log_privacy (2) | 13 |
-| **Python total** | | **352** |
-| App logic | logic-core (37), logic-timer-data (20), logic-planner-client (24), pickers (8), smoke (2), bug9 (1), bugs20-25 (7) | 99 |
+| Tracker notifications | test_notifications | 24 |
+| **Python total** | | **376** |
+| App logic | logic-core (37), logic-timer-data (20), logic-planner-client (24), pickers (8), smoke (2), bug9 (1), bugs20-25 (7), notify-schedule (8) | 107 |
 | Data integrity and pipeline | data-integrity (21), data-pipeline (22) | 43 |
 | ML serving and robustness | serving (21), planner-fixes (7), planner-attack (35) | 63 |
 | AI eval tooling and safety | coach-eval (51), coach-v2 (9), coach-attack (18), ai-safety (11) | 89 |
 | Security (browser) | security-xss | 9 |
 | Performance | perf | 4 |
-| **Unit total** | | **307** |
-| End-to-end | journeys (21), quality (6), csp (3), ai-ui (10), ai-provider (5), model-parity (2), tasks-tick (4), resilience (13), log-privacy (1) | **65 per browser** |
+| **Unit total** | | **315** |
+| End-to-end | journeys (21), quality (6), csp (3), ai-ui (10), ai-provider (5), model-parity (2), tasks-tick (4), resilience (13), log-privacy (1), notifications (4) | **69 per browser** |
 
 Flaky tests: **0** in the cloud and in the macOS Firefox/WebKit runs (every suite ran twice); the 2 Chromium-on-macOS failures were explained and fixed (finding 69, and a test timing problem); re-run on the Mac pending. Four test-tooling problems were found and fixed before sign-off:
 - a fake clock outrunning real network replies (Phase 13; 54/54 over 6 parallel repeats afterwards);

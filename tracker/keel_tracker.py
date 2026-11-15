@@ -137,10 +137,240 @@ def is_paused(now_ms=None):
 
 def set_pause(until):
     STATE["paused_until"] = until
+    STATE["paused_since"] = int(time.time() * 1000) if until is not None else None
     cfg = load_config()
     cfg["paused_until"] = until
     with contextlib.suppress(Exception):  # pausing still works in memory if the config can't be written
         save_config(cfg)
+
+
+# ---------- Mac notifications (owner's request, 2026-11-15) ----------
+# Keel sends a short schedule (POST /schedule): plan reminders, focus/break ends, break nudges and the time of the
+# end-of-day summary. The tracker shows them as macOS notifications, also with no Keel tab open, and adds its own
+# alerts: still paused after 2 h, didn't shut down cleanly, Keel hasn't connected by midday.
+NOTE_KINDS = {"plan": "plan", "focus": "focus", "break": "focus"}  # item kind -> the switch that controls it
+DEFAULT_PREFS = {"focus": True, "plan": True, "summary": True, "tracker": True}
+MAX_ITEMS, MAX_TITLE, MAX_TEXT = 50, 80, 120
+HORIZON_MS, STALE_MS, RATE_MS = 24 * 3600 * 1000, 10 * 60 * 1000, 60 * 1000
+PAUSE_ALERT_MS, MIDDAY_HOUR, MIN_ACTIVE_MS = 2 * 3600 * 1000, 12, 30 * 60 * 1000
+
+
+def fresh_notes():
+    return {
+        "items": [],
+        "prefs": dict(DEFAULT_PREFS),
+        "summary_at": None,
+        "tasks_done": 0,
+        "sent": {},
+        "last_kind": {},
+        "last_page": None,
+        "flags": {},
+        "pending": [],
+    }
+
+
+NOTES: dict[str, Any] = fresh_notes()
+
+
+def NOW_MS():  # noqa: N802 - replaced in tests
+    return int(time.time() * 1000)
+
+
+def schedule_file():
+    return os.path.join(OUT_DIR, "schedule.json")
+
+
+def run_marker():
+    return os.path.join(OUT_DIR, ".running")
+
+
+def clean_text(v, n):
+    if not isinstance(v, str):
+        return ""
+    t = " ".join(re.sub(r"[\x00-\x1f\x7f]", " ", v).split())
+    return t if len(t) <= n else t[: n - 1].rstrip() + "…"
+
+
+def _int_in(v, lo, hi):
+    return isinstance(v, int) and not isinstance(v, bool) and lo <= v <= hi
+
+
+def save_schedule():
+    make_private()
+    keep = {k: NOTES[k] for k in ("items", "prefs", "summary_at", "tasks_done", "sent", "flags")}
+    fd = os.open(schedule_file(), os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
+        json.dump(keep, f)
+
+
+def load_schedule():
+    with contextlib.suppress(Exception):
+        with open(schedule_file(), encoding="utf-8") as f:
+            saved = json.load(f)
+        if isinstance(saved, dict):
+            now = NOW_MS()
+            set_schedule(
+                {
+                    "items": saved.get("items"),
+                    "prefs": saved.get("prefs"),
+                    "summaryAt": saved.get("summary_at"),
+                    "tasksDone": saved.get("tasks_done"),
+                },
+                now,
+                persist=False,
+            )
+            if isinstance(saved.get("sent"), dict):
+                NOTES["sent"] = {
+                    k: v for k, v in saved["sent"].items() if isinstance(k, str) and _int_in(v, now - HORIZON_MS, now + HORIZON_MS)
+                }
+            if isinstance(saved.get("flags"), dict):
+                NOTES["flags"] = {k: v for k, v in saved["flags"].items() if isinstance(k, str) and isinstance(v, int)}
+
+
+def set_schedule(body, now_ms, persist=True):
+    """Replaces the schedule with what Keel sent. Anything malformed, in the past, more than 24 h ahead or too long
+    is dropped; at most 50 items, soonest first. Returns how many were kept."""
+    body = body if isinstance(body, dict) else {}
+    items, seen = [], set()
+    for it in body.get("items") if isinstance(body.get("items"), list) else []:
+        if not isinstance(it, dict):
+            continue
+        id_, kind, at = clean_text(it.get("id"), 60), it.get("kind"), it.get("at")
+        title = clean_text(it.get("title"), MAX_TITLE)
+        if not id_ or id_ in seen or kind not in NOTE_KINDS or not title or not _int_in(at, now_ms - 60_000, now_ms + HORIZON_MS):
+            continue
+        seen.add(id_)
+        items.append({"id": id_, "at": at, "kind": kind, "title": title, "body": clean_text(it.get("body"), MAX_TEXT)})
+    items.sort(key=lambda i: i["at"])
+    NOTES["items"] = items[:MAX_ITEMS]
+    prefs = body.get("prefs") if isinstance(body.get("prefs"), dict) else {}
+    for k in DEFAULT_PREFS:
+        if isinstance(prefs.get(k), bool):
+            NOTES["prefs"][k] = prefs[k]
+    sa = body.get("summaryAt")
+    NOTES["summary_at"] = sa if _int_in(sa, now_ms - 60_000, now_ms + HORIZON_MS) else None
+    td = body.get("tasksDone")
+    NOTES["tasks_done"] = td if _int_in(td, 0, 10_000) else 0
+    if persist:
+        with contextlib.suppress(Exception):
+            save_schedule()
+    return len(NOTES["items"])
+
+
+def notify(title, body=""):
+    """Shows a macOS notification. The text goes in as arguments to a fixed script, so a task title can never run
+    as AppleScript. Never raises; the text is never logged."""
+    try:
+        cmd = [
+            "/usr/bin/osascript",
+            "-e",
+            "on run argv",
+            "-e",
+            "display notification (item 2 of argv) with title (item 1 of argv)",
+            "-e",
+            "end run",
+            title,
+            body,
+        ]
+        return subprocess.run(cmd, capture_output=True, timeout=5).returncode == 0
+    except Exception:
+        return False
+
+
+def fmt_minutes(ms):
+    m = int(round(ms / 60000))
+    return f"{m // 60}h {m % 60}m" if m >= 60 else f"{m}m"
+
+
+def tracked_today(now_ms):
+    with LOCK:
+        segs = list(STATE["data"].get("days", {}).get(day_key(now_ms), []))
+    apps: dict[str, int] = {}
+    for s in segs:
+        apps[s["app"]] = apps.get(s["app"], 0) + max(0, s["e"] - s["s"])
+    return sum(apps.values()), [a for a, _ in sorted(apps.items(), key=lambda x: -x[1])[:3]]
+
+
+def start_marker():
+    """Called at start-up. A marker left by the previous run means it didn't shut down cleanly."""
+    if os.path.exists(run_marker()):
+        NOTES["pending"].append(
+            (
+                "Keel tracker didn't shut down cleanly",
+                "It's running again. Activity from just before may be missing; details are in ~/Keel Activity/tracker.log.",
+            )
+        )
+    with contextlib.suppress(Exception):
+        make_private()
+        with open(run_marker(), "w") as f:
+            f.write(str(os.getpid()))
+
+
+def clean_stop(*_):
+    with contextlib.suppress(OSError):
+        os.remove(run_marker())
+
+
+def check_notifications(now_ms):
+    changed, prefs = False, NOTES["prefs"]
+
+    def show(kind, title, body=""):
+        if now_ms - NOTES["last_kind"].get(kind, -RATE_MS) < RATE_MS:
+            return False
+        NOTES["last_kind"][kind] = now_ms
+        notify(title, body)
+        return True
+
+    for it in list(NOTES["items"]):
+        if it["at"] > now_ms:
+            break
+        if it["id"] in NOTES["sent"] or now_ms - it["at"] > STALE_MS or not prefs.get(NOTE_KINDS[it["kind"]], True):
+            NOTES["items"].remove(it)
+            changed = True
+            continue
+        if show(it["kind"], it["title"], it["body"]):
+            NOTES["items"].remove(it)
+            NOTES["sent"][it["id"]] = it["at"]
+            changed = True
+    sa = NOTES["summary_at"]
+    if sa is not None and sa <= now_ms:
+        NOTES["summary_at"], changed = None, True
+        flag = "summary:" + day_key(now_ms)
+        if prefs.get("summary", True) and now_ms - sa <= STALE_MS and flag not in NOTES["flags"]:
+            total, top = tracked_today(now_ms)
+            n = NOTES["tasks_done"]
+            most = f", most in {', '.join(top)}" if top else ""
+            show("summary", "Your day in Keel", f"Tracked {fmt_minutes(total)}{most}. {n} task{'' if n == 1 else 's'} done.")
+            NOTES["flags"][flag] = now_ms
+    if prefs.get("tracker", True):
+        while NOTES["pending"]:
+            title, body = NOTES["pending"].pop(0)
+            show("tracker", title, body)
+        since = STATE.get("paused_since")
+        if is_paused(now_ms) and since and now_ms - since >= PAUSE_ALERT_MS and ("pause:" + str(since)) not in NOTES["flags"]:
+            if show(
+                "tracker",
+                "Keel tracking is still paused",
+                f"Paused for {fmt_minutes(now_ms - since)}. Resume from the Keel sidebar, or run: keel_tracker.py resume",
+            ):
+                NOTES["flags"]["pause:" + str(since)], changed = now_ms, True
+        day = day_key(now_ms)
+        local_hour = datetime.datetime.fromtimestamp(now_ms / 1000).hour
+        lp = NOTES["last_page"]
+        if local_hour >= MIDDAY_HOUR and ("noconn:" + day) not in NOTES["flags"] and not (lp and day_key(lp) == day):
+            if tracked_today(now_ms)[0] >= MIN_ACTIVE_MS and show(
+                "tracker",
+                "Keel hasn't connected today",
+                "Your activity is being recorded, but no Keel page has loaded it yet. Open Keel in Chrome, Arc, Brave or Edge.",
+            ):
+                NOTES["flags"]["noconn:" + day], changed = now_ms, True
+    else:
+        NOTES["pending"].clear()
+    if changed:
+        NOTES["flags"] = {k: v for k, v in NOTES["flags"].items() if now_ms - v < 3 * HORIZON_MS}
+        NOTES["sent"] = {k: v for k, v in NOTES["sent"].items() if now_ms - v < HORIZON_MS}
+        with contextlib.suppress(Exception):
+            save_schedule()
 
 
 def run(cmd, timeout=3):
@@ -465,6 +695,8 @@ class Handler(BaseHTTPRequestHandler):
                 None,
             )
         path = self.path.split("?")[0]
+        if origin and path in ("/status", "/activity"):
+            NOTES["last_page"] = NOW_MS()  # a Keel page connected (for the "hasn't connected today" alert)
         if path == "/status":
             return self._json(200, status_obj(), origin)
         if path == "/activity":
@@ -507,6 +739,9 @@ class Handler(BaseHTTPRequestHandler):
             out = status_obj()
             out["removedDays"] = removed
             return self._json(200, out, origin)
+        if path == "/schedule":
+            n = set_schedule(body, NOW_MS())
+            return self._json(200, {"scheduled": n, "prefs": NOTES["prefs"]}, origin)
         if path == "/settings":
             cfg = load_config()
             kd = body.get("keepDays") if isinstance(body, dict) else None
@@ -547,6 +782,13 @@ def track():
     if not os.path.exists(CONFIG_FILE):
         save_config(cfg)
     STATE["paused_until"] = cfg.get("paused_until")
+    STATE["paused_since"] = int(time.time() * 1000) if STATE["paused_until"] is not None else None
+    load_schedule()
+    start_marker()
+    with contextlib.suppress(Exception):  # launchd stops the tracker with SIGTERM: a clean stop
+        import signal
+
+        signal.signal(signal.SIGTERM, lambda *_: (clean_stop(), sys.exit(0)))
     serve()
     try:
         cleanup()
@@ -559,6 +801,13 @@ def track():
     while True:
         now = time.time()
         now_ms = int(now * 1000)
+        try:
+            check_notifications(now_ms)
+        except Exception as e:
+            msg = where(e)
+            if now - last_err.get(msg, 0) >= 60:
+                log(f"Skipped a notification check: {msg}")
+                last_err[msg] = now
         if now - last_clean >= CLEAN_EVERY:
             try:
                 cleanup()
@@ -717,14 +966,21 @@ def status():
         print(f"  {a}: {m:.0f} min")
 
 
+def run_tracker():
+    try:
+        track()
+    except KeyboardInterrupt:  # Ctrl-C in Terminal is a clean stop
+        clean_stop()
+
+
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
     {
         "install": install,
         "uninstall": uninstall,
         "status": status,
-        "run": track,
+        "run": run_tracker,
         "pause": pause_cmd,
         "resume": resume_cmd,
         "cleanup": cleanup_cmd,
-    }.get(cmd, track)()
+    }.get(cmd, run_tracker)()

@@ -22,6 +22,7 @@ Base URL: `http://127.0.0.1:47821`. The port can be changed with `KEEL_TRACKER_P
 | POST | `/resume` | — | 200 `Status` | 403 |
 | POST | `/cleanup` | — | 200 `Status` plus `removedDays: int` | 403 |
 | POST | `/settings` | `{"keepDays": int 1–365, "maxFileMb": number 1–500}` (both optional; out-of-range values are ignored) | 200 `Status`. Settings are saved and a cleanup runs | 403 |
+| POST | `/schedule` | `Schedule` (below). Replaces the previous schedule | 200 `{"scheduled": int, "prefs": Prefs}` | 403 |
 | any | any other path | — | — | **404** `{"error": string}` |
 
 A body that isn't valid JSON (including `NaN` and `Infinity`, which JSON doesn't allow) is treated as `{}`.
@@ -65,3 +66,26 @@ Any request that hits an unexpected error inside the tracker gets **500** `{"err
 - `title` is at most 90 characters, and is dropped from days older than 7.
 
 `Error`: `{"error": "string"}`
+
+## Notifications (`POST /schedule`, since 2026-11-15)
+
+Keel sends the tracker what to notify about, and the tracker shows macOS notifications at those times, also when no Keel tab is open.
+
+`Schedule`: `{"items": [Item], "summaryAt": int | null, "tasksDone": int, "prefs": Prefs}`
+- `Item`: `{"id": string ≤ 60, "at": int (Unix ms), "kind": "plan" | "focus" | "break", "title": string, "body": string}`. Items are dropped if malformed, more than 1 minute in the past or more than 24 h ahead. Ids must be unique; at most 50 items are kept, soonest first. Control characters are removed; titles are cut to 80 characters and bodies to 120.
+- `summaryAt`: when to show the end-of-day summary (tracked time today, the top 3 apps by name only, and `tasksDone`). It's ignored outside the same window.
+- `Prefs`: `{"focus", "plan", "summary", "tracker"}`, each a boolean; anything else is ignored. `focus` covers both the `focus` and `break` kinds.
+
+The tracker's own alerts, under `tracker`:
+- still paused after 2 hours (once per pause);
+- the previous run didn't shut down cleanly (a marker file in `~/Keel Activity` is removed on a normal stop);
+- no Keel page has loaded `/status` or `/activity` by midday, on a day with at least 30 minutes of tracked use (once a day).
+
+Behavior:
+- An item more than 10 minutes late, after the tracker was asleep or stopped, is dropped rather than shown.
+- At most one notification per minute per kind; any extra waits for the next minute.
+- An item is never shown twice, even after a restart: the schedule and the ids already shown are saved in `~/Keel Activity/schedule.json` (0600).
+- Notifications use `osascript` with the text passed as arguments to a fixed script, so a task title can't run as AppleScript. The text is never written to `tracker.log`.
+
+Keel sends the schedule on its regular tracker check (every 10 s while connected), only when it changed or at least every 10 minutes. It never sends one inside claude.ai. An older tracker answers 404, and Keel ignores that.
+

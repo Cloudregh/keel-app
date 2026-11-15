@@ -165,7 +165,7 @@ test.describe("J5–J6 tracker", () => {
     await expect(page.locator("#trk")).toContainText("App tracking paused");
     await page.locator('#trk [data-act="tr-resume"]').click();
     await expect(page.locator("#trk")).toContainText("Tracking apps");
-    expect(posts).toEqual(["/pause", "/resume"]);
+    expect(posts).toEqual(["/schedule", "/pause", "/resume"]);   // the notification schedule goes first (since 2026-11-15)
   });
   test("failures: tracker down, server error, slow but alive, too slow", async ({ keel: { page, ev } }) => {
     await fakeTracker(page, { fail: "down" });

@@ -253,8 +253,9 @@ test.describe("tracker client", () => {
     await expect(keel.page.locator("#trk")).toContainText("Tracking apps");
     await keel.ev(`() => A["tr-cleanup"]()`);
     await expect(keel.page.locator("#toasts")).toContainText("removed 2 old days");
-    expect(posts.map(p => p[0])).toEqual(["/pause", "/resume", "/cleanup"]);
-    expect(JSON.parse(posts[0][1])).toEqual({ minutes: 60 });
+    // "/schedule": since 2026-11-15 the first check also sends the notification schedule (once: it doesn't change here)
+    expect(posts.map(p => p[0])).toEqual(["/schedule", "/pause", "/resume", "/cleanup"]);
+    expect(JSON.parse(posts[1][1])).toEqual({ minutes: 60 });
   });
   test("blocked (403) and offline states explain what to do", async ({ keel }) => {
     await keel.ev(reset);

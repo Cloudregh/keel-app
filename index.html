@@ -648,7 +648,8 @@ const LS_KEY = "keel.v1", LS_UI = "keel.ui.v1";
 const DEFAULT_SETTINGS = {
   dailyGoalMin: 360, focusGoalMin: 180, focusMin: 25, shortBreakMin: 5, longBreakMin: 15, longEvery: 4,
   breakReminderMin: 90, autoBreak: true, sound: true, idleReturnMin: 5, workStart: 8, workEnd: 19, theme: "dark", weekStart: 1,
-  actKeepDays: 30, keepEntriesDays: 0, keepDoneDays: 0
+  actKeepDays: 30, keepEntriesDays: 0, keepDoneDays: 0,
+  notifyFocus: true, notifyPlan: true, notifySummary: true, notifyTracker: true, notifyHideNames: false
 };
 function defaultState() {
   return {
@@ -703,6 +704,7 @@ function cleanSettings(raw) {
   if (![0, 1, 6].includes(+st.weekStart)) st.weekStart = DEFAULT_SETTINGS.weekStart; else st.weekStart = +st.weekStart;
   if (!["auto", "light", "dark"].includes(st.theme)) st.theme = "dark";
   st.autoBreak = !!st.autoBreak; st.sound = !!st.sound;
+  for (const k of ["notifyFocus", "notifyPlan", "notifySummary", "notifyTracker", "notifyHideNames"]) st[k] = typeof st[k] === "boolean" ? st[k] : DEFAULT_SETTINGS[k];
   if (st.workEnd <= st.workStart) st.workEnd = Math.min(24, st.workStart + 1);
   if (!st.v2) { st.theme = "dark"; st.v2 = true; }
   return st;
@@ -1509,9 +1511,59 @@ async function trPoll(pull) {
       TR.actError = e && e.message === "not keel" ? "The tracker sent activity Keel couldn't read." : "Couldn't load activity from the tracker.";
     }
   }
+  if (TR.state === "online") pushSchedule();
   const after = TR.state + (TR.status ? TR.status.paused : "") + (TR.actError || "");
   renderTrk();
   if (before !== after && ["apps", "settings", "today"].includes(ui.view) && !isEditing()) bgRender();
+}
+/* ---------------- Mac notifications (owner's request, 2026-11-15) ----------------
+   Keel sends the tracker a short schedule; the tracker shows macOS notifications at those times, also when no Keel
+   tab is open. Limits match the tracker's: next 24 h, at most 50 items, titles up to 80 characters. */
+function notifySchedule(now = Date.now()) {
+  const s = state.settings, hide = !!s.notifyHideNames, items = [];
+  const cut = (t, n) => (t.length <= n ? t : t.slice(0, n - 1).trimEnd() + "…");
+  const p = state.plan;
+  if (p && p.accepted && p.day === dayKey(now)) {
+    for (const it of p.items) {
+      if (it.kind !== "task") continue;
+      const t = taskById(it.taskId);
+      if (!t || t.done || it.start - 2 * MIN <= now) continue;
+      items.push({ id: `plan:${p.createdAt}:${it.taskId}:${it.part || 1}`, at: it.start - 2 * MIN, kind: "plan",
+        title: hide ? "Next task in 2 min" : cut(`Next up: ${t.title}`, 80), body: `Starts at ${fmtTime(it.start)}${hide ? "" : ` · ${fmtDur(it.dur * MIN)}`}` });
+    }
+  }
+  const a = state.active;
+  if (a && !a.pausedAt) {
+    const end = a.mode === "pomodoro" && a.plannedMs ? now + Math.max(0, a.plannedMs - activeElapsed(a, now)) : null;
+    if (end && end > now) {
+      const t = a.taskId && taskById(a.taskId);
+      items.push(a.type === "break"
+        ? { id: `end:${a.id}`, at: end, kind: "break", title: "Break's over", body: "Ready for the next focus session?" }
+        : { id: `end:${a.id}`, at: end, kind: "focus", title: "Focus session done", body: hide || !t ? "Time for a short break." : cut(`${t.title}: time for a short break.`, 120) });
+    }
+    if (a.type !== "break") {
+      const at = Math.max(now + Math.max(0, s.breakReminderMin * MIN - currentStretch(now)), ui.breakSnoozeUntil || 0);
+      if (at > now && (!end || at < end)) items.push({ id: `nudge:${a.id}:${ui.breakSnoozeUntil || 0}`, at, kind: "break", title: "Time for a break", body: `You've worked ${fmtDur(s.breakReminderMin * MIN)} without a break.` });
+    }
+  }
+  items.sort((x, y) => x.at - y.at);
+  const t0 = dayStart(dayKey(now)), summaryAt = t0 + s.workEnd * HOUR;
+  return {
+    items: items.filter(i => i.at - now <= DAY).slice(0, 50),
+    summaryAt: summaryAt > now ? summaryAt : null,
+    tasksDone: state.tasks.filter(t => t.done && t.doneAt >= t0).length,
+    prefs: { focus: !!s.notifyFocus, plan: !!s.notifyPlan, summary: !!s.notifySummary, tracker: !!s.notifyTracker }
+  };
+}
+/** Sends the schedule on the regular tracker check when it changed, or every 10 minutes. Failures stay quiet: an
+ *  older tracker answers 404, and notifications are a convenience. */
+async function pushSchedule() {
+  if (IN_CLAUDE || TR.state !== "online") return;
+  const body = JSON.stringify(notifySchedule());
+  if (body === TR.schedSent && Date.now() - (TR.schedAt || 0) < 10 * MIN) return;
+  TR.schedSent = body; TR.schedAt = Date.now();
+  try { await trFetch("/schedule", { method: "POST", headers: { "Content-Type": "application/json" }, body }); }
+  catch { /* older tracker or a hiccup: try again on a later check */ if (TR.schedSent === body) TR.schedAt = Date.now() - 9 * MIN; }
 }
 async function trPost(path, body) {
   if (TR.busy) return; TR.busy = true;
@@ -2553,6 +2605,14 @@ function viewSettings() {
       ${num("breakReminderMin", "Break reminder", "Nudge after this long without a break", 20, 300)}
       ${num("idleReturnMin", "Away check", "Ask about time away from this tab after", 1, 120)}
       ${tog("sound", "Sounds", "Chime when a session or break ends")}
+    </section>
+    <section class="panel"><h2 style="margin-bottom:6px">Notifications</h2>
+      <p class="muted" style="font-size:12.5px;margin:0 0 8px">Shown by the Keel tracker on your Mac, even when Keel isn't open. The first time, macOS may ask you to allow notifications from Script Editor.</p>
+      ${tog("notifyFocus", "Focus and breaks", "When a focus session or break ends, and a nudge after your break-reminder time")}
+      ${tog("notifyPlan", "Plan reminders", "2 minutes before each task in today's accepted plan")}
+      ${tog("notifySummary", "End-of-day summary", "At your workday end: tracked time, top apps and tasks done")}
+      ${tog("notifyTracker", "Tracker problems", "Still paused after 2 hours, an unclean shutdown, or Keel not connected by midday")}
+      ${tog("notifyHideNames", "Hide task names", "Say 'Next task in 2 min' instead of the task's name")}
     </section>
     <section class="panel"><h2 style="margin-bottom:6px">Appearance & data</h2>
       <div class="set-row"><label for="set-theme">Theme<small>Light, dark or match your device</small></label><select class="input" id="set-theme" data-change="setting" data-f="theme"><option value="auto" ${s.theme === "auto" ? "selected" : ""}>Match device</option><option value="light" ${s.theme === "light" ? "selected" : ""}>Light</option><option value="dark" ${s.theme === "dark" ? "selected" : ""}>Dark</option></select></div>

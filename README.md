@@ -44,6 +44,14 @@ Other commands: `status`, `pause [minutes]`, `resume`, `cleanup` and `uninstall`
 
 The first time you use Chrome or Safari, macOS will ask whether `python3` may control that browser. Allow it so Keel can see which site you're on.
 
+**Notifications.** The tracker shows Mac notifications even when Keel isn't open:
+- focus and break ends, and a break nudge;
+- a reminder 2 minutes before each task in today's accepted plan;
+- an end-of-day summary;
+- tracker problems: still paused after 2 hours, an unclean shutdown, or Keel not connected by midday.
+
+Choose which ones in **Settings → Notifications**. "Hide task names" keeps task titles off the screen. The first time, macOS may ask you to allow notifications from Script Editor; allow them in **System Settings → Notifications** if nothing shows.
+
 **Storage:** the tracker keeps 30 days by default. It drops tab titles older than 7 days, caps its file at 20 MB, trims its log at 1 MB, and cleans up every hour.
 
 ## Keyboard shortcuts
