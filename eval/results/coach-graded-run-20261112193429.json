@@ -1,6 +1,7 @@
 {
  "runId": "run-20261112193429",
  "rubric": "coach-rubric-v2",
+ "otherGroundingUngroundedRate": 0.06666666666666667,
  "promptVersion": "coach-v1",
  "stopClaims": {
   "claims": 63,

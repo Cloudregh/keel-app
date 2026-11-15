@@ -1,6 +1,7 @@
 {
  "runId": "run-20261112231144",
  "rubric": "coach-rubric-v2",
+ "otherGroundingUngroundedRate": 0.02,
  "promptVersion": "coach-v2",
  "stopClaims": {
   "claims": 119,
@@ -14,7 +15,7 @@
   ]
  },
  "projectionClaims": {
-  "claims": 5,
+  "claims": 7,
   "wrong": [
    "c28#2 \"hit your focus goal (120 + 60 = 180 of 240)\""
   ],

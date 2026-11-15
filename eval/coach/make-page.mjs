@@ -10,6 +10,8 @@ const sha = s => createHash("sha256").update(s).digest("hex").slice(0, 12);
 // `node eval/coach/make-page.mjs` builds the eval page; `node eval/coach/make-page.mjs attack` builds the Phase 11
 // red-team page (same prompt, same storage layout, attack set coach-attack-v1, its own artifact and storage).
 const ATTACK = process.argv[2] === "attack";
+// Data is embedded in an inline <script>: escape "<" so text like "</script>" (attack a26) can't end the script early.
+const safeJson = v => JSON.stringify(v).replace(/</g, "\\u003c");
 const EVAL_SET = ATTACK ? "coach-attack-v1" : EVAL_SET_FOR[COACH_PROMPT_VERSION];
 const OUT = ATTACK ? "./attack-page/" : "./page/";
 const setText = readFileSync(new URL(`../data/${EVAL_SET}.jsonl`, import.meta.url), "utf8");
@@ -42,8 +44,8 @@ const html = `<!DOCTYPE html>
   <div id="log" aria-live="polite"></div>
 </main>
 <script>
-const CASES = ${JSON.stringify(cases)};
-const META = ${JSON.stringify(META)};
+const CASES = ${safeJson(cases)};
+const META = ${safeJson(META)};
 const $ = s => document.querySelector(s);
 const val = d => !d ? null : typeof d.data === "function" ? d.data() : (d.data && typeof d.data === "object" ? d.data : d);
 const sleep = ms => new Promise(r => setTimeout(r, ms));

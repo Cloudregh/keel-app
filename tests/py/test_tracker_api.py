@@ -380,3 +380,42 @@ def test_concurrent_saves_from_two_threads(kt):
         t.join(30)
     assert errors == [], errors[:3]
     assert_activity(json.load(open(kt.OUT_FILE)))
+
+
+# ---------- fix 64: /activity is built one request at a time ----------
+
+
+def test_fix64_one_activity_copy_alive_at_a_time(server, kt, monkeypatch):
+    """Several tabs pulling /activity at once used to each hold a full copy of the data while it was encoded, so the
+    copies overlapped (tracker RSS 61-66 MB with 3 tabs; target < 60 MB). Now a copy lives from snapshot to encoded
+    bytes one request at a time; every request still gets the full, correct answer."""
+    day = kt.day_key(int(time.time() * 1000))
+    kt.STATE["data"] = {"days": {day: [{"s": 1, "e": 5000, "app": "Code"}]}}
+    real_snap, real_dumps = kt.snapshot, kt.json.dumps
+    live, peak, lock = [0], [0], threading.Lock()
+
+    def counting_snapshot(*a, **k):
+        with lock:
+            live[0] += 1
+            peak[0] = max(peak[0], live[0])
+        return real_snap(*a, **k)
+
+    def slow_dumps(obj, *a, **k):
+        out = real_dumps(obj, *a, **k)
+        if isinstance(obj, dict) and obj.get("source") == "keel-tracker" and "days" in obj:
+            time.sleep(0.2)  # a big encode takes time; the copy is alive until it's done
+            with lock:
+                live[0] -= 1
+        return out
+
+    monkeypatch.setattr(kt, "snapshot", counting_snapshot)
+    monkeypatch.setattr(kt.json, "dumps", slow_dumps)
+    out = []
+    ts = [threading.Thread(target=lambda: out.append(server.request("GET", "/activity?days=7", origin=GOOD))) for _ in range(4)]
+    for t in ts:
+        t.start()
+    for t in ts:
+        t.join()
+    assert [r[0] for r in out] == [200] * 4
+    assert all(r[2]["days"][day][0]["app"] == "Code" for r in out)
+    assert peak[0] == 1, f"{peak[0]} copies of the activity data were alive at the same time"

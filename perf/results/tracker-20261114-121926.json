@@ -1,0 +1,354 @@
+{
+ "date": "2026-11-14 12:17:14",
+ "python": "3.13.18",
+ "cpus": 2,
+ "seedDays": 30,
+ "fileBytes": 1516285,
+ "status": {
+  "app": "keel-tracker",
+  "version": 2,
+  "running": true,
+  "paused": false,
+  "pausedUntil": null,
+  "startedAt": 1794658634986,
+  "current": {
+   "app": "Code",
+   "domain": ""
+  },
+  "idle": false,
+  "todayMs": 0,
+  "device": "vm",
+  "now": 1794658635208,
+  "storage": {
+   "fileBytes": 1516285,
+   "logBytes": 0,
+   "keepDays": 30,
+   "maxFileMb": 20,
+   "days": 31,
+   "lastCleanup": 1794658635122
+  }
+ },
+ "sequential": {
+  "/status": {
+   "n": 1000,
+   "ok": 1000,
+   "errorRate": 0.0,
+   "errors": {},
+   "p50": 0.68,
+   "p95": 0.97,
+   "p99": 1.05,
+   "max": 2.08
+  },
+  "/activity?days=30": {
+   "n": 50,
+   "ok": 50,
+   "errorRate": 0.0,
+   "errors": {},
+   "p50": 17.14,
+   "p95": 29.77,
+   "p99": 31.18,
+   "max": 31.18
+  }
+ },
+ "activityBytes": 1516285,
+ "ramp": [
+  {
+   "clients": 1,
+   "seconds": 10.0,
+   "throughput": 380.4,
+   "status": {
+    "n": 3423,
+    "ok": 3423,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 0.75,
+    "p95": 1.34,
+    "p99": 2.04,
+    "max": 4.48
+   },
+   "activity": {
+    "n": 381,
+    "ok": 381,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 16.83,
+    "p95": 28.05,
+    "p99": 29.93,
+    "max": 38.98
+   },
+   "errorRate": 0.0,
+   "trackerCpuPct": 92.2,
+   "trackerRssMb": 49.3
+  },
+  {
+   "clients": 2,
+   "seconds": 10.0,
+   "throughput": 418.5,
+   "status": {
+    "n": 3771,
+    "ok": 3771,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 1.33,
+    "p95": 17.01,
+    "p99": 21.67,
+    "max": 31.36
+   },
+   "activity": {
+    "n": 420,
+    "ok": 420,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 17.68,
+    "p95": 33.02,
+    "p99": 36.78,
+    "max": 52.53
+   },
+   "errorRate": 0.0,
+   "trackerCpuPct": 98.4,
+   "trackerRssMb": 59.6
+  },
+  {
+   "clients": 4,
+   "seconds": 10.0,
+   "throughput": 384.6,
+   "status": {
+    "n": 3466,
+    "ok": 3466,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 3.18,
+    "p95": 31.96,
+    "p99": 44.91,
+    "max": 117.9
+   },
+   "activity": {
+    "n": 385,
+    "ok": 385,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 20.76,
+    "p95": 51.89,
+    "p99": 66.9,
+    "max": 115.55
+   },
+   "errorRate": 0.0,
+   "trackerCpuPct": 100.3,
+   "trackerRssMb": 71.9
+  },
+  {
+   "clients": 8,
+   "seconds": 10.5,
+   "throughput": 364.1,
+   "status": {
+    "n": 3449,
+    "ok": 3449,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 6.69,
+    "p95": 40.26,
+    "p99": 64.46,
+    "max": 1082.11
+   },
+   "activity": {
+    "n": 383,
+    "ok": 383,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 24.33,
+    "p95": 57.85,
+    "p99": 72.51,
+    "max": 1051.8
+   },
+   "errorRate": 0.0,
+   "trackerCpuPct": 95.4,
+   "trackerRssMb": 78.3
+  },
+  {
+   "clients": 16,
+   "seconds": 11.0,
+   "throughput": 343.3,
+   "status": {
+    "n": 3395,
+    "ok": 3395,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 9.18,
+    "p95": 50.44,
+    "p99": 1047.96,
+    "max": 2072.35
+   },
+   "activity": {
+    "n": 377,
+    "ok": 377,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 31.56,
+    "p95": 64.64,
+    "p99": 1056.24,
+    "max": 2080.17
+   },
+   "errorRate": 0.0,
+   "trackerCpuPct": 91.3,
+   "trackerRssMb": 85.8
+  },
+  {
+   "clients": 32,
+   "seconds": 11.0,
+   "throughput": 364.0,
+   "status": {
+    "n": 3602,
+    "ok": 3598,
+    "errorRate": 0.0011,
+    "errors": {
+     "TimeoutError": 4
+    },
+    "p50": 8.74,
+    "p95": 1008.51,
+    "p99": 1238.9,
+    "max": 3705.79
+   },
+   "activity": {
+    "n": 397,
+    "ok": 397,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 29.42,
+    "p95": 106.45,
+    "p99": 1091.96,
+    "max": 3760.77
+   },
+   "errorRate": 0.001,
+   "trackerCpuPct": 91.4,
+   "trackerRssMb": 87.4
+  },
+  {
+   "clients": 64,
+   "seconds": 10.9,
+   "throughput": 378.9,
+   "status": {
+    "n": 3725,
+    "ok": 3683,
+    "errorRate": 0.0113,
+    "errors": {
+     "TimeoutError": 42
+    },
+    "p50": 18.17,
+    "p95": 1038.06,
+    "p99": 2048.66,
+    "max": 2736.5
+   },
+   "activity": {
+    "n": 414,
+    "ok": 410,
+    "errorRate": 0.0097,
+    "errors": {
+     "TimeoutError": 4
+    },
+    "p50": 33.07,
+    "p95": 1039.37,
+    "p99": 1463.47,
+    "max": 2589.12
+   },
+   "errorRate": 0.0111,
+   "trackerCpuPct": 93.6,
+   "trackerRssMb": 93.6
+  },
+  {
+   "clients": 128,
+   "seconds": 11.2,
+   "throughput": 362.4,
+   "status": {
+    "n": 3645,
+    "ok": 3550,
+    "errorRate": 0.0261,
+    "errors": {
+     "TimeoutError": 95
+    },
+    "p50": 21.0,
+    "p95": 1451.55,
+    "p99": 2471.12,
+    "max": 3783.87
+   },
+   "activity": {
+    "n": 411,
+    "ok": 402,
+    "errorRate": 0.0219,
+    "errors": {
+     "TimeoutError": 9
+    },
+    "p50": 36.63,
+    "p95": 1256.27,
+    "p99": 2314.12,
+    "max": 2841.26
+   },
+   "errorRate": 0.0256,
+   "trackerCpuPct": 92.8,
+   "trackerRssMb": 97.7
+  },
+  {
+   "clients": 256,
+   "seconds": 13.2,
+   "throughput": 297.0,
+   "status": {
+    "n": 3531,
+    "ok": 3176,
+    "errorRate": 0.1005,
+    "errors": {
+     "TimeoutError": 355
+    },
+    "p50": 24.1,
+    "p95": 2083.36,
+    "p99": 2919.04,
+    "max": 4771.54
+   },
+   "activity": {
+    "n": 400,
+    "ok": 358,
+    "errorRate": 0.105,
+    "errors": {
+     "TimeoutError": 42
+    },
+    "p50": 40.25,
+    "p95": 2079.43,
+    "p99": 3086.22,
+    "max": 3832.67
+   },
+   "errorRate": 0.101,
+   "trackerCpuPct": 81.0,
+   "trackerRssMb": 133.7
+  },
+  {
+   "clients": 512,
+   "seconds": 13.4,
+   "throughput": 368.5,
+   "status": {
+    "n": 4428,
+    "ok": 3452,
+    "errorRate": 0.2204,
+    "errors": {
+     "TimeoutError": 976
+    },
+    "p50": 22.0,
+    "p95": 2247.9,
+    "p99": 3028.77,
+    "max": 4354.71
+   },
+   "activity": {
+    "n": 496,
+    "ok": 403,
+    "errorRate": 0.1875,
+    "errors": {
+     "TimeoutError": 93
+    },
+    "p50": 38.44,
+    "p95": 2100.25,
+    "p99": 2955.02,
+    "max": 3827.2
+   },
+   "errorRate": 0.2171,
+   "trackerCpuPct": 79.8,
+   "trackerRssMb": 195.6
+  }
+ ]
+}

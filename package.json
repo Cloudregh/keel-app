@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Keel focus & time tracker: test and tooling setup (the app itself has no build step)",
   "scripts": {
-    "lint": "eslint . && ruff check tracker tests && ruff format --check tracker tests && mypy",
+    "lint": "eslint . && ruff check tracker tests perf && ruff format --check tracker tests perf && mypy",
     "audit": "npm audit --omit=optional && pip-audit -r requirements-dev.txt",
     "test:py": "pytest --cov=tracker --cov-report=term-missing --cov-fail-under=85",
     "test:js": "rm -f coverage/js-v8.jsonl && KEEL_COVERAGE=1 playwright test --project=unit && node tests/js/coverage-report.mjs",

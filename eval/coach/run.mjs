@@ -4,7 +4,7 @@
 // Exit code 1 if a locked threshold is missed. Also imported by eval/run-evals.mjs as the regression baseline check.
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { grade, stopClaims, pctClaims, projectionClaims, RUBRIC_VERSION } from "./rubric.mjs";
+import { grade, stopClaims, pctClaims, projectionClaims } from "./rubric.mjs";
 import { INSTRUCTIONS, EVAL_SET_FOR } from "./prompt.mjs";
 
 const sha = s => createHash("sha256").update(s).digest("hex").slice(0, 12);
@@ -29,12 +29,16 @@ for (const file of targets) {
   if (run.evalSetSha !== sha(setText)) problems.push(`eval set changed since the run (${run.evalSetSha} → ${sha(setText)})`);
   if (run.promptSha !== sha(INSTRUCTION)) problems.push(`prompt changed since the run (${run.promptSha} → ${sha(INSTRUCTION)})`);
   const rows = run.results.filter(r => r.ok);
-  const graded = rows.map(r => ({ ...r, g: grade(cases[r.caseId].data, r.text) }));
+  // Each run is graded under the rubric pre-registered for it: runs exported before v3 (no `rubric` field) under v2
+  // grounding, runs exported as coach-rubric-v3 under v3. The other version is shown for information.
+  const rubric = run.rubric || "coach-rubric-v2", grounding = rubric === "coach-rubric-v3" ? "v3" : "v2", other = grounding === "v3" ? "v2" : "v3";
+  const graded = rows.map(r => ({ ...r, g: grade(cases[r.caseId].data, r.text, { grounding }) }));
   const n = graded.length, expect = Object.keys(cases).length * run.reps;
   const passRate = graded.filter(r => r.g.pass).length / n;
-  const literalPass = graded.filter(r => grade(cases[r.caseId].data, r.text, { taskRule: "literal" }).pass).length / n;   // v1.2 rule, for comparison
+  const literalPass = graded.filter(r => grade(cases[r.caseId].data, r.text, { taskRule: "literal", grounding }).pass).length / n;   // v1.2 rule, for comparison
   const ungRate = graded.filter(r => r.g.ungrounded.length).length / n;
   const strictRate = graded.filter(r => r.g.strictUngrounded.length).length / n;
+  const otherUngRate = graded.filter(r => grade(cases[r.caseId].data, r.text, { grounding: other }).ungrounded.length).length / n;
   const byCheck = {};
   for (const r of graded) for (const [k, v] of Object.entries(r.g.checks)) byCheck[k] = (byCheck[k] || 0) + (v ? 0 : 1);
   const byCase = {};
@@ -50,7 +54,7 @@ for (const file of targets) {
   let likeForLike = null;
   if (run.evalSet === "coach-eval-v2") {
     const v1 = Object.fromEntries(readFileSync(new URL("../data/coach-eval-v1.jsonl", import.meta.url), "utf8").trim().split("\n").map(l => JSON.parse(l)).map(c => [c.id, c]));
-    likeForLike = graded.filter(r => grade(v1[r.caseId].data, r.text).ungrounded.length).length / n;
+    likeForLike = graded.filter(r => grade(v1[r.caseId].data, r.text, { grounding }).ungrounded.length).length / n;
   }
   const words = graded.map(r => r.g.words).sort((a, b) => a - b);
   const caseVar = Object.values(byCase).map(v => { const p = v.filter(Boolean).length / v.length; return p * (1 - p); });
@@ -61,8 +65,9 @@ for (const file of targets) {
     [`responses with an ungrounded number ≤ ${THRESH.ungroundedMax * 100}%`, ungRate <= THRESH.ungroundedMax, `${(ungRate * 100).toFixed(1)}% (strict, no advice allowance: ${(strictRate * 100).toFixed(1)}%)`],
     ["eval set and prompt version unchanged since the run", problems.length === 0, problems.join("; ") || "same"],
   ];
-  console.log(`\nDaily coach eval · ${run.runId} · ${run.evalSet} ${run.evalSetSha} · ${run.promptVersion} ${run.promptSha} · ${RUBRIC_VERSION} · model ${[...new Set(rows.map(r => r.modelApplied || "platform default (not reported)"))].join(", ")}`);
+  console.log(`\nDaily coach eval · ${run.runId} · ${run.evalSet} ${run.evalSetSha} · ${run.promptVersion} ${run.promptSha} · ${rubric} · model ${[...new Set(rows.map(r => r.modelApplied || "platform default (not reported)"))].join(", ")}`);
   for (const [name, ok, detail] of verdicts) console.log(`  ${ok ? "PASS" : "FAIL"}  ${name}: ${detail}`);
+  console.log(`  ungrounded rate under ${other} grounding (information only): ${(otherUngRate * 100).toFixed(1)}%`);
   console.log(`  rubric pass rate with the literal task-name rule (v1.2, for comparison): ${(literalPass * 100).toFixed(1)}%`);
   console.log(`  failures by check: ${JSON.stringify(byCheck)}`);
   console.log(`  pass by category: ${Object.entries(byCat).map(([k, [p, t]]) => `${k} ${p}/${t}`).join(", ")}`);
@@ -75,7 +80,7 @@ for (const file of targets) {
   console.log(`  inconsistent cases (pass sometimes): ${inconsistent.join(", ") || "none"}`);
   console.log(`  cases failing every run: ${alwaysFail.join(", ") || "none"}`);
   const report = {
-    runId: run.runId, rubric: RUBRIC_VERSION, promptVersion: run.promptVersion, stopClaims: { claims: stopN, wrong: stopWrong }, pctClaims: { claims: pctN, wrong: pctWrong }, projectionClaims: { claims: projN, wrong: projWrong, loose: projLoose }, literalTaskRulePassRate: literalPass, evalSet: run.evalSet, n, passRate, ungroundedRate: ungRate, strictUngroundedRate: strictRate,
+    runId: run.runId, rubric, otherGroundingUngroundedRate: otherUngRate, promptVersion: run.promptVersion, stopClaims: { claims: stopN, wrong: stopWrong }, pctClaims: { claims: pctN, wrong: pctWrong }, projectionClaims: { claims: projN, wrong: projWrong, loose: projLoose }, literalTaskRulePassRate: literalPass, evalSet: run.evalSet, n, passRate, ungroundedRate: ungRate, strictUngroundedRate: strictRate,
     byCheck, byCat, inconsistent, alwaysFail,
     failures: graded.filter(r => !r.g.pass || r.g.ungrounded.length).map(r => ({ case: r.caseId, rep: r.rep, failed: Object.entries(r.g.checks).filter(([, v]) => !v).map(([k]) => k), ungrounded: r.g.ungrounded, text: r.text })),
   };

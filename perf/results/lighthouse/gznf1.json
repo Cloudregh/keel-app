@@ -1,0 +1,30 @@
+{
+ "url": "http://127.0.0.1:4181/index.html",
+ "fetchTime": "2026-11-14T12:24:36.085Z",
+ "lighthouse": "12.8.2",
+ "formFactor": "mobile",
+ "throttling": {
+  "rttMs": 150,
+  "throughputKbps": 1638.4,
+  "requestLatencyMs": 562.5,
+  "downloadThroughputKbps": 1474.5600000000002,
+  "uploadThroughputKbps": 675,
+  "cpuSlowdownMultiplier": 4
+ },
+ "blocked": [
+  "*fonts.googleapis.com*"
+ ],
+ "scores": {
+  "performance": 0.99
+ },
+ "metrics": {
+  "first-contentful-paint": 1687.4576,
+  "largest-contentful-paint": 1687.4576,
+  "total-blocking-time": 0,
+  "cumulative-layout-shift": 0,
+  "speed-index": 1687.4576,
+  "interactive": 1687.4576000000002
+ },
+ "renderBlocking": [],
+ "totalByteWeight": 72735
+}

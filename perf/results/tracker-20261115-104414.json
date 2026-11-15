@@ -1,0 +1,266 @@
+{
+ "date": "2026-11-15 10:41:50",
+ "python": "3.13.18",
+ "cpus": 2,
+ "seedDays": 30,
+ "fileBytes": 1516269,
+ "status": {
+  "app": "keel-tracker",
+  "version": 2,
+  "running": true,
+  "paused": false,
+  "pausedUntil": null,
+  "startedAt": 1794739311026,
+  "current": null,
+  "idle": false,
+  "todayMs": 0,
+  "device": "vm",
+  "now": 1794739311145,
+  "storage": {
+   "fileBytes": 1516269,
+   "logBytes": 0,
+   "keepDays": 30,
+   "maxFileMb": 20,
+   "days": 30,
+   "lastCleanup": null
+  }
+ },
+ "sequential": {
+  "/status": {
+   "n": 1000,
+   "ok": 1000,
+   "errorRate": 0.0,
+   "errors": {},
+   "p50": 0.67,
+   "p95": 1.11,
+   "p99": 1.3,
+   "max": 59.32
+  },
+  "/activity?days=30": {
+   "n": 50,
+   "ok": 50,
+   "errorRate": 0.0,
+   "errors": {},
+   "p50": 13.17,
+   "p95": 20.64,
+   "p99": 21.62,
+   "max": 21.62
+  }
+ },
+ "activityBytes": 1516285,
+ "rssAfterSequentialMb": 46.0,
+ "ramp": [
+  {
+   "clients": 1,
+   "seconds": 5.0,
+   "throughput": 452.0,
+   "status": {
+    "n": 2034,
+    "ok": 2034,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 0.82,
+    "p95": 1.08,
+    "p99": 1.18,
+    "max": 2.27
+   },
+   "activity": {
+    "n": 227,
+    "ok": 227,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 12.83,
+    "p95": 20.07,
+    "p99": 23.82,
+    "max": 30.2
+   },
+   "errorRate": 0.0,
+   "trackerCpuPct": 90.4,
+   "trackerRssMb": 46.0
+  },
+  {
+   "clients": 4,
+   "seconds": 5.0,
+   "throughput": 435.2,
+   "status": {
+    "n": 1962,
+    "ok": 1962,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 3.5,
+    "p95": 24.19,
+    "p99": 34.72,
+    "max": 54.71
+   },
+   "activity": {
+    "n": 218,
+    "ok": 218,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 22.73,
+    "p95": 41.39,
+    "p99": 44.72,
+    "max": 54.7
+   },
+   "errorRate": 0.0,
+   "trackerCpuPct": 101.4,
+   "trackerRssMb": 64.7
+  },
+  {
+   "clients": 16,
+   "seconds": 5.9,
+   "throughput": 358.5,
+   "status": {
+    "n": 1892,
+    "ok": 1892,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 8.08,
+    "p95": 43.3,
+    "p99": 1037.31,
+    "max": 2523.6
+   },
+   "activity": {
+    "n": 209,
+    "ok": 209,
+    "errorRate": 0.0,
+    "errors": {},
+    "p50": 27.38,
+    "p95": 61.32,
+    "p99": 1051.43,
+    "max": 2341.9
+   },
+   "errorRate": 0.0,
+   "trackerCpuPct": 87.0,
+   "trackerRssMb": 67.9
+  }
+ ],
+ "idle": {
+  "minutes": 2.0,
+  "cpuAvgPct": 0.325,
+  "rssMaxMb": 67.9,
+  "rssEndMb": 67.9,
+  "samples": [
+   {
+    "t": 5,
+    "cpuS": 0.02,
+    "rssMb": 67.9
+   },
+   {
+    "t": 10,
+    "cpuS": 0.11,
+    "rssMb": 67.9
+   },
+   {
+    "t": 15,
+    "cpuS": 0.12,
+    "rssMb": 67.9
+   },
+   {
+    "t": 20,
+    "cpuS": 0.12,
+    "rssMb": 67.9
+   },
+   {
+    "t": 25,
+    "cpuS": 0.12,
+    "rssMb": 67.9
+   },
+   {
+    "t": 30,
+    "cpuS": 0.12,
+    "rssMb": 67.9
+   },
+   {
+    "t": 35,
+    "cpuS": 0.12,
+    "rssMb": 67.9
+   },
+   {
+    "t": 40,
+    "cpuS": 0.21,
+    "rssMb": 67.9
+   },
+   {
+    "t": 45,
+    "cpuS": 0.22,
+    "rssMb": 67.9
+   },
+   {
+    "t": 50,
+    "cpuS": 0.22,
+    "rssMb": 67.9
+   },
+   {
+    "t": 55,
+    "cpuS": 0.22,
+    "rssMb": 67.9
+   },
+   {
+    "t": 60,
+    "cpuS": 0.22,
+    "rssMb": 67.9
+   },
+   {
+    "t": 65,
+    "cpuS": 0.24,
+    "rssMb": 67.9
+   },
+   {
+    "t": 70,
+    "cpuS": 0.31,
+    "rssMb": 67.9
+   },
+   {
+    "t": 75,
+    "cpuS": 0.31,
+    "rssMb": 67.9
+   },
+   {
+    "t": 80,
+    "cpuS": 0.31,
+    "rssMb": 67.9
+   },
+   {
+    "t": 85,
+    "cpuS": 0.31,
+    "rssMb": 67.9
+   },
+   {
+    "t": 90,
+    "cpuS": 0.31,
+    "rssMb": 67.9
+   },
+   {
+    "t": 95,
+    "cpuS": 0.31,
+    "rssMb": 67.9
+   },
+   {
+    "t": 100,
+    "cpuS": 0.38,
+    "rssMb": 67.9
+   },
+   {
+    "t": 105,
+    "cpuS": 0.38,
+    "rssMb": 67.9
+   },
+   {
+    "t": 110,
+    "cpuS": 0.39,
+    "rssMb": 67.9
+   },
+   {
+    "t": 115,
+    "cpuS": 0.39,
+    "rssMb": 67.9
+   },
+   {
+    "t": 120,
+    "cpuS": 0.39,
+    "rssMb": 67.9
+   }
+  ]
+ }
+}

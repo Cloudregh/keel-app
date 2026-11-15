@@ -12,7 +12,12 @@
 // v2 (2026-11-12, owner decision after run 2, finding 52 revisited): only the "names a due task" rule changes, from the
 // literal title to its distinctive words (taskNamed below). Number rules and thresholds are unchanged. Because this rule
 // was written after run 2's answers were seen, run 2 is reported under it for information; the confirming run is run 3.
-export const RUBRIC_VERSION = "coach-rubric-v2";
+// v3 (2026-11-13, owner decision after run 5): only grounding changes. A number also counts as grounded when it is
+// minutes done plus blocks the answer itself suggests (worked or focus + S), or minutes left minus them (left − S), where
+// S is one suggested block, two of them added, two or three of the same block, or all of them (suggestedBlocks below).
+// Everything else, and both thresholds, are unchanged. Written after run 5's answers were seen, so run 5 is reported
+// under it for information only; the confirming run is run 6. Runs 1–5 keep the rubric they were graded under.
+export const RUBRIC_VERSION = "coach-rubric-v3";
 const STOP = new Set("a an the to for of on in at with and or my your our this that it is be by from up out".split(" "));
 const wordsOf = s => norm(s).split(" ").filter(w => w && !STOP.has(w));
 // two words match when one is a prefix of the other (the shorter at least 3 letters: pay / paying), or they share
@@ -79,7 +84,7 @@ function numbersIn(text) {
   return out;
 }
 
-export function grade(d, text, { taskRule = "words" } = {}) {
+export function grade(d, text, { taskRule = "words", grounding = "v3" } = {}) {
   const t = String(text || "").trim();
   const words = t ? t.split(/\s+/).length : 0;
   const paragraphs = t ? t.split(/\n\s*\n/).filter(p => p.trim()).length : 0;
@@ -105,8 +110,9 @@ export function grade(d, text, { taskRule = "words" } = {}) {
   };
   // grounding
   const ok = allowedNumbers(d), ungrounded = [], strictUngrounded = [];
+  const derived = grounding === "v3" ? afterBlocks(d, t) : null;
   for (const n of numbersIn(rest)) {
-    const grounded = n.clock && n.parts.length === 2 ? ok.has(n.parts[0]) && ok.has(n.parts[1]) : n.parts.every(v => ok.has(v) || ok.has(r1(v)));
+    const grounded = n.clock && n.parts.length === 2 ? ok.has(n.parts[0]) && ok.has(n.parts[1]) : n.parts.every(v => ok.has(v) || ok.has(r1(v)) || (derived && !n.clock && derived.has(v)));
     if (grounded) continue;
     strictUngrounded.push(n.raw.trim());
     const v = n.parts[0];
@@ -152,6 +158,38 @@ export function pctClaims(d, text) {
   return { claims, wrong };
 }
 
+const BLOCK_RE = /(?:\b(one|two|three|four|another|a|an)\s+)?(?:(\d+)[\s-]*(?:minutes?|mins?)|(\d+)[\s-]*hours?|(hour))(?:[\s-]+long)?\s+(?:more\s+)?(?:of\s+)?(?:focus(?:ed)?\s+|deep[- ]work\s+|uninterrupted\s+|distraction[- ]free\s+)?(?:blocks?|sessions?|stretch(?:es)?|sprints?|pass(?:es)?|timers?|hours?)\b|\b(?:one|another)\s+(?:more\s+)?focus(?:ed)?\s+hour\b|\b(\d+)\s+more\s+(?:focus\s+|work\s+)?minutes\b|\((?:about\s+)?(\d+)[\s-]*minutes?\b|\b(?:a|another|one more)\s+(?:second|another|further)?\s*(?:focus\s+)?(block|session)\b|\b(?:(?:take|spend|use|give|do|add|need)s?\s+(?:just\s+|only\s+|the\s+|a\s+|another\s+)?|(?:another|a further)\s+)(\d+)\s*(?:more\s+)?(?:focus\s+|work\s+)?minutes?\b|\b(?:an|one|another|a second|one more)\s+hour\b(?!s)/gi;
+const BLOCK_MULT = { two: 2, three: 3, four: 4 };
+/** Blocks the answer suggests, in order, in minutes: "a 45-minute block", "two 60-minute stretches" (120), "one more
+ *  focus hour", "60 more minutes", "(about 15 minutes)", "a 2-hour block", "an hour", "take/spend/use 20 minutes",
+ *  "another 60 minutes"; "a second
+ *  block" repeats the previous one. */
+export function suggestedBlocks(text) {
+  const out = [];
+  for (const m of String(text).matchAll(BLOCK_RE)) {
+    if (m[7]) { if (out.length) out.push({ at: m.index, mins: out.at(-1).mins }); continue; }
+    const mult = m[1] && BLOCK_MULT[m[1].toLowerCase()] || 1;
+    const mins = m[2] ? +m[2] : m[3] ? +m[3] * 60 : m[5] ? +m[5] : m[6] ? +m[6] : m[8] ? +m[8] : 60;
+    out.push({ at: m.index, mins: mins * mult });
+  }
+  return out;
+}
+/** v3 grounding: values reachable from the day's totals with the blocks this answer suggests. */
+export function afterBlocks(d, text) {
+  const b = suggestedBlocks(text).map(x => x.mins), S = new Set();
+  b.forEach((x, i) => { S.add(x); S.add(2 * x); S.add(3 * x); for (let j = i + 1; j < b.length; j++) S.add(x + b[j]); });
+  if (b.length) S.add(b.reduce((a, x) => a + x, 0));
+  const out = new Set();
+  const wl = d.workLeftMin ?? (d.goals.workMin > 0 ? Math.max(0, d.goals.workMin - d.workedMin) : null);
+  const fl = d.focusLeftMin ?? (d.goals.focusMin > 0 ? Math.max(0, d.goals.focusMin - d.focusMin) : null);
+  for (const s of S) {
+    out.add(s);                                   // the suggested amount itself ("that adds 90 focus minutes")
+    for (const v of [d.workedMin, d.focusMin]) out.add(v + s);
+    for (const l of [wl, fl]) if (l != null && l - s >= 0) out.add(l - s);
+  }
+  return out;
+}
+
 /** Fix 55 check (reported alongside the rubric; not part of `pass` and not a locked threshold).
  *  Finds claims about where a suggested block would take the user ("a 60-minute session would put you past your
  *  240-minute focus goal", "a 90-minute block takes you to well over a third of your work goal") and checks them against
@@ -161,23 +199,18 @@ export function pctClaims(d, text) {
  *  exact hit is listed separately as `loose`; "reach/hit/meet" needs it at or above the goal; "over/more than a third"
  *  needs it above the fraction; "nearly/almost a half" needs it within 10 points below the fraction. */
 export function projectionClaims(d, text) {
-  const WORDS = { one: 1, two: 2, three: 3, four: 4, a: 1, an: 1, another: 1 };
   const FRAC = { "a quarter": 1 / 4, "a third": 1 / 3, half: 1 / 2, "two thirds": 2 / 3, "three quarters": 3 / 4 };
   const done = { work: d.workedMin, focus: d.focusMin }, goal = { work: d.goals.workMin, focus: d.goals.focusMin };
   const kindOf = (word, mins) => word ? word.toLowerCase() : mins && +mins === goal.work && +mins !== goal.focus ? "work" : mins && +mins === goal.focus && +mins !== goal.work ? "focus" : null;
   let claims = 0; const wrong = [], loose = [];
   for (const para of String(text).split(/\n\s*\n/)) {
-    const blocks = [];
-    const blockRe = /(?:\b(one|two|three|four|another|a|an)\s+)?(?:(\d+)[\s-]*(?:minutes?|mins?)|(hour))(?:[\s-]+long)?\s+(?:more\s+)?(?:of\s+)?(?:focus(?:ed)?\s+|deep[- ]work\s+|uninterrupted\s+|distraction[- ]free\s+)?(?:block|session|stretch|sprint|pass|timer|hour)s?\b|\b(?:one|another)\s+(?:more\s+)?focus(?:ed)?\s+hour\b|\b(\d+)\s+more\s+(?:focus\s+)?minutes\b|\((?:about\s+)?(\d+)[\s-]*minutes?\b/gi;
-    for (const m of para.matchAll(blockRe)) {
-      const mult = m[1] && /^(two|three|four)$/i.test(m[1]) ? WORDS[m[1].toLowerCase()] : 1;
-      const mins = m[2] ? +m[2] : m[4] ? +m[4] : m[5] ? +m[5] : 60;
-      blocks.push({ at: m.index, mins: mins * mult });
-    }
+    const blocks = suggestedBlocks(para);   // shared with v3 grounding
     if (!blocks.length) continue;
     const claimRe = /\b(past|pass|beyond|exceed|over|reach|hit|meet)\s+(?:your\s+|the\s+|today's\s+)?(?:(\d+)[\s-]*(?:minutes?|mins?)[\s-]+)?(work|focus)?\s*goal\b|\b(well over|over|more than|nearly|almost)\s+(a quarter|a third|half|two thirds|three quarters)\s+of\s+(?:your\s+|the\s+)?(?:(\d+)[\s-]*(?:minutes?|mins?)[\s-]+)?(work|focus)?\s*goal\b/gi;
     for (const m of para.matchAll(claimRe)) {
       const before = para.slice(Math.max(0, m.index - 60), m.index);
+      // "leaving 80 to reach your goal", "still 183 short of your goal": the goal is not claimed to be reached
+      if (/\b(leav\w*|short|still|left|need\w*|to go|remain\w*)\b[^.!?]{0,30}$/i.test(before) && !m[4]) continue;
       const kind = kindOf(m[3] || m[7] || (/\bfocus\b/i.test(before) && !/\bwork\b/i.test(before) ? "focus" : /\bwork\b/i.test(before) && !/\bfocus\b/i.test(before) ? "work" : null), m[2] || m[6]);
       const prior = blocks.filter(x => x.at < m.index + m[0].length);
       if (!kind || !prior.length || !(goal[kind] > 0)) continue;

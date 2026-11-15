@@ -1,0 +1,359 @@
+{
+ "plannerData": {
+  "bytes": 1357368,
+  "storageFull": false,
+  "tasks": 90,
+  "entries": 300
+ },
+ "planner": {
+  "desktop": {
+   "n": 300,
+   "p50": 1,
+   "p95": 2,
+   "p99": 2,
+   "max": 5
+  },
+  "cpu4x": {
+   "n": 100,
+   "p50": 5,
+   "p95": 8,
+   "p99": 8,
+   "max": 9
+  },
+  "plannedItems": 7
+ },
+ "renderData": {
+  "bytes": 2543334,
+  "storageFull": false,
+  "tasks": 600,
+  "entries": 3650
+ },
+ "render": {
+  "today": {
+   "desktop": {
+    "n": 40,
+    "p50": 16,
+    "p95": 18,
+    "p99": 23,
+    "max": 23
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 54,
+    "p95": 73,
+    "p99": 76,
+    "max": 76
+   }
+  },
+  "focus": {
+   "desktop": {
+    "n": 40,
+    "p50": 3,
+    "p95": 7,
+    "p99": 11,
+    "max": 11
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 22,
+    "p95": 23,
+    "p99": 24,
+    "max": 24
+   }
+  },
+  "tasks": {
+   "desktop": {
+    "n": 40,
+    "p50": 41,
+    "p95": 51,
+    "p99": 70,
+    "max": 70
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 155,
+    "p95": 233,
+    "p99": 283,
+    "max": 283
+   }
+  },
+  "timeline": {
+   "desktop": {
+    "n": 40,
+    "p50": 7,
+    "p95": 9,
+    "p99": 13,
+    "max": 13
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 40,
+    "p95": 50,
+    "p99": 58,
+    "max": 58
+   }
+  },
+  "apps": {
+   "desktop": {
+    "n": 40,
+    "p50": 7,
+    "p95": 8,
+    "p99": 9,
+    "max": 9
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 42,
+    "p95": 69,
+    "p99": 76,
+    "max": 76
+   }
+  },
+  "reports": {
+   "desktop": {
+    "n": 40,
+    "p50": 7,
+    "p95": 8,
+    "p99": 11,
+    "max": 11
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 22,
+    "p95": 30,
+    "p99": 32,
+    "max": 32
+   }
+  },
+  "projects": {
+   "desktop": {
+    "n": 40,
+    "p50": 1,
+    "p95": 1,
+    "p99": 2,
+    "max": 2
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 4,
+    "p95": 5,
+    "p99": 5,
+    "max": 5
+   }
+  },
+  "settings": {
+   "desktop": {
+    "n": 40,
+    "p50": 1,
+    "p95": 1,
+    "p99": 3,
+    "max": 3
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 6,
+    "p95": 8,
+    "p99": 9,
+    "max": 9
+   }
+  }
+ },
+ "mobile": {
+  "views": {
+   "today": {
+    "lcp": 644,
+    "fcp": 644,
+    "cls": 0,
+    "tbt": 17,
+    "longest": 336,
+    "tbtRuns": [
+     22,
+     17,
+     8
+    ]
+   },
+   "focus": {
+    "lcp": 664,
+    "fcp": 664,
+    "cls": 0,
+    "tbt": 0,
+    "longest": 187,
+    "tbtRuns": [
+     0,
+     0,
+     0
+    ]
+   },
+   "tasks": {
+    "lcp": 1468,
+    "fcp": 1468,
+    "cls": 0,
+    "tbt": 0,
+    "longest": 442,
+    "tbtRuns": [
+     0,
+     0,
+     0
+    ]
+   },
+   "timeline": {
+    "lcp": 1092,
+    "fcp": 1092,
+    "cls": 0,
+    "tbt": 34,
+    "longest": 232,
+    "tbtRuns": [
+     37,
+     21,
+     34
+    ]
+   },
+   "apps": {
+    "lcp": 1372,
+    "fcp": 1372,
+    "cls": 0,
+    "tbt": 32,
+    "longest": 233,
+    "tbtRuns": [
+     32,
+     0,
+     40
+    ]
+   },
+   "reports": {
+    "lcp": 1248,
+    "fcp": 1248,
+    "cls": 0,
+    "tbt": 0,
+    "longest": 295,
+    "tbtRuns": [
+     0,
+     0,
+     0
+    ]
+   },
+   "projects": {
+    "lcp": 1268,
+    "fcp": 1268,
+    "cls": 0,
+    "tbt": 0,
+    "longest": 229,
+    "tbtRuns": [
+     0,
+     0,
+     0
+    ]
+   },
+   "settings": {
+    "lcp": 1564,
+    "fcp": 1564,
+    "cls": 0.008,
+    "tbt": 0,
+    "longest": 299,
+    "tbtRuns": [
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "taskTapMs": [
+   653,
+   621,
+   721,
+   785,
+   957
+  ],
+  "desktopTaskTapMs": [
+   165,
+   133,
+   217,
+   222,
+   181
+  ],
+  "tasksViewDomNodes": 6655,
+  "taskRowsRendered": 220
+ },
+ "ramp": [
+  {
+   "tasks": 600,
+   "years": 1,
+   "actDays": 30,
+   "bytes": 2543334,
+   "storageFull": false,
+   "entries": 3650,
+   "mb": 2.54,
+   "p95": {
+    "today": 24,
+    "tasks": 51,
+    "reports": 11,
+    "plan": 30
+   },
+   "loadMs": 10
+  },
+  {
+   "tasks": 2000,
+   "years": 2,
+   "actDays": 60,
+   "bytes": 5237528,
+   "storageFull": false,
+   "entries": 7300,
+   "mb": 5.24,
+   "p95": {
+    "today": 19,
+    "tasks": 184,
+    "reports": 8,
+    "plan": 53
+   },
+   "loadMs": 13
+  },
+  {
+   "tasks": 5000,
+   "years": 3,
+   "actDays": 90,
+   "bytes": 8575762,
+   "storageFull": false,
+   "entries": 10950,
+   "mb": 8.58,
+   "p95": {
+    "today": 25,
+    "tasks": 424,
+    "reports": 10,
+    "plan": 196
+   },
+   "loadMs": 33
+  },
+  {
+   "tasks": 10000,
+   "years": 5,
+   "actDays": 180,
+   "bytes": 9915214,
+   "storageFull": true,
+   "entries": 18250,
+   "mb": 9.92,
+   "p95": {
+    "today": 28,
+    "tasks": 821,
+    "reports": 18,
+    "plan": 514
+   },
+   "loadMs": 45
+  },
+  {
+   "tasks": 20000,
+   "years": 8,
+   "actDays": 365,
+   "bytes": 530302,
+   "storageFull": true,
+   "entries": 29200,
+   "mb": 0.53,
+   "p95": {
+    "today": 59,
+    "tasks": 2917,
+    "reports": 38,
+    "plan": 1565
+   },
+   "loadMs": 0
+  }
+ ]
+}

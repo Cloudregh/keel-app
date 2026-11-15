@@ -4,7 +4,7 @@ import { test, expect } from "../fixtures/keel.mjs";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { buildPrompt, INSTRUCTION, INSTRUCTIONS } from "../../../eval/coach/prompt.mjs";
-import { grade, allowedNumbers, stopClaims, taskNamed, pctClaims, projectionClaims } from "../../../eval/coach/rubric.mjs";
+import { grade, allowedNumbers, stopClaims, taskNamed, pctClaims, projectionClaims, suggestedBlocks } from "../../../eval/coach/rubric.mjs";
 
 const root = new URL("../../../", import.meta.url);
 const app = readFileSync(new URL("index.html", root), "utf8");
@@ -155,9 +155,11 @@ test.describe("prompt parity with the app", () => {
     expect(sha(INSTRUCTIONS["coach-v1"])).toBe("02353b9f1666");
   });
 
-  test("the manifest pins this prompt text to coach-v4 (a prompt change must bump the version and re-run the eval)", () => {
+  test("the manifest pins this prompt text to coach-v6 (a prompt change must bump the version and re-run the eval)", () => {
     const m = JSON.parse(readFileSync(new URL("eval/manifest.json", root), "utf8")).prompts.dailyCoach;
-    expect(m.version).toBe("coach-v4");
+    expect(m.version).toBe("coach-v6");
+    expect(m.versions["coach-v5"]).toBe("8b653fc177ba");
+    expect(m.versions["coach-v4"]).toBe("b2843a99061e");
     expect(m.versions["coach-v3"]).toBe("4c4fc1d9d0da");
     expect(m.versions["coach-v2"]).toBe("1a6ad23d2536");
     expect(m.versions["coach-v1"]).toBe("02353b9f1666");
@@ -171,7 +173,7 @@ test.describe("prompt parity with the app", () => {
     expect(embedded.map(c => c.id)).toEqual(cases4.map(c => c.id));
     for (const c of embedded) expect(c.prompt).toBe(buildPrompt(byId4[c.id].data));
     const meta = JSON.parse(page.match(/const META = (\{.*\});\n/)[1]);
-    expect(meta).toEqual({ evalSet: "coach-eval-v4", evalSetSha: sha(set4Text), promptVersion: "coach-v4", promptSha: sha(INSTRUCTION), reps: 3 });
+    expect(meta).toEqual({ evalSet: "coach-eval-v4", evalSetSha: sha(set4Text), promptVersion: "coach-v6", promptSha: sha(INSTRUCTION), reps: 3 });
     expect(page).toContain("sample(c.prompt, { cache: false })");
     expect(page).not.toMatch(/innerHTML/);   // answers are shown with textContent only
   });
@@ -212,7 +214,7 @@ test.describe("rubric coach-rubric-v1 on hand-written answers", () => {
     const g = grade(typical, "You worked 410 minutes today. Take a 10-minute break each hour. Then Write Q4 report.");
     expect(g.ungrounded).toEqual(["410 minutes"]);
     expect(g.strictUngrounded).toEqual(["410 minutes"]);
-    const advice = grade(typical, "Nice work today. Try a 25-minute block on Write Q4 report.");
+    const advice = grade(typical, "Nice work today. Try a 25-minute block on Write Q4 report.", { grounding: "v2" });   // v1/v2 rule; v3 counts a suggested block's own minutes as grounded (next test group)
     expect(advice.ungrounded).toEqual([]);
     expect(advice.strictUngrounded).toEqual(["25-minute"]);   // 25 isn't derivable from c01: allowed as advice, still reported in the strict rate
   });
@@ -321,5 +323,68 @@ test.describe("projectionClaims (fix 55 check)", () => {
     const run = JSON.parse(readFileSync(new URL("eval/results/coach-run-20261113002126.json", root), "utf8"));
     const wrong = run.results.flatMap(r => projectionClaims(byId3[r.caseId].data, r.text).wrong.map(() => `${r.caseId}#${r.rep}`));
     expect(wrong).toEqual(["c21#3", "c47#3"]);
+  });
+});
+
+// Rubric v3 (owner decision after run 5): numbers reached from the day's totals with blocks the answer itself suggests
+// are grounded; everything else is unchanged. Earlier runs keep the rubric that was pre-registered for them.
+test.describe("rubric v3 grounding (done + block, left − block)", () => {
+  const d = { workedMin: 160, focusMin: 160, breakMin: 15, goals: { workMin: 360, focusMin: 240 }, workLeftMin: 200, focusLeftMin: 80, stillDue: [], completedToday: [], sessions: [], byProject: {} };
+  const ung = (text, grounding = "v3") => grade(d, text, { grounding }).ungrounded;
+  test("accepts correct sums after a suggested block, which v2 flagged", () => {
+    const t = "You did 160 minutes. A 60-minute block now would bring focus to 220 and leave 20 focus minutes and 140 work minutes.";
+    expect(ung(t, "v2")).toEqual(["220", "20", "140"]);
+    expect(ung(t)).toEqual([]);
+  });
+  test("rejects wrong arithmetic even with a block named", () => {
+    expect(ung("A 60-minute block would leave 25 focus minutes and bring focus to 230.")).toEqual(["25", "230"]);
+  });
+  test("recognises blocks phrased several ways", () => {
+    for (const [text, mins] of [["Two 60-minute stretches", [120]], ["an hour would", [60]], ["take 20 minutes for the email", [20]], ["another 60 minutes of work", [60]], ["a 45-minute block, then a second block", [45, 45]], ["a 2-hour focus block", [120]], ["(about 15 minutes)", [15]]])
+      expect(suggestedBlocks(text).map(x => x.mins), text).toEqual(mins);
+  });
+  test("runs 1–5 keep their recorded verdicts under the rubric pre-registered for them", () => {
+    const want = { "coach-run-20261112193429.json": [0.807, 0.080], "coach-run-20261112231144.json": [0.987, 0.040], "coach-run-20261112234548.json": [0.993, 0.033], "coach-run-20261113002126.json": [0.987, 0.013], "coach-run-20261113011136.json": [0.987, 0.367] };
+    for (const [f, [pass, ungR]] of Object.entries(want)) {
+      const run = JSON.parse(readFileSync(new URL("eval/results/" + f, root), "utf8"));
+      expect(run.rubric, f).toBeUndefined();               // exported before v3: graded under v2
+      const set = Object.fromEntries(readFileSync(new URL(`eval/data/${run.evalSet}.jsonl`, root), "utf8").trim().split("\n").map(l => JSON.parse(l)).map(c => [c.id, c]));
+      const g = run.results.map(r => grade(set[r.caseId].data, r.text, { grounding: "v2" }));
+      expect(Math.round(1000 * g.filter(x => x.pass).length / g.length) / 1000, f).toBe(pass);
+      expect(Math.round(1000 * g.filter(x => x.ungrounded.length).length / g.length) / 1000, f).toBe(ungR);
+    }
+  });
+  test("run 5 under v3 (information only): the two real errors found by reading stay flagged", () => {
+    const run = JSON.parse(readFileSync(new URL("eval/results/coach-run-20261113011136.json", root), "utf8"));
+    const flagged = run.results.filter(r => grade(byId4[r.caseId].data, r.text).ungrounded.length).map(r => `${r.caseId}#${r.rep}`);
+    expect(flagged).toEqual(expect.arrayContaining(["c21#1", "c23#3"]));
+  });
+});
+
+test("projectionClaims: 'leaving X to reach your goal' is not a claim that the goal is reached", () => {
+  const d = { workedMin: 160, focusMin: 160, goals: { workMin: 360, focusMin: 240 } };
+  expect(projectionClaims(d, "Start a 60-minute block, leaving 20 minutes to reach your focus goal.").claims).toBe(0);
+  expect(projectionClaims(d, "Start a 60-minute block to reach your focus goal.").wrong).toHaveLength(1);
+});
+
+test.describe("runs 6, 7 and 8 under coach-rubric-v3", () => {
+  const load = f => JSON.parse(readFileSync(new URL("eval/results/" + f, root), "utf8"));
+  const rate = (run, pick) => { const g = run.results.map(r => grade(byId4[r.caseId].data, r.text)); return Math.round(1000 * g.filter(pick).length / g.length) / 1000; };
+  test("run 6 (coach-v4), run 7 (coach-v5, fix 60) and run 8 (coach-v6, fix 61) keep their recorded verdicts", () => {
+    for (const [f, ver, pass, ungR] of [["coach-run-20261113112243.json", "coach-v4", 0.96, 0.033], ["coach-run-20261114112108.json", "coach-v5", 0.933, 0.013], ["coach-run-20261114122555.json", "coach-v6", 1, 0.027]]) {
+      const run = load(f);
+      expect([run.rubric, run.promptVersion], f).toEqual(["coach-rubric-v3", ver]);
+      expect(rate(run, x => x.pass), f).toBe(pass);
+      expect(rate(run, x => x.ungrounded.length), f).toBe(ungR);
+    }
+  });
+  // Finding 61 (reported, not locked): coach-v5 renders the Japanese and French task titles in English instead of naming them.
+  test("finding 61: c37 and c40 name the task in run 6, in no run-7 answer, and in every run-8 answer (fix 61)", () => {
+    const named = (f, id) => load(f).results.filter(r => r.caseId === id && grade(byId4[id].data, r.text).checks.namesDueTask).length;
+    for (const id of ["c37", "c40"]) {
+      expect(named("coach-run-20261113112243.json", id), id).toBe(3);
+      expect(named("coach-run-20261114112108.json", id), id).toBe(0);
+      expect(named("coach-run-20261114122555.json", id), id).toBe(3);
+    }
   });
 });

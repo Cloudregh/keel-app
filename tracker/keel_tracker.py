@@ -81,6 +81,9 @@ SAFARI = {"Safari", "Safari Technology Preview"}
 _browser_fail: dict[str, float] = {}  # browser -> time of last failed read, so we don't retry constantly
 LOCK = threading.Lock()  # guards the in-memory activity data
 SAVE_LOCK = threading.RLock()  # one file write at a time (main loop and API requests both save)
+# Fix 64: one /activity copy at a time, from snapshot to encoded bytes. Several tabs pulling at once used to hold a
+# full copy each while it was encoded (tracker RSS over 60 MB with 3 tabs); the send happens outside this lock.
+ACTIVITY_LOCK = threading.Lock()
 STATE: dict[str, Any] = {"data": {"days": {}}, "paused_until": None, "current": None, "idle": False, "started": int(time.time() * 1000)}
 
 
@@ -203,12 +206,32 @@ def day_key(ms):
 
 
 def load():
-    with contextlib.suppress(Exception):  # missing or corrupt file: start fresh
+    if not os.path.exists(OUT_FILE):
+        return {"days": {}}
+    with contextlib.suppress(Exception):
         with open(OUT_FILE, encoding="utf-8") as f:
             data = json.load(f)
         if isinstance(data.get("days"), dict):
             return data
+    # Fix 65: the file exists but can't be read. Keep it aside (never overwrite history) and start a new one.
+    kept = os.path.join(OUT_DIR, datetime.datetime.now().strftime("keel-activity.corrupt-%Y%m%d-%H%M%S.json"))
+    try:
+        os.replace(OUT_FILE, kept)
+        print(f"The activity file couldn't be read. It was kept as {kept} and a new one was started.", file=sys.stderr, flush=True)
+    except OSError as e:
+        print(f"The activity file couldn't be read, and couldn't be kept aside either: {e}", file=sys.stderr, flush=True)
     return {"days": {}}
+
+
+def where(e):
+    """Error type and the tracker's own code location, without the message: a message can hold the data being
+    parsed (an app name, a window title), and the log must not (Phase 13)."""
+    tb, line = e.__traceback__, 0
+    while tb is not None:
+        if tb.tb_frame.f_code.co_filename == __file__:
+            line = tb.tb_lineno
+        tb = tb.tb_next
+    return f"{type(e).__name__} at keel_tracker.py line {line}"
 
 
 def snapshot(data, max_days=None):
@@ -224,6 +247,10 @@ def snapshot(data, max_days=None):
         "tzOffsetMin": offset,
         "days": days,
     }
+
+
+def _encode(obj):
+    return json.dumps(obj, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
 
 
 def save(data):
@@ -382,7 +409,9 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Access-Control-Allow-Private-Network", "true")
 
     def _json(self, code, obj, origin):
-        body = json.dumps(obj, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        self._send(code, _encode(obj), origin)
+
+    def _send(self, code, body, origin):
         self.send_response(code)
         self._cors(origin)
         self.send_header("Content-Type", "application/json; charset=utf-8")
@@ -403,6 +432,24 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
+        self._safely(self._get)
+
+    def do_POST(self):
+        self._safely(self._post)
+
+    def _safely(self, handler):
+        """Fix 67: an unexpected error answers 500 with a JSON error (the documented contract) instead of dropping
+        the connection, and is logged without request data."""
+        try:
+            handler()
+        except Exception as e:
+            print(f"API error on {self.command} {self.path.split('?')[0][:64]}: {where(e)}", file=sys.stderr, flush=True)
+            origin = self.headers.get("Origin")
+            with contextlib.suppress(Exception):  # the answer may already be partly sent; then the client sees a drop
+                ok = origin if origin and origin_allowed(origin) else None
+                self._json(500, {"error": "The tracker hit an error. Details are in ~/Keel Activity/tracker.log."}, ok)
+
+    def _get(self):
         ok, origin = self._check()
         if not ok:
             return self._json(
@@ -416,12 +463,15 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/activity":
             m = re.search(r"days=(\d+)", self.path)
             n = min(KEEP_DAYS, int(m.group(1))) if m else KEEP_DAYS
-            with LOCK:
-                snap = snapshot(STATE["data"], n)
-            return self._json(200, snap, origin)
+            with ACTIVITY_LOCK:
+                with LOCK:
+                    snap = snapshot(STATE["data"], n)
+                body = _encode(snap)
+                del snap  # free the copy before the next request builds one
+            return self._send(200, body, origin)
         return self._json(404, {"error": "Not found"}, origin)
 
-    def do_POST(self):
+    def _post(self):
         ok, origin = self._check()
         if not ok:
             return self._json(403, {"error": "Not allowed"}, None)
@@ -489,6 +539,7 @@ def track():
         print(f"Cleanup failed: {e}", file=sys.stderr, flush=True)
     last_clean = time.time()
     cur, cur_key, last_save = None, None, 0.0
+    last_err: dict[str, float] = {}
     print(f"Keel tracker running. Writing to {OUT_FILE}", flush=True)
     while True:
         now = time.time()
@@ -511,34 +562,40 @@ def track():
                 last_save = now
             time.sleep(INTERVAL)
             continue
-        idle = idle_seconds()
-        STATE["idle"] = idle >= IDLE_LIMIT
-        if idle >= IDLE_LIMIT:
-            if cur:
-                cur["e"] = max(cur["s"], min(cur["e"], int((now - idle) * 1000)))
-            cur, cur_key = None, None
-        else:
-            app = front_app()
-            if app and app not in ("loginwindow", "ScreenSaverEngine"):
-                domain, title = browser_tab(app) if (app in CHROMIUM or app in SAFARI) else ("", "")
-                key = (app, domain, title)
-                same_day = cur is not None and day_key(cur["s"]) == day_key(now_ms)
-                STATE["current"] = {"app": app, "domain": domain}
-                if cur and key == cur_key and same_day and now_ms - cur["e"] <= INTERVAL * 3000:
-                    with LOCK:
-                        cur["e"] = now_ms
-                else:
-                    if cur and now_ms - cur["e"] <= INTERVAL * 3000:
-                        cur["e"] = now_ms
-                    seg = {"s": now_ms, "e": now_ms, "app": app}
-                    if domain:
-                        seg["domain"] = domain
-                    if title:
-                        seg["title"] = title
-                    with LOCK:
-                        data["days"].setdefault(day_key(now_ms), []).append(seg)
-                    cur, cur_key = seg, key
-                    STATE["cur"] = seg
+        try:  # fix 66: one bad sample (an answer a parser didn't foresee) must not end tracking
+            idle = idle_seconds()
+            STATE["idle"] = idle >= IDLE_LIMIT
+            if idle >= IDLE_LIMIT:
+                if cur:
+                    cur["e"] = max(cur["s"], min(cur["e"], int((now - idle) * 1000)))
+                cur, cur_key = None, None
+            else:
+                app = front_app()
+                if app and app not in ("loginwindow", "ScreenSaverEngine"):
+                    domain, title = browser_tab(app) if (app in CHROMIUM or app in SAFARI) else ("", "")
+                    key = (app, domain, title)
+                    same_day = cur is not None and day_key(cur["s"]) == day_key(now_ms)
+                    STATE["current"] = {"app": app, "domain": domain}
+                    if cur and key == cur_key and same_day and now_ms - cur["e"] <= INTERVAL * 3000:
+                        with LOCK:
+                            cur["e"] = now_ms
+                    else:
+                        if cur and now_ms - cur["e"] <= INTERVAL * 3000:
+                            cur["e"] = now_ms
+                        seg = {"s": now_ms, "e": now_ms, "app": app}
+                        if domain:
+                            seg["domain"] = domain
+                        if title:
+                            seg["title"] = title
+                        with LOCK:
+                            data["days"].setdefault(day_key(now_ms), []).append(seg)
+                        cur, cur_key = seg, key
+                        STATE["cur"] = seg
+        except Exception as e:
+            msg = where(e)
+            if now - last_err.get(msg, 0) >= 60:  # at most once a minute for the same error
+                print(f"Skipped one activity sample: {msg}", file=sys.stderr, flush=True)
+                last_err[msg] = now
         if now - last_save >= SAVE_EVERY:
             try:
                 save(data)

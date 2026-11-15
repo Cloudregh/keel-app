@@ -1,0 +1,36 @@
+{
+ "url": "http://127.0.0.1:4181/index.html",
+ "fetchTime": "2026-11-14T12:24:02.356Z",
+ "lighthouse": "12.8.2",
+ "formFactor": "mobile",
+ "throttling": {
+  "rttMs": 150,
+  "throughputKbps": 1638.4,
+  "requestLatencyMs": 562.5,
+  "downloadThroughputKbps": 1474.5600000000002,
+  "uploadThroughputKbps": 675,
+  "cpuSlowdownMultiplier": 4
+ },
+ "blocked": null,
+ "scores": {
+  "performance": 0.99,
+  "accessibility": 1,
+  "best-practices": 1
+ },
+ "metrics": {
+  "first-contentful-paint": 1680.3843761469145,
+  "largest-contentful-paint": 1680.3843761469145,
+  "total-blocking-time": 0,
+  "cumulative-layout-shift": 0.008592574657219756,
+  "speed-index": 1680.3843761469145,
+  "interactive": 1680.3843761469147
+ },
+ "renderBlocking": [
+  {
+   "url": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Raleway:wght@600;700&display=swap",
+   "totalBytes": 0,
+   "wastedMs": 780
+  }
+ ],
+ "totalByteWeight": 72735
+}

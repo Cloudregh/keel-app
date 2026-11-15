@@ -1,6 +1,7 @@
 {
  "runId": "run-20261113002126",
  "rubric": "coach-rubric-v2",
+ "otherGroundingUngroundedRate": 0.006666666666666667,
  "promptVersion": "coach-v3",
  "stopClaims": {
   "claims": 122,
@@ -11,13 +12,12 @@
   "wrong": []
  },
  "projectionClaims": {
-  "claims": 7,
+  "claims": 6,
   "wrong": [
    "c21#3 \"well over a third of your work goal (10 + 90 = 100 of 360)\"",
    "c47#3 \"past your 240-minute focus goal (160 + 60 = 220 of 240)\""
   ],
   "loose": [
-   "c09#2 \"past the 240-minute goal (180 + 60 = 240 of 240)\"",
    "c50#2 \"pass your 240-minute focus goal (180 + 60 = 240 of 240)\"",
    "c50#3 \"past your 240-minute focus goal (180 + 60 = 240 of 240)\""
   ]

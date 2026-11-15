@@ -27,6 +27,8 @@ Base URL: `http://127.0.0.1:47821`. The port can be changed with `KEEL_TRACKER_P
 A body that isn't valid JSON (including `NaN` and `Infinity`, which JSON doesn't allow) is treated as `{}`.
 Every POST also returns **400** `{"error": "Bad Content-Length"}` if `Content-Length` is negative or not a number, and **413** `{"error": "Request body too large"}` if the body is over 2 MB; either way nothing changes.
 
+Any request that hits an unexpected error inside the tracker gets **500** `{"error": "The tracker hit an error. Details are in ~/Keel Activity/tracker.log."}` (fix 67). The log line names the error type and code location, never request data or the error message.
+
 ## Files
 
 `~/Keel Activity` is readable by this account only (folder `0700`; `config.json`, `tracker.log` and `keel-activity.json` `0600`).

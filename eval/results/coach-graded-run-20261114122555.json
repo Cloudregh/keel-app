@@ -1,0 +1,115 @@
+{
+ "runId": "run-20261114122555",
+ "rubric": "coach-rubric-v3",
+ "otherGroundingUngroundedRate": 0.2866666666666667,
+ "promptVersion": "coach-v6",
+ "stopClaims": {
+  "claims": 114,
+  "wrong": []
+ },
+ "pctClaims": {
+  "claims": 184,
+  "wrong": []
+ },
+ "projectionClaims": {
+  "claims": 13,
+  "wrong": [],
+  "loose": []
+ },
+ "literalTaskRulePassRate": 1,
+ "evalSet": "coach-eval-v4",
+ "n": 150,
+ "passRate": 1,
+ "ungroundedRate": 0.02666666666666667,
+ "strictUngroundedRate": 0.09333333333333334,
+ "byCheck": {
+  "nonEmpty": 0,
+  "noRefusal": 0,
+  "plainText": 0,
+  "length": 0,
+  "paragraphs": 0,
+  "english": 0,
+  "citesNumber": 0,
+  "namesDueTask": 0,
+  "emptyDayAck": 0
+ },
+ "byCat": {
+  "typical": [
+   42,
+   42
+  ],
+  "empty": [
+   12,
+   12
+  ],
+  "low": [
+   12,
+   12
+  ],
+  "long-stretch": [
+   12,
+   12
+  ],
+  "many-switch": [
+   12,
+   12
+  ],
+  "overdue": [
+   15,
+   15
+  ],
+  "multilingual": [
+   15,
+   15
+  ],
+  "edge": [
+   18,
+   18
+  ],
+  "ambiguous": [
+   12,
+   12
+  ]
+ },
+ "inconsistent": [],
+ "alwaysFail": [],
+ "failures": [
+  {
+   "case": "c12",
+   "rep": 3,
+   "failed": [],
+   "ungrounded": [
+    "140 minutes"
+   ],
+   "text": "You tracked 250 minutes of work today, 60% of your 420-minute goal, and your focus time hit 220 minutes, which is 92% of the focus goal. A focus score of 82 and a 110-minute longest stretch are strong, and Data cleaning is done.\n\nTracking stopped at 1:20pm, and it's now 4:40pm. Your 45-minute mid-morning break was the longest gap, though you still got back into focus well afterward.\n\nFocus needs just 20 more minutes. Start a 20-minute block on Regression models now, then send the 10-minute Email supervisor task. You'd still have about 140 minutes of work to go for today's goal, so continue Regression models tomorrow morning."
+  },
+  {
+   "case": "c21",
+   "rep": 1,
+   "failed": [],
+   "ungrounded": [
+    "260   minutes",
+    "150"
+   ],
+   "text": "You've logged 10 minutes so far, a meeting from 9:00 to 9:10am, which is 3% of your 360-minute work goal. It's early, so there's plenty of room to build momentum.\n\nFocus time is at 0 of your 240-minute goal, and your focus score is 15. With only a short meeting tracked, there's not much to read into yet, but a deep-focus block hasn't started.\n\nTry starting \"Quarterly review prep\" now. Its 90-minute estimate would bring you to about 100 minutes worked and 90 of focus, leaving roughly 260 work minutes and 150 focus minutes still to go."
+  },
+  {
+   "case": "c21",
+   "rep": 2,
+   "failed": [],
+   "ungrounded": [
+    "10:45am"
+   ],
+   "text": "You're off to a gentle start: 10 minutes tracked so far, all in a 9:00 meeting under Work, which puts you at 3% of your 360-minute work goal.\n\nNothing focused has been logged yet, so the 240 focus minutes are all still ahead of you, along with 350 work minutes. It's early, and no breaks or tab switching show up so far.\n\nNext, try a 90-minute block on \"Quarterly review prep\", your priority 3 task. Starting it now would take you to about 10:45am and put 90 focus minutes on the board, leaving 150 to go."
+  },
+  {
+   "case": "c38",
+   "rep": 2,
+   "failed": [],
+   "ungrounded": [
+    "80"
+   ],
+   "text": "You've put in 100 focused minutes today, which is 42% of your focus goal. Your best stretch was a solid 60 minutes reviewing the report, and your 20-minute break afterward was well placed.\n\nOne honest observation: tracking stopped at 11:00am, and it's now 3:00pm. If you kept working, those hours aren't captured. If not, a big part of the day is still open. You also made 12 tab switches, which is fairly modest.\n\nFor the next block, try 60 minutes on \"مراجعة التقرير\", your priority task still due. That would leave about 80 focus minutes to reach your goal."
+  }
+ ]
+}

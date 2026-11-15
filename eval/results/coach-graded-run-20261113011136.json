@@ -1,6 +1,7 @@
 {
  "runId": "run-20261113011136",
  "rubric": "coach-rubric-v2",
+ "otherGroundingUngroundedRate": 0.03333333333333333,
  "promptVersion": "coach-v4",
  "stopClaims": {
   "claims": 119,
@@ -11,16 +12,8 @@
   "wrong": []
  },
  "projectionClaims": {
-  "claims": 21,
-  "wrong": [
-   "c03#2 \"reach your work goal (270 + 30 = 300 of 360)\"",
-   "c14#3 \"reach your focus goal (70 + 90 = 160 of 240)\"",
-   "c20#2 \"reach your goal (12 + 45 = 57 of 240)\"",
-   "c28#2 \"hit your focus goal (120 + 60 = 180 of 240)\"",
-   "c33#2 \"hit your goal (20 + 60 = 80 of 240)\"",
-   "c36#1 \"reach your goal (110 + 90 = 200 of 240)\"",
-   "c46#3 \"reach your work goal (210 + 30 = 240 of 360)\""
-  ],
+  "claims": 14,
+  "wrong": [],
   "loose": []
  },
  "literalTaskRulePassRate": 0.9,

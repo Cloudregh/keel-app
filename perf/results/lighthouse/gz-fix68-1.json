@@ -1,0 +1,30 @@
+{
+ "url": "http://127.0.0.1:4181/index.html",
+ "fetchTime": "2026-11-14T23:20:13.869Z",
+ "lighthouse": "12.8.2",
+ "formFactor": "mobile",
+ "throttling": {
+  "rttMs": 150,
+  "throughputKbps": 1638.4,
+  "requestLatencyMs": 562.5,
+  "downloadThroughputKbps": 1474.5600000000002,
+  "uploadThroughputKbps": 675,
+  "cpuSlowdownMultiplier": 4
+ },
+ "blocked": null,
+ "scores": {
+  "performance": 1,
+  "accessibility": 1,
+  "best-practices": 1
+ },
+ "metrics": {
+  "first-contentful-paint": 1036.3217,
+  "largest-contentful-paint": 1062.6434,
+  "total-blocking-time": 36.5,
+  "cumulative-layout-shift": 0,
+  "speed-index": 1036.3217,
+  "interactive": 1146.0664649999999
+ },
+ "renderBlocking": [],
+ "note": "after fix 68 (font stylesheet no longer blocks; switched on by the boot script)"
+}
