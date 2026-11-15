@@ -4,20 +4,23 @@ Date: 2026-11-15 · QA sign-off run from a clean state · Owner: Cloudregh
 
 ## Verdict
 
-**READY WITH KNOWN ISSUES**, final once the WebKit re-run on the owner's Mac passes (see "Still to run").
+**READY WITH KNOWN ISSUES**, final once the 2 Mac-Chromium tests pass on re-run, CI is green on the new push, and Vercel builds (see "Still to run").
 
 Why:
 - Every approved Phase 1 target is met. Values were measured from a clean copy or, where noted, in the phase that owns them.
-- No bug is open: 64 of the 66 recorded bugs are fixed and verified, and the other 2 were closed by decision. Each fix has a test that fails on the old code. Bugs 1 and 2 and accepted risks A5 and A6 were fixed on 2026-11-15, after the first sign-off review.
+- No bug is open: 65 of the 67 recorded bugs are fixed and verified, and the other 2 were closed by decision. Each fix has a test that fails on the old code. Bugs 1 and 2 and accepted risks A5 and A6 were fixed on 2026-11-15, after the first sign-off review.
 - The "known issues" are 5 accepted limitations (A1–A4, A7), none of which can lose or expose data.
 - AI spend was $0.
 - CI runs the critical suites on every push and pull request, and its first run passed.
 
 ## Still to run
 
-| Item | Why | How |
+| Item | Status | What's needed |
 |---|---|---|
-| WebKit on macOS, twice | The first Mac run failed 1 test, twice: the tasks-tick focus check. Safari on macOS doesn't focus a button on a mouse click, so after a click there was no focus in the row to keep. The app behaves correctly, but the test assumed click focus, which Chromium, Firefox and Linux WebKit give. The focus check now uses the keyboard, where every browser has focus on the checkbox before the tick; it now checks both ticking and unticking. Firefox passed 63/63 twice; CI's Ubuntu WebKit passed | On the Mac: `bash tests/run-mac-browsers.sh` |
+| macOS browsers, clean copy (`bash tests/run-mac-browsers.sh`, 2026-11-15) | **Done:** Firefox 65/65, 65/65; WebKit 65/65, 65/65 | - |
+| Chromium on the owner's Mac (local) | Both items explained and fixed: (1) the 26 MB restore paste froze Chrome on macOS before Keel's size check ran. That was a real app issue, recorded as finding 69 and fixed by refusing an oversized paste or drop before it lands in the box. (2) The long-output test spent 9 s or more streaming 20-character pieces before its checks and timed out on a loaded Mac; it now streams the same text in 400-character pieces, with its checks unchanged (100/100 over 10 parallel repeats in the cloud) | Re-run the two tests on the Mac |
+| CI on 891306a and 0632a7f | queued when last reported | the result |
+| Vercel redeploy | not yet checked | the result |
 
 ## The clean run (2026-11-15)
 
@@ -31,7 +34,7 @@ Fresh copy of the project with no `node_modules`, `.venv`, caches or earlier res
 | Tracker tests (Python) | `npm run test:py` | 350 passed, 0 failed, 0 skipped; coverage 98.63% |
 | Logic, ML, AI and security tests | `npm run test:js` (unit project) | 303 passed, 0 failed, 0 skipped; line 100%, char 96.8% |
 | End-to-end, Chromium | `npx playwright test --project=chromium`, run twice | 63/63, then 63/63; 0 flaky. After the 2026-11-15 fixes: 65/65 twice |
-| End-to-end, Firefox and WebKit (macOS 27.0.1) | `bash tests/run-mac-browsers.sh` on the Mac | Firefox 63/63 twice. WebKit 62/63 twice: one test-code assumption, fixed (see "Still to run"); re-run pending |
+| End-to-end, Firefox and WebKit (macOS 27.0.1) | `bash tests/run-mac-browsers.sh` on the Mac | first run: Firefox 63/63 twice, WebKit 62/63 twice (a test assumed click focus, which Safari on macOS doesn't give; fixed in the test). After the fixes: **Firefox 65/65 twice, WebKit 65/65 twice** |
 | CI (GitHub Actions, Ubuntu) | `.github/workflows/tests.yml`, commit d349215 | every step passed in 10 min 21 s: lint, audit, Python, unit, end-to-end in Chromium, Firefox and WebKit, evals |
 | Model eval (planner) | `node eval/planner/run.mjs` | 13/13 checks pass; reproducible |
 | AI evals (coach, red-team) | `npm run eval` (re-grades every stored run, $0) | shipped coach-v6 runs pass (run 8, red-team run 3). Historical runs 1 and 5 and red-team run 1 are still shown failing, as recorded. Since 2026-11-15 (owner's decision) the exit code is decided by the shipped versions only: exit 0 now. A control run marking coach-v4 as shipped exits 1 |
@@ -44,7 +47,7 @@ Fresh copy of the project with no `node_modules`, `.venv`, caches or earlier res
 
 | Area | Target | Threshold | Measured | Result |
 |---|---|---|---|---|
-| All | Test suites pass / flaky | 100% pass, 0 flaky | After the 2026-11-15 fixes: 722/722 (352 + 305 + 65); Chromium twice and Firefox twice with 0 flaky; CI green on all three browsers; macOS WebKit re-run pending | PASS (pending macOS WebKit) |
+| All | Test suites pass / flaky | 100% pass, 0 flaky | After the 2026-11-15 fixes: 724/724 (352 + 307 + 65) in the cloud; Chromium (cloud), Firefox and WebKit (Mac) each twice with 0 flaky. Chromium on the owner's Mac: 2 items fixed, re-run pending (see "Still to run") | PASS (Mac Chromium re-run of 2 tests pending) |
 | Logic | Tracker (Python) line coverage | ≥ 85% | 98.6% | PASS |
 | Logic | JS business-logic line coverage | ≥ 80% | 100% lines, 96.8% characters (the gate uses the lower) | PASS |
 | Security | Open Critical/High findings | 0 | 0 (both Highs, 26 and 44, fixed) | PASS |
@@ -61,7 +64,7 @@ Fresh copy of the project with no `node_modules`, `.venv`, caches or earlier res
 | Daily coach | Output rendered as HTML / script executed | 0 | 0 (ai-safety.spec, clean run) | PASS |
 | Frontend | Serious/critical axe violations | 0 on every page | 0 (quality.spec, every view, both themes, 3 sizes; Chromium, Firefox and CI WebKit) | PASS |
 | Frontend | Console errors (excluding offline fonts) | 0 on every page | 0 (quality.spec; Chromium, Firefox and CI WebKit) | PASS |
-| Frontend | Chromium, WebKit, Firefox × 390/768/1440 px | all pass | Chromium and Firefox all pass (twice); WebKit all pass on Ubuntu (CI); macOS WebKit 62/63, the 1 being the fixed test assumption, re-run pending | PASS (pending macOS WebKit re-run) |
+| Frontend | Chromium, WebKit, Firefox × 390/768/1440 px | all pass | Chromium (Linux), Firefox and WebKit (macOS) all pass, twice each | PASS |
 | Performance | Tracker `/status` p95 | < 50 ms | 0.97 ms (Phase 12, 1,000 requests); 1.1 ms (clean run) | PASS |
 | Performance | Tracker CPU avg (10 min) / RSS | < 2% / < 60 MB | owner's Mac: 0.64% worst case (tracker 0.18% + helpers 0.46%) / 15.9 MB | PASS |
 | Performance | Lighthouse mobile LCP / CLS / TBT | < 2.5 s / < 0.1 / < 300 ms | 1.06–1.12 s / 0 / 36–128 ms (3 runs on this app version, after fix 68) | PASS |
@@ -72,7 +75,7 @@ Fresh copy of the project with no `node_modules`, `.venv`, caches or earlier res
 
 ## Test counts
 
-After the 2026-11-15 fixes:
+After the 2026-11-15 fixes (including finding 69):
 
 | Layer | Suite | Tests |
 |---|---|---|
@@ -85,14 +88,16 @@ After the 2026-11-15 fixes:
 | Data integrity and pipeline | data-integrity (21), data-pipeline (22) | 43 |
 | ML serving and robustness | serving (21), planner-fixes (7), planner-attack (35) | 63 |
 | AI eval tooling and safety | coach-eval (51), coach-v2 (9), coach-attack (18), ai-safety (11) | 89 |
-| Security (browser) | security-xss | 7 |
+| Security (browser) | security-xss | 9 |
 | Performance | perf | 4 |
-| **Unit total** | | **305** |
+| **Unit total** | | **307** |
 | End-to-end | journeys (21), quality (6), csp (3), ai-ui (10), ai-provider (5), model-parity (2), tasks-tick (4), resilience (13), log-privacy (1) | **65 per browser** |
 
-Flaky tests: **0**. Every browser suite ran twice. Two test-code problems were found and fixed in the tests before sign-off:
+Flaky tests: **0** in the cloud and in the macOS Firefox/WebKit runs (every suite ran twice); the 2 Chromium-on-macOS failures were explained and fixed (finding 69, and a test timing problem); re-run on the Mac pending. Four test-tooling problems were found and fixed before sign-off:
 - a fake clock outrunning real network replies (Phase 13; 54/54 over 6 parallel repeats afterwards);
-- the macOS-Safari focus assumption (above).
+- the macOS-Safari focus assumption (above);
+- the long-output test's 9-second stream, which timed out on a loaded Mac (it now streams larger pieces; checks unchanged);
+- `perf.spec` overwrote a tracked results file on every test run, so a local run replaced the recorded cloud numbers in commit 0632a7f. It now writes to the git-ignored `test-results/perf/`, records in `perf/results/` only with `KEEL_PERF_RECORD=1`, and every file says which machine, OS and browser measured it. The recorded clean-run file is restored, and the Mac's numbers are kept as `perf/results/web-2026-11-15-mac-m4.json`.
 
 ## ML results, per model (planner-v2.3, code 26ec832153f1; datasets effort-v2 1a057392bd27, duration-v1 3eefa22e8f34, energy-v1 fc5f409702bb)
 
@@ -114,7 +119,7 @@ Flaky tests: **0**. Every browser suite ran twice. Two test-code problems were f
 
 ## Open bugs and accepted risks
 
-**Open bugs: none.**
+**Open bugs: none.** Finding 69 (found in Phase 14: an oversized Restore paste froze Chrome on macOS) is fixed.
 
 Fixed on 2026-11-15:
 - **Bug 1:** the setup help now says the browser may be blocking local connections, and names the Claude app's built-in browser and the alternatives. The block itself is that browser's own per-site approval, which no page can change.
@@ -149,6 +154,7 @@ Setup, once: `npm ci` (on the Mac: `npm ci --include=dev`), then `python3 -m ven
 | Evals: planner + shipped coach runs decide the exit code; history is printed | `npm run eval` | **Yes** |
 | Live coach eval / red-team | the claude.ai eval pages (docs/ai-eval.md), then export and grade | No: after a coach prompt change or a visible model change |
 | Golden predictions | `node eval/planner/golden.mjs` | No: after a planner change; the parity test runs on every PR |
+| Recorded browser performance | `KEEL_PERF_RECORD=1 KEEL_PERF_LABEL=<machine> npx playwright test --project=unit tests/js/unit/perf.spec.mjs` | No: before a release |
 | Load and resource tests | `perf/tracker_bench.py`, `perf/tracker_rss_tabs.py`, `perf/serve_gzip.py` + Lighthouse, `perf/mac_tracker_cpu.sh`, `perf/mac_child_cpu.sh` (docs/performance.md) | No: before a release |
 
 **CI.** Active: `.github/workflows/tests.yml` runs every suite marked **Yes** on every pull request and every push to `main`, in Chromium, Firefox and WebKit on Ubuntu, with no AI calls. The first run passed on commit d349215. On 2026-11-15 the actions were moved to releases that run on Node.js 24 (checkout v6, setup-node v6, setup-python v6, upload-artifact v6), which clears GitHub's Node 20 deprecation warning, and the eval step became `npm run eval`. `docs/ci-tests.yml` is a copy kept identical.

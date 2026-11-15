@@ -14,7 +14,9 @@ async function withCoach(page, mode) {
       const text = mode === "long" ? ("A very long coaching paragraph without breaks " + "x".repeat(4000) + " ").repeat(3)
         : mode === "html" ? '<img src=x onerror="window.__xss=1"><b>bold</b> **markdown** and <script>window.__xss=2</script> text'
         : "You focused for 2h. Breaks were regular. Tomorrow, start with the proposal.";
-      const parts = text.match(/.{1,20}/gs) || [text];
+      // Long mode streams the same text in 400-character pieces: at 20 characters every 15 ms it took 9 s or more
+      // before the overflow checks even ran, and timed out on a loaded Mac (Phase 14, 2026-11-15). Text and checks unchanged.
+      const parts = text.match(mode === "long" ? /.{1,400}/gs : /.{1,20}/gs) || [text];
       let i = 0, acc = "";
       const step = () => {
         if (opts.signal && opts.signal.aborted) return fail("aborted", "stopped");

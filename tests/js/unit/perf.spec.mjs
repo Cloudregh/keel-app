@@ -2,15 +2,22 @@
 //   buildPlan p95 < 50 ms for 30 tasks with 30 days of history; dashboard render < 150 ms with 30 days of activity.
 // Each measurement is repeated (p50/p95/p99 over many runs, after a warm-up) and also taken at 4× CPU slowdown
 // (a mid-range phone; reported, not a target). The data-size ramp finds what breaks first as data grows.
-// Numbers are written to perf/results/web-<date>.json for docs/performance.md.
+// Numbers go to test-results/perf/web-<date>.json (git-ignored) on every run. They're recorded for docs/performance.md
+// only on purpose: KEEL_PERF_RECORD=1 writes perf/results/web-<date>[-<label>].json (label: KEEL_PERF_LABEL). A normal
+// test run used to overwrite the tracked file with whatever machine ran it (found in Phase 14, 2026-11-15).
+// Every file says where it was measured.
 import { test, expect } from "../fixtures/keel.mjs";
 import { mkdirSync, writeFileSync } from "node:fs";
+import os from "node:os";
 
 const VIEWS = ["today", "focus", "tasks", "timeline", "apps", "reports", "projects", "settings"];
 const OUT = {};
-test.afterAll(() => {
-  mkdirSync("perf/results", { recursive: true });
-  writeFileSync(`perf/results/web-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(OUT, null, 1) + "\n");
+test.afterAll(async ({ browser }) => {
+  const record = process.env.KEEL_PERF_RECORD === "1", label = (process.env.KEEL_PERF_LABEL || "").replace(/[^a-z0-9-]/gi, "");
+  const dir = record ? "perf/results" : "test-results/perf";
+  mkdirSync(dir, { recursive: true });
+  const measuredOn = { at: new Date().toISOString(), os: `${os.type()} ${os.release()} ${os.arch()}`, cpu: os.cpus()[0]?.model || "unknown", cores: os.cpus().length, browser: `${browser.browserType().name()} ${browser.version()}`, node: process.version, ci: !!process.env.CI };
+  writeFileSync(`${dir}/web-${measuredOn.at.slice(0, 10)}${label ? "-" + label : ""}.json`, JSON.stringify({ measuredOn, ...OUT }, null, 1) + "\n");
 });
 
 // Seeds `tasks` tasks (a third done, with tracked sessions), `years` of sessions and `actDays` heavy activity days

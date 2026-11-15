@@ -1,0 +1,368 @@
+{
+ "measuredOn": {
+  "at": "2026-11-15 (before 12:12 UTC; from commit 0632a7f)",
+  "os": "macOS 27.0.1 (Darwin) arm64",
+  "cpu": "Apple M4",
+  "browser": "chromium (Playwright default location on the owner's Mac; version not recorded by the old writer)",
+  "node": "v26 (owner's Mac)",
+  "ci": false,
+  "note": "Measured by a local test run on the owner's Mac, which overwrote the tracked file in commit 0632a7f. Numbers unchanged; only this measuredOn block was added. The cloud clean-run file is perf/results/web-2026-11-15.json."
+ },
+ "plannerData": {
+  "bytes": 1357368,
+  "storageFull": false,
+  "tasks": 90,
+  "entries": 300
+ },
+ "planner": {
+  "desktop": {
+   "n": 300,
+   "p50": 1,
+   "p95": 1,
+   "p99": 1,
+   "max": 4
+  },
+  "cpu4x": {
+   "n": 100,
+   "p50": 2,
+   "p95": 3,
+   "p99": 5,
+   "max": 5
+  },
+  "plannedItems": 7
+ },
+ "renderData": {
+  "bytes": 2543334,
+  "storageFull": false,
+  "tasks": 600,
+  "entries": 3650
+ },
+ "render": {
+  "today": {
+   "desktop": {
+    "n": 40,
+    "p50": 5,
+    "p95": 7,
+    "p99": 9,
+    "max": 9
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 23,
+    "p95": 26,
+    "p99": 26,
+    "max": 26
+   }
+  },
+  "focus": {
+   "desktop": {
+    "n": 40,
+    "p50": 1,
+    "p95": 2,
+    "p99": 2,
+    "max": 2
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 5,
+    "p95": 6,
+    "p99": 10,
+    "max": 10
+   }
+  },
+  "tasks": {
+   "desktop": {
+    "n": 40,
+    "p50": 15,
+    "p95": 20,
+    "p99": 22,
+    "max": 22
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 59,
+    "p95": 65,
+    "p99": 68,
+    "max": 68
+   }
+  },
+  "timeline": {
+   "desktop": {
+    "n": 40,
+    "p50": 3,
+    "p95": 5,
+    "p99": 6,
+    "max": 6
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 15,
+    "p95": 17,
+    "p99": 17,
+    "max": 17
+   }
+  },
+  "apps": {
+   "desktop": {
+    "n": 40,
+    "p50": 4,
+    "p95": 5,
+    "p99": 5,
+    "max": 5
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 18,
+    "p95": 20,
+    "p99": 22,
+    "max": 22
+   }
+  },
+  "reports": {
+   "desktop": {
+    "n": 40,
+    "p50": 2,
+    "p95": 3,
+    "p99": 4,
+    "max": 4
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 9,
+    "p95": 11,
+    "p99": 13,
+    "max": 13
+   }
+  },
+  "projects": {
+   "desktop": {
+    "n": 40,
+    "p50": 0,
+    "p95": 1,
+    "p99": 1,
+    "max": 1
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 2,
+    "p95": 2,
+    "p99": 3,
+    "max": 3
+   }
+  },
+  "settings": {
+   "desktop": {
+    "n": 40,
+    "p50": 0,
+    "p95": 1,
+    "p99": 1,
+    "max": 1
+   },
+   "cpu4x": {
+    "n": 15,
+    "p50": 1,
+    "p95": 2,
+    "p99": 3,
+    "max": 3
+   }
+  }
+ },
+ "mobile": {
+  "views": {
+   "today": {
+    "lcp": 300,
+    "fcp": 300,
+    "cls": 0,
+    "tbt": 0,
+    "longest": 161,
+    "tbtRuns": [
+     0,
+     0,
+     0
+    ]
+   },
+   "focus": {
+    "lcp": 292,
+    "fcp": 292,
+    "cls": 0,
+    "tbt": 0,
+    "longest": 97,
+    "tbtRuns": [
+     0,
+     0,
+     0
+    ]
+   },
+   "tasks": {
+    "lcp": 756,
+    "fcp": 756,
+    "cls": 0,
+    "tbt": 0,
+    "longest": 243,
+    "tbtRuns": [
+     0,
+     0,
+     0
+    ]
+   },
+   "timeline": {
+    "lcp": 464,
+    "fcp": 464,
+    "cls": 0,
+    "tbt": 0,
+    "longest": 107,
+    "tbtRuns": [
+     0,
+     0,
+     0
+    ]
+   },
+   "apps": {
+    "lcp": 524,
+    "fcp": 524,
+    "cls": 0,
+    "tbt": 0,
+    "longest": 98,
+    "tbtRuns": [
+     0,
+     0,
+     0
+    ]
+   },
+   "reports": {
+    "lcp": 564,
+    "fcp": 564,
+    "cls": 0,
+    "tbt": 0,
+    "longest": 131,
+    "tbtRuns": [
+     0,
+     0,
+     0
+    ]
+   },
+   "projects": {
+    "lcp": 548,
+    "fcp": 548,
+    "cls": 0,
+    "tbt": 0,
+    "longest": 77,
+    "tbtRuns": [
+     0,
+     0,
+     0
+    ]
+   },
+   "settings": {
+    "lcp": 572,
+    "fcp": 572,
+    "cls": 0,
+    "tbt": 0,
+    "longest": 127,
+    "tbtRuns": [
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  "taskTapMs": [
+   147,
+   39,
+   33,
+   38,
+   35
+  ],
+  "desktopTaskTapMs": [
+   28,
+   26,
+   13,
+   24,
+   26
+  ],
+  "tasksViewDomNodes": 6655,
+  "taskRowsRendered": 220
+ },
+ "ramp": [
+  {
+   "tasks": 600,
+   "years": 1,
+   "actDays": 30,
+   "bytes": 2543334,
+   "storageFull": false,
+   "entries": 3650,
+   "mb": 2.54,
+   "p95": {
+    "today": 5,
+    "tasks": 14,
+    "reports": 4,
+    "plan": 6
+   },
+   "loadMs": 3
+  },
+  {
+   "tasks": 2000,
+   "years": 2,
+   "actDays": 60,
+   "bytes": 5237528,
+   "storageFull": false,
+   "entries": 7300,
+   "mb": 5.24,
+   "p95": {
+    "today": 7,
+    "tasks": 56,
+    "reports": 6,
+    "plan": 27
+   },
+   "loadMs": 6
+  },
+  {
+   "tasks": 5000,
+   "years": 3,
+   "actDays": 90,
+   "bytes": 8575762,
+   "storageFull": false,
+   "entries": 10950,
+   "mb": 8.58,
+   "p95": {
+    "today": 10,
+    "tasks": 150,
+    "reports": 7,
+    "plan": 70
+   },
+   "loadMs": 13
+  },
+  {
+   "tasks": 10000,
+   "years": 5,
+   "actDays": 180,
+   "bytes": 9915214,
+   "storageFull": true,
+   "entries": 18250,
+   "mb": 9.92,
+   "p95": {
+    "today": 16,
+    "tasks": 345,
+    "reports": 9,
+    "plan": 185
+   },
+   "loadMs": 17
+  },
+  {
+   "tasks": 20000,
+   "years": 8,
+   "actDays": 365,
+   "bytes": 530302,
+   "storageFull": true,
+   "entries": 29200,
+   "mb": 0.53,
+   "p95": {
+    "today": 20,
+    "tasks": 750,
+    "reports": 11,
+    "plan": 516
+   },
+   "loadMs": 0
+  }
+ ]
+}

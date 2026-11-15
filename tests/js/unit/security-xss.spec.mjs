@@ -154,11 +154,41 @@ test.describe("bug 31: oversized files and backups are refused", () => {
     await expect(page.locator("#toasts")).toContainText("too large to be a Keel activity file");
     expect(await ev(`() => JSON.stringify(act)`)).toBe(before);
   });
-  test("a 26 MB backup pasted into Restore", async ({ keel: { page, ev } }) => {
-    const before = await ev(`() => JSON.stringify(state.tasks)`);
+  // Restore takes pasted text. Chrome on macOS freezes once 26 MB of text is in the box, before the click-time check
+  // can run (Phase 14, 2026-11-15), so an oversized paste or drop is refused before the text lands in the box.
+  for (const how of ["paste", "drop"]) {
+    test(`a 26 MB backup ${how === "paste" ? "pasted" : "dropped"} into Restore is refused before it lands in the box`, async ({ keel: { page, ev } }) => {
+      const before = await ev(`() => JSON.stringify(state.tasks)`);
+      await page.locator('#nav [data-view="settings"]').click();
+      await page.locator('[data-act="import"]').click();
+      const prevented = await page.evaluate(how => {
+        const dt = new DataTransfer(); dt.setData("text/plain", '{"tasks":[],"entries":[],"pad":"' + "x".repeat(26 * 1024 * 1024) + '"}');
+        const box = document.querySelector('.modal textarea[name="j"]');
+        const e = how === "paste" ? new ClipboardEvent("paste", { clipboardData: dt, bubbles: true, cancelable: true })
+          : new DragEvent("drop", { dataTransfer: dt, bubbles: true, cancelable: true });
+        box.dispatchEvent(e);
+        return e.defaultPrevented;
+      }, how);
+      expect(prevented, "the browser must not insert the text").toBe(true);
+      await expect(page.locator("#imp-err")).toContainText("too large");
+      expect(await page.locator('.modal textarea[name="j"]').inputValue()).toBe("");
+      expect(await ev(`() => JSON.stringify(state.tasks)`)).toBe(before);
+    });
+  }
+  test("a small backup can still be pasted; the click-time size check stays as a backstop", async ({ keel: { page, ev } }) => {
     await page.locator('#nav [data-view="settings"]').click();
     await page.locator('[data-act="import"]').click();
-    await page.evaluate(() => { document.querySelector('.modal textarea[name="j"]').value = '{"tasks":[],"entries":[],"pad":"' + "x".repeat(26 * 1024 * 1024) + '"}'; });
+    const prevented = await page.evaluate(() => {
+      const dt = new DataTransfer(); dt.setData("text/plain", '{"tasks":[],"entries":[]}');
+      const e = new ClipboardEvent("paste", { clipboardData: dt, bubbles: true, cancelable: true });
+      document.querySelector('.modal textarea[name="j"]').dispatchEvent(e);
+      return e.defaultPrevented;
+    });
+    expect(prevented).toBe(false);                                                    // normal pastes are left to the browser
+    const before = await ev(`() => JSON.stringify(state.tasks)`);
+    // Backstop: text that got in some other way is still checked on Restore. The box is hidden so the browser
+    // doesn't lay out 26 MB of text; this checks Keel's size check, not the browser's text rendering.
+    await page.evaluate(() => { const b = document.querySelector('.modal textarea[name="j"]'); b.style.display = "none"; b.value = '{"tasks":[],"entries":[],"pad":"' + "x".repeat(26 * 1024 * 1024) + '"}'; });
     await page.locator(".modal button.primary").click();
     await expect(page.locator("#imp-err")).toContainText("too large");
     expect(await ev(`() => JSON.stringify(state.tasks)`)).toBe(before);

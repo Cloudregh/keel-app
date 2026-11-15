@@ -1098,6 +1098,19 @@ document.addEventListener("drop", e => {
   readActivityFile(f).then(() => { if (ui.view !== "apps") { ui.view = "apps"; saveUI(); render(); } }).catch(fileErr);
 });
 
+// Restore box: refuse an oversized backup the moment it's pasted or dropped, before the browser inserts it. Chrome on
+// macOS freezes once 26 MB of text is in a text box, so the check on Restore (kept as a backstop) came too late.
+const BACKUP_TOO_BIG = "That backup is too large (the limit is 25 MB). Back up again from Settings and paste the new copy.";
+for (const type of ["paste", "drop"]) document.addEventListener(type, e => {
+  const box = e.target && e.target.closest && e.target.closest('form[data-form="import"] textarea[name="j"]');
+  if (!box) return;
+  const data = type === "paste" ? e.clipboardData : e.dataTransfer;
+  const text = data ? data.getData("text/plain") || data.getData("text") || "" : "";
+  if (text.length + box.value.length <= MAX_IMPORT_BYTES) return;
+  e.preventDefault(); e.stopPropagation();
+  const err = $("#imp-err"); if (err) err.textContent = BACKUP_TOO_BIG;
+}, true);
+
 /* ---------------- Domain helpers ---------------- */
 const projById = id => state.projects.find(p => p.id === id);
 const taskById = id => state.tasks.find(t => t.id === id);
@@ -2932,7 +2945,7 @@ document.addEventListener("submit", e => {
   } else if (kind === "import") {
     try {
       const text = String(fd.get("j") || "");
-      if (text.length > MAX_IMPORT_BYTES) { $("#imp-err").textContent = "That backup is too large (the limit is 25 MB). Back up again from Settings and paste the new copy."; return; }
+      if (text.length > MAX_IMPORT_BYTES) { $("#imp-err").textContent = BACKUP_TOO_BIG; return; }
       const obj = JSON.parse(text);
       if (!obj || !Array.isArray(obj.tasks) || !Array.isArray(obj.entries)) throw new Error("bad");
       state = normalize(obj);
