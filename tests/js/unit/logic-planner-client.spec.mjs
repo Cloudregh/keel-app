@@ -176,6 +176,19 @@ test.describe("plan builder", () => {
     expect(p.items).toEqual([]);
     expect(p.later).toEqual(["a"]);
   });
+  test("bug 2: when only part 1 of a split task fits today, the rest is listed under 'doesn't fit today'", async ({ keel }) => {
+    await keel.ev(reset);
+    await keel.page.clock.setFixedTime(new Date("2026-11-10T15:30:00Z"));               // 2.5 h of workday left (75% usable)
+    const p = await keel.ev(`ts => { state.settings.workEnd = 18; state.tasks = ts; state.plan = null; state.planSkips = null; const p = buildPlan(); state.plan = p; ui.view = "tasks"; ui.taskFilter = "today"; render(); return p; }`,
+      [task("big", "Write the quarterly report", { estimate: 270 })]);
+    const parts = p.items.filter(i => i.kind === "task" && i.taskId === "big");
+    expect(parts.length).toBeGreaterThan(0);                                            // part 1 is planned...
+    expect(parts.length).toBeLessThan(parts[0].parts);                                  // ...but not every part fits
+    expect(p.later).toEqual(["big"]);                                                   // the rest is listed (ids only: plan schema unchanged)
+    const from = parts.length + 1, of = parts[0].parts;
+    const which = from === of ? `part ${of} of ${of}` : `parts ${from}–${of} of ${of}`;
+    await expect(keel.page.locator(".plan-panel")).toContainText(`Doesn't fit today: Write the quarterly report (${which})`);
+  });
   test("reordering nudges weights within bounds; plan actions work", async ({ keel }) => {
     await keel.ev(reset);
     await keel.ev(build, twelve);

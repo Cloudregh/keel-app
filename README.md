@@ -16,6 +16,8 @@ Keel is one static page (`index.html`). There's no build step and no server.
 
 **GitHub Pages:** push this repository, then go to **Settings → Pages → Deploy from a branch → `main` / root**. Your site will be at `https://<your-username>.github.io/<repo>/`. You can install it as an app from your browser's address bar.
 
+**Vercel:** import the repository; `vercel.json` and `.vercelignore` make it a static deploy with nothing to build, and only the page's files (`index.html`, `sw.js`, `manifest.json`, the icons) are published. Don't follow Vercel's suggestion to set a Python entrypoint: `tracker/keel_tracker.py` is the private tracker for your own Mac and must never run as a web function. If the tracker should connect to your Vercel site, add its address to `allowed_origins` (see below).
+
 **Locally:** run `python3 -m http.server 8000` in this folder, then open http://localhost:8000.
 
 Your data is saved in your browser's local storage on each device. Use **Settings → Back up** to copy it, and **Restore** to move it to another browser.

@@ -217,10 +217,17 @@ def load():
     kept = os.path.join(OUT_DIR, datetime.datetime.now().strftime("keel-activity.corrupt-%Y%m%d-%H%M%S.json"))
     try:
         os.replace(OUT_FILE, kept)
-        print(f"The activity file couldn't be read. It was kept as {kept} and a new one was started.", file=sys.stderr, flush=True)
+        log(f"The activity file couldn't be read. It was kept as {kept} and a new one was started.")
     except OSError as e:
-        print(f"The activity file couldn't be read, and couldn't be kept aside either: {e}", file=sys.stderr, flush=True)
+        log(f"The activity file couldn't be read, and couldn't be kept aside either: {e}")
     return {"days": {}}
+
+
+def log(msg, err=True):
+    """One line for tracker.log (stdout/stderr under launchd). Paths are written from ~, so the log never holds the
+    macOS user name (accepted risk A6, fixed 2026-11-15)."""
+    text = str(msg).replace(HOME + os.sep, "~" + os.sep) if HOME and HOME != os.sep else str(msg)
+    print(text, file=sys.stderr if err else sys.stdout, flush=True)
 
 
 def where(e):
@@ -443,7 +450,7 @@ class Handler(BaseHTTPRequestHandler):
         try:
             handler()
         except Exception as e:
-            print(f"API error on {self.command} {self.path.split('?')[0][:64]}: {where(e)}", file=sys.stderr, flush=True)
+            log(f"API error on {self.command} {self.path.split('?')[0][:64]}: {where(e)}")
             origin = self.headers.get("Origin")
             with contextlib.suppress(Exception):  # the answer may already be partly sent; then the client sees a drop
                 ok = origin if origin and origin_allowed(origin) else None
@@ -514,14 +521,22 @@ class Handler(BaseHTTPRequestHandler):
         return self._json(404, {"error": "Not found"}, origin)
 
 
+class Server(ThreadingHTTPServer):
+    # Accepted risk A5, fixed 2026-11-15: Python's default queue of 5 waiting connections made bursts of 16-32
+    # clients wait 1 s for a TCP retry. 64 holds any realistic burst from open tabs.
+    request_queue_size = 64
+    daemon_threads = True
+
+
 def serve():
     try:
-        srv = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
+        srv = Server(("127.0.0.1", PORT), Handler)
     except OSError as e:
-        print(f"Couldn't start the local API on port {PORT}: {e}", file=sys.stderr, flush=True)
-        return
+        log(f"Couldn't start the local API on port {PORT}: {e}")
+        return None
     threading.Thread(target=srv.serve_forever, daemon=True).start()
-    print(f"Local API on http://127.0.0.1:{PORT}", flush=True)
+    log(f"Local API on http://127.0.0.1:{PORT}", err=False)
+    return srv
 
 
 def track():
@@ -536,11 +551,11 @@ def track():
     try:
         cleanup()
     except Exception as e:
-        print(f"Cleanup failed: {e}", file=sys.stderr, flush=True)
+        log(f"Cleanup failed: {e}")
     last_clean = time.time()
     cur, cur_key, last_save = None, None, 0.0
     last_err: dict[str, float] = {}
-    print(f"Keel tracker running. Writing to {OUT_FILE}", flush=True)
+    log(f"Keel tracker running. Writing to {OUT_FILE}", err=False)
     while True:
         now = time.time()
         now_ms = int(now * 1000)
@@ -548,7 +563,7 @@ def track():
             try:
                 cleanup()
             except Exception as e:
-                print(f"Cleanup failed: {e}", file=sys.stderr, flush=True)
+                log(f"Cleanup failed: {e}")
             last_clean = now
         if is_paused(now_ms):
             cur, cur_key = None, None
@@ -558,7 +573,7 @@ def track():
                 try:
                     save(data)
                 except Exception as e:
-                    print(f"Couldn't write activity file: {e}", file=sys.stderr, flush=True)
+                    log(f"Couldn't write activity file: {e}")
                 last_save = now
             time.sleep(INTERVAL)
             continue
@@ -594,13 +609,13 @@ def track():
         except Exception as e:
             msg = where(e)
             if now - last_err.get(msg, 0) >= 60:  # at most once a minute for the same error
-                print(f"Skipped one activity sample: {msg}", file=sys.stderr, flush=True)
+                log(f"Skipped one activity sample: {msg}")
                 last_err[msg] = now
         if now - last_save >= SAVE_EVERY:
             try:
                 save(data)
             except Exception as e:
-                print(f"Couldn't write activity file: {e}", file=sys.stderr, flush=True)
+                log(f"Couldn't write activity file: {e}")
             last_save = now
         time.sleep(INTERVAL)
 

@@ -9,6 +9,7 @@ under launchd), and must recover once the dependency works again. macOS tools ar
 import glob
 import json
 import os
+import socket
 import subprocess
 import time
 
@@ -182,3 +183,23 @@ def test_api_answers_while_the_disk_is_failing(server, kt, monkeypatch, path):
     monkeypatch.setattr(kt, "save", lambda d: (_ for _ in ()).throw(OSError(28, "No space left on device")))
     st, _, _ = server.request("GET", path, origin=GOOD)
     assert st == 200
+
+
+def test_api_queue_holds_bursts_of_connections(kt):
+    """Accepted risk A5, fixed 2026-11-15: the API's waiting-connection queue was Python's default of 5, so bursts of
+    16-32 clients had connections dropped and retried after 1 s. It's now 64."""
+    with socket.socket() as s:
+        s.bind(("127.0.0.1", 0))
+        kt.PORT = s.getsockname()[1]
+    srv = kt.serve()
+    try:
+        assert srv is not None and srv.request_queue_size >= 64
+        assert srv.daemon_threads  # request threads never keep the tracker from exiting
+        with socket.create_connection(("127.0.0.1", kt.PORT), timeout=3) as c:  # and it serves
+            c.sendall(f"GET /status HTTP/1.1\r\nHost: 127.0.0.1:{kt.PORT}\r\nConnection: close\r\n\r\n".encode())
+            status_line = c.recv(64).split(b"\r\n")[0]
+            assert status_line.startswith(b"HTTP/1.") and b" 200 " in status_line, status_line
+    finally:
+        if srv:
+            srv.shutdown()
+            srv.server_close()

@@ -23,7 +23,6 @@ test("a tick updates that row and the counts without re-rendering the view; the 
   const row = page.locator(`.task[data-task="${id}"]`);
   await expect(row).toHaveClass(/\bdone\b/);
   await expect(row.locator("[data-act='toggle-task']")).toHaveAttribute("aria-checked", "true");
-  await expect(row.locator("[data-act='toggle-task']")).toBeFocused();                                   // focus stays on the checkbox
   expect(await count(page, "open")).toBe(String(+open0 - 1));
   expect(await count(page, "done")).toBe(String(+done0 + 1));
   expect(await page.evaluate(() => [document.querySelector(".tasks").dataset.sentinel, window.__views])).toEqual(["1", 0]);
@@ -32,6 +31,28 @@ test("a tick updates that row and the counts without re-rendering the view; the 
   // ...then, after the pause, the whole view catches up: the task sits under "Completed today".
   await expect(page.locator(".group-h:has-text('Completed today') ~ .task[data-task='" + id + "']")).toHaveCount(1, { timeout: 4000 });
   expect(await page.evaluate(() => window.__views)).toBe(1);
+});
+
+// Focus is checked with the keyboard, where every browser has focus on the checkbox before the tick. A mouse click
+// doesn't focus a button in Safari on macOS (it does in Chromium, Firefox and Linux WebKit), so after a click there
+// may be no focus in the row to keep; the app keeps focus only where it was (index.html, "toggle-task").
+test("keyboard: Space on a focused checkbox ticks it in place and focus stays on it, ticking and unticking", async ({ keel: { page, ev } }) => {
+  await ev(seed(600));
+  await page.evaluate(() => { window.__views = 0; const v = window.viewTasks; window.viewTasks = (...a) => (window.__views++, v(...a)); });
+  const id = await page.locator(".group-h:has-text('Overdue') ~ .task [data-act='toggle-task']").first().getAttribute("data-id");
+  const box = () => page.locator(`.task[data-task="${id}"] [data-act='toggle-task']`);
+  const open0 = await count(page, "open");
+  await box().focus();
+  await page.keyboard.press("Space");
+  await expect(box()).toHaveAttribute("aria-checked", "true");
+  await expect(box()).toBeFocused();
+  expect(await count(page, "open")).toBe(String(+open0 - 1));
+  expect(await page.evaluate(() => window.__views)).toBe(0);                                             // patched in place
+  await page.keyboard.press("Space");                                                                    // untick, before the deferred render
+  await expect(box()).toHaveAttribute("aria-checked", "false");
+  await expect(box()).toBeFocused();
+  expect(await count(page, "open")).toBe(open0);
+  expect(await page.evaluate(i => taskById(i).done, id)).toBe(false);
 });
 
 test("ticking several tasks quickly re-renders once, after the last tick; unticking works the same way", async ({ keel: { page, ev } }) => {

@@ -88,6 +88,22 @@ test.describe("tracker API", () => {
     await expect(trk(page)).toContainText("Tracking apps");
   });
 
+  test("bug 1: when the tracker can't be reached, the setup help says a browser may be blocking local connections", async ({ keel: { page } }) => {
+    // Some browsers (the Claude desktop app's built-in browser) block a page's calls to 127.0.0.1 with their own
+    // per-site approval. The page can't tell that apart from "not running", so the help names it as a possible cause.
+    const t = await switchableTracker(page);
+    t.mode = "down";
+    await withFakeClock(page);
+    await advance(page, 2000);
+    await page.locator('#nav [data-view="apps"]').click();
+    const help = page.locator("#view");
+    await expect(help).toContainText("keel_tracker.py install");
+    await expect(help).toContainText(/browser may be blocking/i);
+    await expect(help).toContainText("Claude app's built-in browser");
+    await expect(help).toContainText(/Chrome, Arc, Brave or Edge/);
+    await expect(help).toContainText(/import the activity file/i);
+  });
+
   test("bad activity data: says the activity couldn't be read (not 'not running'), and clears once it's readable", async ({ keel: { page } }) => {
     const t = await switchableTracker(page);
     t.mode = "badActivity";

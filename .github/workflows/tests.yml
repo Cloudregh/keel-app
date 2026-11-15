@@ -1,5 +1,6 @@
 # Keel: the suites that must run on every pull request (docs/test-report.md, "CI").
-# Not active yet: the repository has no CI. To turn it on, copy this file to .github/workflows/tests.yml and push.
+# Live copy: .github/workflows/tests.yml (first run passed on d349215). Keep the two files identical.
+# Actions are on majors that run on Node.js 24 (checkout v6, setup-node v6, setup-python v6, upload-artifact v6).
 # No paid AI calls: the coach is mocked in every test, and the evals re-grade stored runs ($0).
 name: tests
 on:
@@ -13,10 +14,10 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with: { node-version: 22, cache: npm }
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with: { python-version: "3.13", cache: pip, cache-dependency-path: requirements-dev.lock }
       - run: npm ci
       - run: python -m venv .venv && .venv/bin/pip install -r requirements-dev.lock
@@ -32,12 +33,10 @@ jobs:
         run: npm run test:js
       - name: End-to-end, Chromium, Firefox and WebKit
         run: npm run test:e2e
-      - name: Model eval (planner) and the shipped coach runs
+      - name: Evals (planner + the shipped coach runs decide the exit code; history is printed) and datasets
         run: |
-          node eval/planner/run.mjs
-          node eval/coach/run.mjs eval/results/coach-run-20261114122555.json
-          node eval/coach/attack.mjs eval/results/coach-attack-run-20261114121818.json
+          npm run eval
           node eval/data/build.mjs --check
       - if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with: { name: test-results, path: "test-results/\nplaywright-report/", retention-days: 7 }

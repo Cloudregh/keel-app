@@ -2,7 +2,7 @@
   "generatedAt": "2026-11-10",
   "app": {
     "file": "index.html",
-    "sha256": "41daca998a2d"
+    "sha256": "0d8018cbb3b0"
   },
   "tracker": {
     "file": "tracker/keel_tracker.py",
@@ -11,8 +11,8 @@
   },
   "models": {
     "planner": {
-      "version": "planner-v2.2",
-      "sha256": "7531df56160e",
+      "version": "planner-v2.3",
+      "sha256": "26ec832153f1",
       "components": [
         "naive-bayes-effort",
         "bayes-duration-shrinkage",
@@ -27,14 +27,16 @@
         "2026-11-12: fixes 37 (overdue first), 39 (temperature 0.45), 40 (duration buffer only when erratic), 41 (ordering steps)",
         "2026-11-12: fix 38 (verb feature, weight 3, chosen on validation vocabulary)",
         "2026-11-12: fixes 44 (model repair), 45 (guards and defaults), 46 (revision cache key), 47 (version stamp), 48 (label pruning); PLANNER_VERSION introduced as planner-v2.0",
-        "2026-11-12: fix 49 (plan overflow is always a boolean) → planner-v2.1",
-        "2026-11-13: fixes 58 (own-key lookups in word tables; the word \"constructor\" no longer breaks predictions) and 59 (reasons never quote words over 40 characters) → planner-v2.2"
+        "2026-11-12: fix 49 (plan overflow is always a boolean) \u2192 planner-v2.1",
+        "2026-11-13: fixes 58 (own-key lookups in word tables; the word \"constructor\" no longer breaks predictions) and 59 (reasons never quote words over 40 characters) \u2192 planner-v2.2",
+        "2026-11-15: bug 2 (the rest of a split task whose first parts are planned is listed under \"Doesn't fit today\"; plan schema unchanged) \u2192 planner-v2.3"
       ],
       "versions": {
         "planner-v1": "e451ce05c4cb (range not recorded)",
         "planner-v2.0": "d2ce6766d811",
         "planner-v2.1": "541b16481e59",
-        "planner-v2.2": "7531df56160e"
+        "planner-v2.2": "7531df56160e",
+        "planner-v2.3": "26ec832153f1"
       }
     }
   },
@@ -52,9 +54,9 @@
         "coach-v5": "8b653fc177ba",
         "coach-v6": "c1e66fd50ff2"
       },
-      "rubric": "coach-rubric-v2 (eval/coach/rubric.mjs; task-name rule loosened by owner decision 52; v1 to v1.2 results kept in docs/ai-eval.md) + stopClaims, pctClaims and projectionClaims checks (reported, not locked) | 2026-11-13: coach-rubric-v3 (owner decision after run 5): grounding also accepts done + suggested blocks and left − suggested blocks; used for run 6 onwards; runs 1–5 keep their pre-registered rubric",
+      "rubric": "coach-rubric-v2 (eval/coach/rubric.mjs; task-name rule loosened by owner decision 52; v1 to v1.2 results kept in docs/ai-eval.md) + stopClaims, pctClaims and projectionClaims checks (reported, not locked) | 2026-11-13: coach-rubric-v3 (owner decision after run 5): grounding also accepts done + suggested blocks and left \u2212 suggested blocks; used for run 6 onwards; runs 1\u20135 keep their pre-registered rubric",
       "changes": [
-        "2026-11-12: coach-v2 (fixes 50–51): at most 90 words; sessions carry end times and the day carries lastTrackedEnd; eval set coach-eval-v2",
+        "2026-11-12: coach-v2 (fixes 50\u201351): at most 90 words; sessions carry end times and the day carries lastTrackedEnd; eval set coach-eval-v2",
         "2026-11-13: coach-v3 (fix 54): data gains workPct and focusPct; the prompt says to use them instead of calculating percentages; eval set coach-eval-v3",
         "2026-11-13: coach-v4 (fix 55): data gains workLeftMin and focusLeftMin; the prompt says to check any claim about where a suggested block would take the user against them; eval set coach-eval-v4",
         "2026-11-13: fix 56 caps the coach data (titles 300 chars, 10 due, 15 completed, 8 projects, 30 sessions, 14,000-char fallback); every eval day goes out unchanged (tested), so the prompt version stays coach-v4",

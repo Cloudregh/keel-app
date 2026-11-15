@@ -1,0 +1,10 @@
+# Keel's website is static: publish only the files the page needs. Everything else stays out of the deploy:
+# the local tracker (tracker/) must never run as a public web function, and pyproject.toml / requirements*
+# would otherwise make Vercel treat the project as a Python app (PYTHON_ENTRYPOINT_NOT_FOUND).
+/*
+!index.html
+!sw.js
+!manifest.json
+!icon.svg
+!icon-maskable.svg
+!vercel.json

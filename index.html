@@ -1543,7 +1543,7 @@ function trackerPanel() {
     ? `You're viewing Keel on claude.ai, which can't talk to programs on your Mac. Open Keel from your GitHub Pages site to control the tracker and load activity live. Here you can still import the activity file.`
     : TR.state === "blocked"
       ? `The tracker is running but doesn't allow this site yet. Add <code>${esc(location.origin)}</code> to <code>allowed_origins</code> in <code>~/Keel Activity/config.json</code>, then restart it with <code>python3 ~/"Keel Activity"/keel_tracker.py install</code>.`
-      : `Start it in Terminal with <code>python3 ~/"Keel Activity"/keel_tracker.py install</code>. If your browser asks to allow access to devices on your local network, choose Allow.`;
+      : `Start it in Terminal with <code>python3 ~/"Keel Activity"/keel_tracker.py install</code>. If your browser asks to allow access to devices on your local network, choose Allow. If the tracker is running and Keel still can't connect, your browser may be blocking local connections: the Claude app's built-in browser does. Use Chrome, Arc, Brave or Edge, or import the activity file below.`;
   return `<section class="panel"><div class="panel-h"><h2>Tracker</h2></div><p style="margin:0 0 12px">${how}</p>
     ${meta.importedAt ? `<p class="muted" style="margin:0 0 12px;font-size:12.5px">Last activity loaded ${fmtDay(dayKey(meta.importedAt)) === "Today" ? "today" : fmtDay(dayKey(meta.importedAt))} at ${fmtTime(meta.importedAt)}${meta.device ? ` from ${esc(meta.device)}` : ""}.</p>` : ""}
     <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-act="tr-retry">Try again</button><button class="btn sm ghost" data-act="act-refresh">${FSH.handle ? "Re-read file" : "Import activity file"}</button></div></section>`;
@@ -1757,7 +1757,7 @@ function projBars(byProj) {
                      corrections retrain the effort model. Everything stays in this browser.  */
 /* Planner version (bug 47): stamped on every plan and on the saved model. Bump it whenever the planner code
    changes; eval/manifest.json maps each version to its code hash and a test enforces the bump. */
-const PLANNER_VERSION = "planner-v2.2";
+const PLANNER_VERSION = "planner-v2.3";
 const EFF = ["L", "M", "H"];
 const EFF_LABEL = { L: "Light", M: "Medium", H: "Heavy" };
 const PRIOR_CURVE = [0.15, 0.1, 0.08, 0.06, 0.06, 0.1, 0.25, 0.45, 0.6, 0.85, 1.0, 1.0, 0.8, 0.5, 0.45, 0.6, 0.75, 0.7, 0.6, 0.5, 0.42, 0.35, 0.28, 0.2];
@@ -2048,7 +2048,7 @@ function buildPlan() {
     } else if (rest.length) t += 5 * MIN;
   }
   const overflow = items.length > 0 && items[items.length - 1].end > dayEnd;   // always a boolean (bug 49)
-  return { day: k, createdAt: now, items, later: [...new Set(later.map(c => c.t.id))].filter(id => !items.some(i => i.taskId === id && i.part === 1)).concat([...new Set(later.filter(c => c.part > 1 && items.some(i => i.taskId === c.t.id)).map(c => c.t.id))].map(() => null)).filter(Boolean), learnedDays, overflow, accepted: false, version: PLANNER_VERSION, onDefaults: plannerOnDefaults };
+  return { day: k, createdAt: now, items, later: [...new Set(later.map(c => c.t.id))] /* bug 2: includes the rest of a split task whose first parts are planned */, learnedDays, overflow, accepted: false, version: PLANNER_VERSION, onDefaults: plannerOnDefaults };
 }
 function reasonFor(c, p, h, e) {
   if (c.u >= 20) return "Overdue: clear it before anything else";
@@ -2105,12 +2105,18 @@ function planPanel() {
       <div class="t-actions">${t.done ? `<span class="muted" style="font-size:12px">Done</span>` : `<button class="icon-btn" data-act="plan-move" data-i="${i}" data-d="-1" aria-label="Move up">▲</button><button class="icon-btn" data-act="plan-move" data-i="${i}" data-d="1" aria-label="Move down">▼</button><button class="icon-btn" data-act="plan-skip" data-id="${esc(t.id)}" aria-label="Not today" title="Not today">✕</button><button class="play" data-act="task-play" data-id="${esc(t.id)}" aria-label="Start ${esc(t.title)}">${ICON.play}</button>`}</div></div>`;
   }).join("");
   const later = (p.later || []).map(id => taskById(id)).filter(t => t && !t.done);
+  const laterLabel = t => {   // bug 2: a split task with some parts planned shows which parts are left
+    const planned = p.items.filter(i => i.kind === "task" && i.taskId === t.id);
+    if (!planned.length || !(planned[0].parts > 1)) return esc(t.title);
+    const of = planned[0].parts, from = Math.max(...planned.map(i => i.part)) + 1;
+    return `${esc(t.title)} (${from === of ? `part ${of} of ${of}` : `parts ${from}–${of} of ${of}`})`;
+  };
   return `<section class="panel plan-panel"><div class="panel-h"><h2>${ICON.spark} Your plan for today</h2>
       <div style="display:flex;gap:6px">${p.accepted ? `<span class="chip" style="pointer-events:none">On your calendar</span>` : `<button class="btn sm primary" data-act="plan-accept">Add to calendar</button>`}<button class="btn sm" data-act="plan-build">Re-plan from now</button><button class="btn sm ghost" data-act="plan-clear">Clear</button></div></div>
     ${p.onDefaults ? `<p class="banner" role="status" style="margin:0 0 10px">The planner is using its defaults right now, so this order is a rough guide. Re-plan to try again.</p>` : ""}
     ${p.overflow ? `<p class="banner" style="margin:0 0 10px">This plan runs past your workday. Mark something “Not today” or re-plan tomorrow.</p>` : ""}
     <div class="pl-list">${rows || `<p class="muted">Everything planned is done. Nice work.</p>`}</div>
-    ${later.length ? `<p class="muted" style="margin:12px 0 0;font-size:12.5px">Doesn't fit today: ${later.slice(0, 5).map(t => esc(t.title)).join(", ")}${later.length > 5 ? ` and ${later.length - 5} more` : ""}.</p>` : ""}
+    ${later.length ? `<p class="muted" style="margin:12px 0 0;font-size:12.5px">Doesn't fit today: ${later.slice(0, 5).map(laterLabel).join(", ")}${later.length > 5 ? ` and ${later.length - 5} more` : ""}.</p>` : ""}
     <details style="margin-top:12px"><summary class="muted" style="cursor:pointer;font-size:12.5px">How Keel ordered this</summary><div style="margin-top:10px">${energyBars()}
       <p class="muted" style="font-size:12.5px;margin:8px 0 0">Tasks are chosen by value and deadline for their size, then placed hour by hour so heavy work lands in your high-energy hours and light work in your dips. Durations are adjusted for how long tasks really take you. Moving tasks up or down teaches Keel your preferences; correcting Light/Medium/Heavy trains its effort guesses.</p></div></details>
   </section>`;

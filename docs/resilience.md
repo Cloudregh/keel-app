@@ -58,7 +58,7 @@ For each dependency, the test simulates a failure or slowdown and checks five th
 - It then runs the tracking loop through disk-full and cleanup errors, calls every API path, good and bad, and forces a handler traceback. It searches all captured stdout and stderr: **none of the 7 planted values appears**, and no line contains activity JSON.
 - `tests/js/e2e/log-privacy.spec.mjs` does the same in the browser. It plants a task title, an app, a site, a window title and a token. It loads live activity, then makes the tracker answer 500 and then go down, and runs a coach review. Every console message, page error and failed request is collected: **none of the 5 planted values appears**.
 - Secrets in the repository are checked on every gate run by `npm run audit` (gitleaks, Phase 6).
-- What does appear: file paths under the user's home folder, which include the macOS user name, in start-up and file-error lines. That is local only, never leaves the Mac, and is needed to find the file.
+- Paths: since 2026-11-15 (accepted risk A6, fixed at the owner's request) every log line writes the home folder as `~`, so the log never holds the macOS user name (`test_log_writes_the_home_folder_as_tilde`).
 
 **Tracing a request end to end: N/A (owner's decision).** There is no request ID. A "request" here is one call from the page to the tracker on the same Mac. The browser's Network panel shows each one (method, path, status, time), and the tracker deliberately writes nothing per request, so that no activity ends up in its log. **Decision (owner, 2026-11-14): N/A** for this app, as recommended. Adding a request ID would cost an extra CORS preflight on every poll for little gain on one machine.
 

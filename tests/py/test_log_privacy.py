@@ -92,3 +92,22 @@ def test_nothing_private_reaches_the_tracker_log(kt, server, monkeypatch, fake_t
     for line in log.splitlines():  # nothing that looks like activity data either
         assert '"app"' not in line and '"title"' not in line, line
     json.dumps(log)  # the whole log is plain text
+
+
+def test_log_writes_the_home_folder_as_tilde(kt, monkeypatch, fake_time, capfd):
+    """Accepted risk A6, fixed 2026-11-15: log lines named files by their full path, which holds the macOS user name.
+    Every path in the log is now written from ~ (start-up line, kept damaged file, file errors)."""
+    with open(kt.OUT_FILE, "w") as f:
+        f.write('{"days": ')  # damaged: kept aside, with its name logged
+    frames = [(0, "Code", "", "")] * 4
+    scripted(kt, monkeypatch, frames)
+    monkeypatch.setattr(kt, "cleanup", lambda: (_ for _ in ()).throw(OSError(13, "Permission denied", kt.OUT_FILE)))
+    monkeypatch.setattr(kt, "save", lambda d: (_ for _ in ()).throw(OSError(28, "No space left on device", kt.OUT_FILE)))
+    monkeypatch.setattr(kt, "SAVE_EVERY", 5)
+    run_loop(kt, monkeypatch, fake_time, frames)
+    out, err = capfd.readouterr()
+    log = out + err
+    assert "Writing to ~/Keel Activity/keel-activity.json" in log
+    assert "kept as ~/Keel Activity/keel-activity.corrupt-" in log
+    assert "Couldn't write activity file" in log and "~/Keel Activity/keel-activity.json" in log
+    assert kt.HOME not in log, f"the home folder path appears in the log:\n{log}"

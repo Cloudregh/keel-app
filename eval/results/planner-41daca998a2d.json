@@ -1,6 +1,6 @@
 {
- "generatedAt": "2026-11-14T23:32:54.399Z",
- "seconds": 15,
+ "generatedAt": "2026-11-15T10:41:42.569Z",
+ "seconds": 12,
  "app": "41daca998a2d",
  "plannerModel": {
   "version": "planner-v2.2",
@@ -1561,9 +1561,9 @@
   },
   "latencyMs": {
    "runs": 200,
-   "median": 1.5,
+   "median": 1,
    "p95": 2,
-   "max": 6
+   "max": 3
   }
  },
  "energy": {

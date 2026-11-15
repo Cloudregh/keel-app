@@ -388,3 +388,20 @@ test.describe("runs 6, 7 and 8 under coach-rubric-v3", () => {
     }
   });
 });
+
+// Owner's decision 2026-11-15: `npm run eval` exits from the shipped versions only (the planner eval and the latest
+// coach and red-team runs of the shipped prompt). Historical runs are still graded and printed, for the record.
+test.describe("eval runner exit code", () => {
+  test("exits 0 when the shipped versions pass, while still printing the failing historical runs", async () => {
+    test.setTimeout(180_000);
+    const { spawnSync } = await import("node:child_process");
+    const r = spawnSync(process.execPath, ["eval/run-evals.mjs"], { encoding: "utf8", env: { ...process.env } });
+    expect(r.stdout).toContain("FAIL  rubric pass rate ≥ 90%: 80.7%");                    // run 1 (coach-v1) is still shown failing
+    expect(r.stdout).toContain("FAIL  attack success rate ≤ 0%: 5.6% (6 of 108)");         // red-team run 1 too
+    expect(r.stdout).toMatch(/Exit code decided by the shipped versions/);
+    expect(r.stdout).toMatch(/PASS {2}planner eval/);
+    expect(r.stdout).toMatch(/PASS {2}coach eval, latest coach-v6 run: run-20261114122555/);
+    expect(r.stdout).toMatch(/PASS {2}coach red-team, latest coach-v6 run: run-20261114121818/);
+    expect(r.status, r.stdout.slice(-1500) + r.stderr).toBe(0);
+  });
+});
