@@ -2,7 +2,7 @@
   "generatedAt": "2026-11-10",
   "app": {
     "file": "index.html",
-    "sha256": "f0a1e0c33b28"
+    "sha256": "00ccf0e5a7bb"
   },
   "tracker": {
     "file": "tracker/keel_tracker.py",
