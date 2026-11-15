@@ -26,6 +26,18 @@ Your data is saved in your browser's local storage on each device. Use **Setting
 
 The tracker records which app is in front and, for browsers, which site and tab title. It doesn't take screenshots or record keystrokes. It skips idle time and only listens on your own Mac.
 
+**Install Keel Tracker (no Terminal needed).** In Keel, open **Apps**, or go straight to the download:
+1. Download [Keel-Tracker.zip](https://github.com/Cloudregh/keel-app/releases/latest/download/Keel-Tracker.zip) (Apple silicon and Intel).
+2. Unzip it, move **Keel Tracker** to Applications and open it.
+3. The first time, macOS says it can't check the app, because it isn't notarized yet. Open **System Settings → Privacy & Security**, click **Open Anyway** and confirm.
+4. Keel Tracker says it's on and starts at every login. Keel connects by itself.
+
+Open Keel Tracker again at any time to pause, resume or turn tracking off.
+
+**Publishing a new version (maintainers).** Push a tag such as `tracker-v1.0.0`. The `tracker-app` workflow builds the app on a Mac runner, checks it (both architectures, the signature, a self-test) and attaches `Keel-Tracker.zip` to a GitHub Release. The download link above always points to the latest release.
+
+**Or with Python (advanced):**
+
 ```bash
 mkdir -p ~/"Keel Activity"
 cp tracker/keel_tracker.py ~/"Keel Activity"/
@@ -34,7 +46,7 @@ python3 ~/"Keel Activity"/keel_tracker.py install   # runs now and at every logi
 
 Other commands: `status`, `pause [minutes]`, `resume`, `cleanup` and `uninstall`.
 
-**Let your site talk to the tracker.** The tracker only answers pages listed in `~/Keel Activity/config.json`:
+**Let your site talk to the tracker.** The tracker only answers pages listed in `~/Keel Activity/config.json`. The two Keel sites (`https://cloudregh.github.io` and `https://keel-app-five.vercel.app`) are allowed by default; add your own if you host Keel elsewhere:
 
 ```json
 { "allowed_origins": ["https://<your-username>.github.io"], "keep_days": 30, "max_file_mb": 20 }

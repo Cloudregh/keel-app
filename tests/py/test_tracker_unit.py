@@ -25,7 +25,7 @@ def ms_on(days_ago, hour=10):
 
 def test_config_defaults_when_missing(kt):
     cfg = kt.load_config()
-    assert cfg["allowed_origins"] == ["https://cloudregh.github.io"]
+    assert cfg["allowed_origins"] == ["https://cloudregh.github.io", "https://keel-app-five.vercel.app"]  # both Keel sites (2026-11-15)
     assert cfg["keep_days"] == 30
     assert cfg["max_file_mb"] == 20
 
@@ -53,7 +53,7 @@ def test_config_corrupt_file_falls_back_to_defaults(kt):
 def test_config_allowed_origins_must_be_a_list(kt):
     with open(kt.CONFIG_FILE, "w") as f:
         json.dump({"allowed_origins": "https://evil.example"}, f)
-    assert kt.load_config()["allowed_origins"] == ["https://cloudregh.github.io"]
+    assert kt.load_config()["allowed_origins"] == ["https://cloudregh.github.io", "https://keel-app-five.vercel.app"]
 
 
 def test_save_config_round_trip(kt):

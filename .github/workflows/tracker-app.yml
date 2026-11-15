@@ -1,0 +1,65 @@
+# Builds Keel Tracker.app: the tracker as a Mac app, so nobody needs Python or Terminal (owner's request, 2026-11-15).
+# Live copy: .github/workflows/tracker-app.yml. Keep the two files identical.
+#  - On a pull request or a push to main that touches tracker/: build and check the app (artifact kept 14 days).
+#  - On a tag tracker-v*: also publish Keel-Tracker.zip as a GitHub Release, the download Keel's setup screen
+#    links to (https://github.com/Cloudregh/keel-app/releases/latest/download/Keel-Tracker.zip).
+# Unsigned for now (owner's choice): the app is ad-hoc signed, which Apple silicon requires, but not notarized,
+# so users approve it once in System Settings > Privacy & Security > Open Anyway.
+name: tracker-app
+on:
+  pull_request:
+    paths: ["tracker/**", ".github/workflows/tracker-app.yml"]
+  push:
+    branches: [main]
+    paths: ["tracker/**", ".github/workflows/tracker-app.yml"]
+    tags: ["tracker-v*"]
+jobs:
+  app:
+    runs-on: macos-15
+    timeout-minutes: 30
+    permissions:
+      contents: write   # only used by the release step, which runs on tracker-v* tags
+    steps:
+      - uses: actions/checkout@v6
+      - name: Python from python.org (universal2, so the app runs on Apple silicon and Intel Macs)
+        run: |
+          curl -fsSLo python.pkg https://www.python.org/ftp/python/3.12.10/python-3.12.10-macos11.pkg
+          sudo installer -pkg python.pkg -target /
+          PY=/Library/Frameworks/Python.framework/Versions/3.12/bin/python3.12
+          "$PY" -c "import sys; print(sys.version)"
+          "$PY" -m venv build-venv
+          build-venv/bin/pip install --quiet pyinstaller==6.16.0
+      - name: Build Keel Tracker.app
+        run: |
+          VERSION="${GITHUB_REF_NAME#tracker-v}"; case "$GITHUB_REF" in refs/tags/tracker-v*) ;; *) VERSION="0.0.0-dev";; esac
+          build-venv/bin/pyinstaller --noconfirm --clean --windowed --name "Keel Tracker" \
+            --target-arch universal2 --osx-bundle-identifier com.keel.tracker \
+            --paths tracker --hidden-import keel_tracker tracker/app_main.py
+          PLIST="dist/Keel Tracker.app/Contents/Info.plist"
+          plutil -replace LSUIElement -bool YES "$PLIST"   # no Dock icon: it's a background helper
+          plutil -replace NSAppleEventsUsageDescription -string "Keel Tracker reads which website is open in your browser, so Keel can show your time per site." "$PLIST"
+          plutil -replace CFBundleShortVersionString -string "$VERSION" "$PLIST"
+          plutil -replace CFBundleVersion -string "$VERSION" "$PLIST"
+          codesign --force --deep --sign - "dist/Keel Tracker.app"   # ad-hoc: required to run on Apple silicon
+      - name: Check the app
+        run: |
+          APP="dist/Keel Tracker.app"; EXE="$APP/Contents/MacOS/Keel Tracker"
+          lipo -archs "$EXE" | tee /dev/stderr | grep -q arm64
+          lipo -archs "$EXE" | grep -q x86_64
+          codesign --verify --deep --strict "$APP"
+          plutil -extract LSUIElement raw "$APP/Contents/Info.plist" | grep -q true
+          "$EXE" selftest
+          arch -x86_64 "$EXE" selftest   # the Intel half, under Rosetta
+      - name: Zip
+        run: |
+          ditto -c -k --keepParent "dist/Keel Tracker.app" Keel-Tracker.zip
+          shasum -a 256 Keel-Tracker.zip | tee Keel-Tracker.zip.sha256
+      - uses: actions/upload-artifact@v6
+        with: { name: Keel-Tracker, path: "Keel-Tracker.zip\nKeel-Tracker.zip.sha256", retention-days: 14 }
+      - name: Publish the release
+        if: startsWith(github.ref, 'refs/tags/tracker-v')
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          gh release create "$GITHUB_REF_NAME" Keel-Tracker.zip Keel-Tracker.zip.sha256 \
+            --title "Keel Tracker ${GITHUB_REF_NAME#tracker-v}" \
+            --notes "Keel Tracker for macOS (Apple silicon and Intel). Unzip, move Keel Tracker to Applications and open it. The first time, macOS blocks it because it isn't notarized: open System Settings > Privacy & Security and click Open Anyway. SHA-256 in Keel-Tracker.zip.sha256."

@@ -40,7 +40,7 @@ import sys
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from typing import Any
+from typing import Any, Callable
 
 VERSION = 2
 PORT = int(os.environ.get("KEEL_TRACKER_PORT", "47821"))  # override only for tests; the web app expects 47821
@@ -61,7 +61,7 @@ OUT_DIR = os.path.join(HOME, "Keel Activity")
 OUT_FILE = os.path.join(OUT_DIR, "keel-activity.json")
 LOG_FILE = os.path.join(OUT_DIR, "tracker.log")
 CONFIG_FILE = os.path.join(OUT_DIR, "config.json")
-DEFAULT_ORIGINS = ["https://cloudregh.github.io"]
+DEFAULT_ORIGINS = ["https://cloudregh.github.io", "https://keel-app-five.vercel.app"]  # both Keel sites (2026-11-15)
 LABEL = "com.keel.tracker"
 PLIST = os.path.join(HOME, "Library", "LaunchAgents", LABEL + ".plist")
 
@@ -869,20 +869,25 @@ def track():
         time.sleep(INTERVAL)
 
 
-def install():
+def install(program=None, quiet=False):
+    """Registers the tracker to start at login and starts it. `program` is what launchd runs: by default this script
+    under the current Python; Keel Tracker.app passes its own executable, so no Python is needed."""
+    from xml.sax.saxutils import escape
+
     os.makedirs(OUT_DIR, exist_ok=True)
     os.makedirs(os.path.dirname(PLIST), exist_ok=True)
-    script = os.path.abspath(__file__)
+    program = program or [sys.executable, os.path.abspath(__file__), "run"]
+    args = "".join(f"<string>{escape(a)}</string>" for a in program)
     plist = f"""<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
   <key>Label</key><string>{LABEL}</string>
-  <key>ProgramArguments</key><array><string>{sys.executable}</string><string>{script}</string><string>run</string></array>
+  <key>ProgramArguments</key><array>{args}</array>
   <key>RunAtLoad</key><true/>
   <key>KeepAlive</key><dict><key>SuccessfulExit</key><false/></dict>
   <key>ProcessType</key><string>Background</string>
-  <key>StandardOutPath</key><string>{LOG_FILE}</string>
-  <key>StandardErrorPath</key><string>{LOG_FILE}</string>
+  <key>StandardOutPath</key><string>{escape(LOG_FILE)}</string>
+  <key>StandardErrorPath</key><string>{escape(LOG_FILE)}</string>
 </dict></plist>
 """
     uid = os.getuid()
@@ -892,15 +897,52 @@ def install():
     r = subprocess.run(["launchctl", "bootstrap", f"gui/{uid}", PLIST], capture_output=True, text=True)
     if r.returncode != 0:
         subprocess.run(["launchctl", "load", "-w", PLIST], capture_output=True)
-    print("Keel tracker installed. It's running now and will start at every login.")
-    print(f"Activity file: {OUT_FILE}")
+    if not quiet:
+        print("Keel tracker installed. It's running now and will start at every login.")
+        print(f"Activity file: {OUT_FILE}")
 
 
-def uninstall():
+def uninstall(quiet=False):
     subprocess.run(["launchctl", "bootout", f"gui/{os.getuid()}/{LABEL}"], capture_output=True)
     if os.path.exists(PLIST):
         os.remove(PLIST)
-    print("Keel tracker stopped and removed from login items. Your activity file was kept.")
+    if not quiet:
+        print("Keel tracker stopped and removed from login items. Your activity file was kept.")
+
+
+def installed_program():
+    """The program the login item runs, or None if the tracker isn't set up to start at login."""
+    try:
+        text = open(PLIST, encoding="utf-8").read()
+    except OSError:
+        return None
+    from xml.sax.saxutils import unescape
+
+    m = re.search(r"<key>ProgramArguments</key><array>(.*?)</array>", text, re.S)
+    return [unescape(a) for a in re.findall(r"<string>(.*?)</string>", m.group(1))] if m else None
+
+
+def selftest():
+    """Used by the app build: the bundled tracker starts its API and answers /status to an allowed site. Writes
+    nothing to the user's folder."""
+    import urllib.request
+
+    global PORT
+    old = PORT
+    srv = Server(("127.0.0.1", 0), Handler)
+    PORT = srv.server_address[1]
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    try:
+        req = urllib.request.Request(f"http://127.0.0.1:{PORT}/status", headers={"Origin": DEFAULT_ORIGINS[0]})
+        with urllib.request.urlopen(req, timeout=5) as r:  # noqa: S310 - fixed http://127.0.0.1 URL
+            body = json.loads(r.read())
+        ok = r.status == 200 and body.get("app") == "keel-tracker"
+    finally:
+        srv.shutdown()
+        srv.server_close()
+        PORT = old
+    print("selftest ok" if ok else "selftest FAILED")
+    return 0 if ok else 1
 
 
 def api(method, path, body=None):
@@ -966,6 +1008,10 @@ def status():
         print(f"  {a}: {m:.0f} min")
 
 
+def selftest_cmd():
+    sys.exit(selftest())
+
+
 def run_tracker():
     try:
         track()
@@ -975,7 +1021,7 @@ def run_tracker():
 
 if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else "run"
-    {
+    commands: dict[str, Callable[[], object]] = {
         "install": install,
         "uninstall": uninstall,
         "status": status,
@@ -983,4 +1029,6 @@ if __name__ == "__main__":
         "pause": pause_cmd,
         "resume": resume_cmd,
         "cleanup": cleanup_cmd,
-    }.get(cmd, run_tracker)()
+        "selftest": selftest_cmd,
+    }
+    commands.get(cmd, run_tracker)()

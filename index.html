@@ -1608,7 +1608,7 @@ function trackerPanel() {
     ? `You're viewing Keel on claude.ai, which can't talk to programs on your Mac. Open Keel from your GitHub Pages site to control the tracker and load activity live. Here you can still import the activity file.`
     : TR.state === "blocked"
       ? `The tracker is running but doesn't allow this site yet. Add <code>${esc(location.origin)}</code> to <code>allowed_origins</code> in <code>~/Keel Activity/config.json</code>, then restart it with <code>python3 ~/"Keel Activity"/keel_tracker.py install</code>.`
-      : `Start it in Terminal with <code>python3 ~/"Keel Activity"/keel_tracker.py install</code>. If your browser asks to allow access to devices on your local network, choose Allow. If the tracker is running and Keel still can't connect, your browser may be blocking local connections: the Claude app's built-in browser does. Use Chrome, Arc, Brave or Edge, or import the activity file below.`;
+      : `Open <b>Keel Tracker</b> from your Applications folder (new here? follow the steps to download it). If you set it up with Python, run <code>python3 ~/"Keel Activity"/keel_tracker.py install</code>. If your browser asks to allow access to devices on your local network, choose Allow. If the tracker is running and Keel still can't connect, your browser may be blocking local connections: the Claude app's built-in browser does. Use Chrome, Arc, Brave or Edge, or import the activity file below.`;
   return `<section class="panel"><div class="panel-h"><h2>Tracker</h2></div><p style="margin:0 0 12px">${how}</p>
     ${meta.importedAt ? `<p class="muted" style="margin:0 0 12px;font-size:12.5px">Last activity loaded ${fmtDay(dayKey(meta.importedAt)) === "Today" ? "today" : fmtDay(dayKey(meta.importedAt))} at ${fmtTime(meta.importedAt)}${meta.device ? ` from ${esc(meta.device)}` : ""}.</p>` : ""}
     <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-act="tr-retry">Try again</button><button class="btn sm ghost" data-act="act-refresh">${FSH.handle ? "Re-read file" : "Import activity file"}</button></div></section>`;
@@ -2498,20 +2498,35 @@ function actSummaryPanel(k) {
       <div class="stat"><div class="l">Distracting</div><div class="v num">${fmtDur(a.dist)}</div></div></div>
     <div class="hbars">${top.map(it => { const c = catOf(it.key); return `<div class="hbar"><div class="n"><i class="dot" style="background:${catColor(c)}"></i>${esc(it.domain || it.app)}</div><div class="b"><i style="width:${it.ms / max * 100}%;background:${catColor(c)}"></i></div><div class="v num">${fmtDur(it.ms)}</div></div>`; }).join("")}</div></section>`;
 }
+// Turning on app tracking without Terminal (owner's request, 2026-11-15): download Keel Tracker.app, open it once,
+// and Keel connects by itself (it checks every 5 s while this screen is open).
+const TRACKER_DOWNLOAD = "https://github.com/Cloudregh/keel-app/releases/latest/download/Keel-Tracker.zip";
+const IS_MAC = /Mac/i.test(navigator.platform || navigator.userAgent || "");
 function setupPanel() {
+  const privacy = `<p class="muted" style="margin:18px 0 0;font-size:13px">The tracker records the name of the app in front and, for browsers, the site and tab title. It doesn't take screenshots or log keystrokes, and everything stays on your Mac. Time stops counting after 3 minutes without keyboard or mouse input.</p>`;
+  const importBtn = `<button class="btn ghost" data-act="act-import">Import activity file</button>`;
+  if (TR.state === "online") return `<section class="panel setup"><h2 style="margin-bottom:8px">Connected — waiting for activity</h2>
+    <p class="muted" style="margin:0">Keel Tracker is running. Your app and site time shows up here within a minute of using your Mac.</p>${privacy}</section>`;
+  if (!IS_MAC) return `<section class="panel setup"><h2 style="margin-bottom:8px">App tracking works on macOS</h2>
+    <p class="muted" style="margin:0 0 16px">Keel Tracker is a small Mac app, so it can't run on this computer. Focus sessions, tasks and your plan all work here. To see app time from a Mac, import its activity file.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">${importBtn}</div>${privacy}</section>`;
   return `<section class="panel setup">
-    <h2 style="margin-bottom:8px">${TR.state === "online" ? "Connected — waiting for activity" : "Connect the tracker on your Mac"}</h2>
-    <p class="muted" style="margin:0 0 16px">A web page can't see your other apps, so a small tracker on your Mac records them and Keel reads its file.</p>
+    <h2 style="margin-bottom:8px">Turn on app tracking</h2>
+    <p class="muted" style="margin:0 0 16px">Keel needs a small helper on your Mac to see which apps and sites you use. You install it once; after that it starts by itself when you log in.</p>
     <ol class="steps">
-      <li><b>Keep the tracker running.</b> It starts at login and saves to <code>Keel Activity/keel-activity.json</code> in your home folder every 30 seconds.</li>
-      <li><b>Open Keel from your own site</b> (your GitHub Pages address). Keel connects to the tracker by itself, shows whether it's running, and loads your activity every minute. Pause and resume it from the sidebar.</li>
-      <li><b>Or import the file.</b> Click <b>Import activity file</b>, press <kbd>⌘</kbd><kbd>⇧</kbd><kbd>H</kbd> to jump to your home folder, open <b>Keel Activity</b> and choose <b>keel-activity.json</b>. You can also drag the file onto this page.</li>
-      <li><b>Refresh whenever you like.</b> Where your browser allows it, Keel remembers the file and picks up new activity automatically while this page is open.</li>
+      <li><b>Download Keel Tracker.</b> <a class="btn sm primary" href="${TRACKER_DOWNLOAD}" download>Download Keel Tracker</a></li>
+      <li><b>Unzip it, move Keel Tracker to Applications, and open it.</b></li>
+      <li><b>Approve it once.</b> macOS says it can't check the app, because it isn't notarized by Apple yet. Open <b>System Settings → Privacy &amp; Security</b>, scroll down, click <b>Open Anyway</b> and confirm.</li>
+      <li><b>That's it.</b> Keel Tracker says it's on, and this page connects by itself. If your browser asks to allow access to devices on your local network, choose <b>Allow</b>. Use Chrome, Arc, Brave or Edge.</li>
     </ol>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><button class="btn primary" data-act="act-import">Import activity file</button></div>
-    <p class="muted" style="margin:18px 0 0;font-size:13px">The tracker records the name of the app in front and, for browsers, the site and tab title. It doesn't take screenshots or log keystrokes, and it only writes a file on your Mac. Time stops counting after 3 minutes without keyboard or mouse input.</p>
+    <p class="muted" role="status" style="margin:14px 0 0;font-size:13px">${TR.state === "blocked" ? "Keel Tracker is running but doesn't allow this site yet: see the Tracker panel." : "Looking for Keel Tracker on this Mac…"}</p>
+    <details style="margin-top:14px"><summary class="muted" style="cursor:pointer;font-size:13px">Advanced: set it up with Python</summary>
+      <p class="muted" style="font-size:13px;margin:8px 0 0">Copy <code>tracker/keel_tracker.py</code> from the Keel repository to <code>~/Keel Activity/</code>, then run <code>python3 ~/"Keel Activity"/keel_tracker.py install</code> in Terminal.</p></details>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">${importBtn}</div>
+    ${privacy}
   </section>`;
 }
+
 function viewApps() {
   const has = Object.keys(act).length > 0;
   const k = ui.actDay || todayKey();
@@ -3116,8 +3131,9 @@ function tick() {
     if (stretch >= lim && remindedFor !== a.id && now >= (ui.breakSnoozeUntil || 0)) { remindedFor = a.id; chime("nudge"); bgRender(); }
   }
   if (FSH.handle && TR.state !== "online" && !document.hidden && now - lastActPoll > 2 * MIN) { lastActPoll = now; refreshActivity(true); }
-  const trEvery = TR.state === "online" ? 10000 : IN_CLAUDE ? 10 * MIN : 60000;
-  if (ui.trSeen && !document.hidden && now - TR.lastPoll > trEvery) trPoll(false);
+  const onSetup = ui.view === "apps" && TR.state !== "online" && !IN_CLAUDE && IS_MAC;   // the setup screen is open
+  const trEvery = TR.state === "online" ? 10000 : IN_CLAUDE ? 10 * MIN : onSetup ? 5000 : 60000;
+  if ((ui.trSeen || onSetup) && !document.hidden && now - TR.lastPoll > trEvery) trPoll(false);
   if (now - (state.lastCleanup || 0) > DAY) cleanupKeel(false);
   const editing = document.activeElement && ["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement.tagName);
   if (todayKey() !== lastDay) { lastDay = todayKey(); if (ui.tlDay === addDays(lastDay, -1)) ui.tlDay = lastDay; bgRender(); }

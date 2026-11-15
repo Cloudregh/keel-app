@@ -10,7 +10,7 @@ ignore = ["S603", "S607"]  # tracker intentionally runs fixed macOS tools (lsapp
 "tests/**" = ["S101"]
 
 [tool.mypy]
-files = ["tracker/keel_tracker.py"]
+files = ["tracker/keel_tracker.py", "tracker/app_main.py"]
 python_version = "3.9"
 ignore_missing_imports = true
 

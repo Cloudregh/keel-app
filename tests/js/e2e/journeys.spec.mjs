@@ -296,7 +296,9 @@ test.describe("J11 install & offline", () => {
 test.describe("J12 import activity file", () => {
   test("import a tracker file; a wrong file is refused with directions", async ({ keel: { page } }) => {
     await nav(page, "apps");
-    await expect(page.locator("#view")).toContainText("Connect the tracker on your Mac");
+    // The setup screen's heading depends on the platform since 2026-11-15 ("Turn on app tracking" on a Mac); the
+    // import fallback is offered on every platform.
+    await expect(page.locator(".setup").getByRole("button", { name: "Import activity file" })).toBeVisible();
     await page.setInputFiles("#act-file", { name: "notes.json", mimeType: "application/json", buffer: Buffer.from('{"hello":1}') });
     await expect(page.locator("#toasts")).toContainText("isn't a Keel activity file");
     await page.setInputFiles("#act-file", "tests/js/fixtures/data/activity-2026-11-10.json");
