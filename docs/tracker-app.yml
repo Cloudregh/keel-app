@@ -34,7 +34,10 @@ jobs:
           VERSION="${GITHUB_REF_NAME#tracker-v}"; case "$GITHUB_REF" in refs/tags/tracker-v*) ;; *) VERSION="0.0.0-dev";; esac
           build-venv/bin/pyinstaller --noconfirm --clean --windowed --name "Keel Tracker" \
             --target-arch universal2 --osx-bundle-identifier com.keel.tracker \
-            --paths tracker --hidden-import keel_tracker tracker/app_main.py
+            --paths tracker --hidden-import keel_tracker \
+            --add-data "index.html:web" --add-data "sw.js:web" --add-data "manifest.json:web" \
+            --add-data "icon.svg:web" --add-data "icon-maskable.svg:web" \
+            tracker/app_main.py
           PLIST="dist/Keel Tracker.app/Contents/Info.plist"
           plutil -replace LSUIElement -bool YES "$PLIST"   # no Dock icon: it's a background helper
           plutil -replace NSAppleEventsUsageDescription -string "Keel Tracker reads which website is open in your browser, so Keel can show your time per site." "$PLIST"

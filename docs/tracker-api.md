@@ -16,6 +16,7 @@ Base URL: `http://127.0.0.1:47821`. The port can be changed with `KEEL_TRACKER_P
 | Method | Path | Body | Success | Errors |
 |---|---|---|---|---|
 | OPTIONS | any | — | **204** with `Access-Control-Allow-Methods: GET, POST, OPTIONS`, `Access-Control-Allow-Headers: Content-Type`, `Access-Control-Max-Age: 600` | 403 (bad Host or origin) |
+| GET | `/`, `/index.html`, `/sw.js`, `/manifest.json`, `/icon.svg`, `/icon-maskable.svg` | — | 200, Keel's own file (since 2026-11-23, for Safari). Headers: `Content-Security-Policy: frame-ancestors 'none'`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`, `Cache-Control: no-cache`; no CORS header. Only these exact paths; files come from the app bundle's `web/` folder (or the repository) | 403 (bad Host or origin); 404 if this copy of the tracker has no Keel files |
 | GET | `/status` | — | 200 `Status` | 403 |
 | GET | `/activity?days=N` | — | 200 `Activity`, at most `min(N, keep_days)` days (N defaults to `keep_days`) | 403 |
 | POST | `/pause` | `{"minutes": number}` (optional) | 200 `Status`. A positive `minutes` pauses until then; anything else pauses until resumed | 403 |
@@ -24,6 +25,8 @@ Base URL: `http://127.0.0.1:47821`. The port can be changed with `KEEL_TRACKER_P
 | POST | `/settings` | `{"keepDays": int 1–365, "maxFileMb": number 1–500}` (both optional; out-of-range values are ignored) | 200 `Status`. Settings are saved and a cleanup runs | 403 |
 | POST | `/schedule` | `Schedule` (below). Replaces the previous schedule | 200 `{"scheduled": int, "prefs": Prefs}` | 403 |
 | any | any other path | — | — | **404** `{"error": string}` |
+
+A `/status` or `/activity` request counts as "a Keel page connected" (for the "hasn't connected today" alert) when it has an allowed `Origin`, or `Sec-Fetch-Site: same-origin` (Keel opened from the tracker itself, whose GETs carry no `Origin`). Requests from curl or the address bar don't count.
 
 A body that isn't valid JSON (including `NaN` and `Infinity`, which JSON doesn't allow) is treated as `{}`.
 Every POST also returns **400** `{"error": "Bad Content-Length"}` if `Content-Length` is negative or not a number, and **413** `{"error": "Request body too large"}` if the body is over 2 MB; either way nothing changes.

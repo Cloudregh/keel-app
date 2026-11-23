@@ -601,6 +601,25 @@ def origin_allowed(origin):
 
 MAX_BODY = 2 * 1024 * 1024  # bytes; the app sends a few dozen
 
+# Keel itself, served at http://127.0.0.1:47821/ (2026-11-23). Safari won't let the https website reach this
+# tracker (it treats http://127.0.0.1 as mixed content), so Safari users open Keel from here instead. Only these
+# files are served, by exact path: nothing else on disk is reachable.
+WEB_FILES = {
+    "/": ("index.html", "text/html; charset=utf-8"),
+    "/index.html": ("index.html", "text/html; charset=utf-8"),
+    "/sw.js": ("sw.js", "text/javascript; charset=utf-8"),
+    "/manifest.json": ("manifest.json", "application/manifest+json"),
+    "/icon.svg": ("icon.svg", "image/svg+xml"),
+    "/icon-maskable.svg": ("icon-maskable.svg", "image/svg+xml"),
+}
+
+
+def web_dir():
+    """The app bundle carries Keel's files in web/; a checkout of the repository has them one folder up."""
+    if getattr(sys, "frozen", False):
+        return os.path.join(getattr(sys, "_MEIPASS", os.path.dirname(sys.executable)), "web")
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 def _no_constant(name):
     raise ValueError(f"{name} is not valid JSON")  # Python's json accepts NaN/Infinity; JSON doesn't
@@ -658,6 +677,24 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _web(self, path, origin):
+        name, ctype = WEB_FILES[path]
+        try:
+            with open(os.path.join(web_dir(), name), "rb") as f:
+                body = f.read()
+        except OSError:
+            return self._json(404, {"error": "Keel's page isn't included with this copy of the tracker. Use Keel Tracker.app."}, origin)
+        self.send_response(200)
+        self.send_header("Content-Type", ctype)
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Cache-Control", "no-cache")
+        self.send_header("Content-Security-Policy", "frame-ancestors 'none'")  # no other site can embed it
+        self.send_header("X-Frame-Options", "DENY")
+        self.send_header("Referrer-Policy", "no-referrer")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
     def do_OPTIONS(self):
         ok, origin = self._check()
         self.send_response(204 if ok else 403)
@@ -695,8 +732,11 @@ class Handler(BaseHTTPRequestHandler):
                 None,
             )
         path = self.path.split("?")[0]
-        if origin and path in ("/status", "/activity"):
+        same_site = self.headers.get("Sec-Fetch-Site") == "same-origin"  # Keel opened from this tracker (no Origin on GET)
+        if (origin or same_site) and path in ("/status", "/activity"):
             NOTES["last_page"] = NOW_MS()  # a Keel page connected (for the "hasn't connected today" alert)
+        if path in WEB_FILES:
+            return self._web(path, origin)
         if path == "/status":
             return self._json(200, status_obj(), origin)
         if path == "/activity":
@@ -937,6 +977,11 @@ def selftest():
         with urllib.request.urlopen(req, timeout=5) as r:  # noqa: S310 - fixed http://127.0.0.1 URL
             body = json.loads(r.read())
         ok = r.status == 200 and body.get("app") == "keel-tracker"
+        try:  # Keel's page is bundled (Safari users open it here)
+            with urllib.request.urlopen(f"http://127.0.0.1:{PORT}/", timeout=5) as r:  # noqa: S310 - fixed URL
+                ok = ok and r.status == 200 and b"<title>Keel" in r.read()
+        except OSError:  # urllib's HTTPError (a 404) is an OSError
+            ok = False
     finally:
         srv.shutdown()
         srv.server_close()

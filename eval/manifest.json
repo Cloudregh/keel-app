@@ -2,12 +2,12 @@
   "generatedAt": "2026-11-10",
   "app": {
     "file": "index.html",
-    "sha256": "00ccf0e5a7bb"
+    "sha256": "e97b319861c9"
   },
   "tracker": {
     "file": "tracker/keel_tracker.py",
     "version": 2,
-    "sha256": "11eae39747c0"
+    "sha256": "870c2c16b29f"
   },
   "models": {
     "planner": {

@@ -1588,8 +1588,63 @@ function coachPanel() {
 }
 function renderCoach() { const p = $("#ai-panel"); if (p) p.innerHTML = coachPanel(); }
 
+/* ---------------- Keel on this Mac, for Safari (2026-11-23) ----------------
+   Safari won't let an https page reach http://127.0.0.1 (mixed content), so the website can't see Keel Tracker.
+   The tracker also serves Keel at LOCAL_KEEL. In Safari the website offers to open it; the local copy says it's
+   ready, the website hands it a backup inside the browser (postMessage, exact origins both ways), and the local
+   copy asks before restoring it. Nothing goes over the network. */
+const LOCAL_KEEL = "http://127.0.0.1:47821";
+const WEB_ORIGINS = ["https://cloudregh.github.io", "https://keel-app-five.vercel.app"];
+const IS_LOCAL_KEEL = /^http:\/\/(127\.0\.0\.1|localhost):47821$/.test(location.origin);
+const IS_SAFARI = /Safari\//.test(navigator.userAgent) && !/Chrome\/|Chromium\/|CriOS|FxiOS|EdgiOS|Edg\//.test(navigator.userAgent);
+const SAFARI_BLOCKED = IS_SAFARI && location.protocol === "https:";
+const HANDOFF = { win: null, sent: false, from: null, pending: null };
+const backupText = () => JSON.stringify({ ...state, activity: act });
+function openLocalKeel() {
+  const w = window.open(`${LOCAL_KEEL}/#from=${encodeURIComponent(location.origin)}`, "keel-local");
+  if (!w) { toast("The new window was blocked. Allow pop-ups for this site, then try again."); return; }
+  Object.assign(HANDOFF, { win: w, sent: false });
+  setTimeout(() => { if (HANDOFF.win === w && !HANDOFF.sent) toast("Keel on this Mac didn't answer. Check that Keel Tracker is installed and on, then try again."); }, 20000);
+}
+function startHandoff() {     // local copy: opened by the website with #from=<its origin>
+  const m = /^#from=(.+)$/.exec(location.hash);
+  if (!IS_LOCAL_KEEL || !m) return;
+  history.replaceState(null, "", location.pathname);
+  let from = ""; try { from = decodeURIComponent(m[1]); } catch { return; }
+  if (!WEB_ORIGINS.includes(from) || !window.opener) return;
+  HANDOFF.from = from;
+  window.opener.postMessage({ type: "keel-ready" }, from);
+}
+function offerHandoff(text) {
+  let obj = null;
+  try { obj = text.length <= MAX_IMPORT_BYTES ? JSON.parse(text) : null; } catch { obj = null; }
+  if (!obj || !Array.isArray(obj.tasks) || !Array.isArray(obj.entries)) { handoffDone(false); toast("The website sent something that isn't a Keel backup, so nothing changed."); return; }
+  HANDOFF.pending = obj;
+  const days = isObj(obj.activity) ? Object.keys(obj.activity).length : 0, here = state.tasks.length + state.entries.length;
+  const site = esc(new URL(HANDOFF.from).host);
+  openModal(`<h2>Bring your Keel data to this Mac?</h2>
+    <p>Keel on <b>${site}</b> has ${obj.tasks.length} task${obj.tasks.length === 1 ? "" : "s"}, ${obj.entries.length} time entr${obj.entries.length === 1 ? "y" : "ies"}${days ? ` and ${days} day${days === 1 ? "" : "s"} of app activity` : ""}.</p>
+    <p>${here ? "This replaces what's in Keel on this Mac now. Copy a backup from Settings first if you want to keep it." : "Keel on this Mac is empty, so nothing is lost."} After this, use Keel from <b>${esc(LOCAL_KEEL.replace("http://", ""))}</b> in Safari: it connects to Keel Tracker by itself.</p>
+    <div class="acts"><button type="button" class="btn" data-act="handoff-no">Not now</button><button type="button" class="btn primary" data-act="handoff-yes">Bring it over</button></div>`);
+}
+function handoffDone(moved) {
+  HANDOFF.pending = null;
+  if (HANDOFF.from && window.opener) window.opener.postMessage({ type: "keel-done", moved }, HANDOFF.from);
+  HANDOFF.from = null;
+}
+addEventListener("message", e => {
+  const d = e.data;
+  if (!d || typeof d !== "object") return;
+  if (HANDOFF.win && e.source === HANDOFF.win && e.origin === LOCAL_KEEL) {           // website side
+    if (d.type === "keel-ready" && !HANDOFF.sent) { HANDOFF.sent = true; HANDOFF.win.postMessage({ type: "keel-data", backup: backupText() }, LOCAL_KEEL); }
+    else if (d.type === "keel-done") { HANDOFF.win = null; toast(d.moved ? "Your data is now in Keel on this Mac. Use that window from now on." : "Nothing was moved. Keel on this Mac kept its own data."); }
+    return;
+  }
+  if (IS_LOCAL_KEEL && HANDOFF.from && e.origin === HANDOFF.from && e.source === window.opener && d.type === "keel-data" && typeof d.backup === "string" && !HANDOFF.pending) offerHandoff(d.backup);
+});
+
 /* ---------------- Tracker connection (local API on this Mac) ---------------- */
-const TR = { base: "http://127.0.0.1:47821", status: null, state: "unknown", lastPull: 0, lastPoll: 0, menu: false, busy: false, actError: null };
+const TR = { base: IS_LOCAL_KEEL ? location.origin : LOCAL_KEEL, status: null, state: "unknown", lastPull: 0, lastPoll: 0, menu: false, busy: false, actError: null };
 const IN_CLAUDE = /claude\.ai$|claudeusercontent\.com$|claude\.site$/.test(location.hostname) || (window.claude && typeof window.claude.use === "function");
 async function trFetch(path, opts = {}) {
   const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 3000);
@@ -1689,8 +1744,8 @@ function trkWidget() {
       <div class="row">${paused ? `<button class="btn sm" data-act="tr-resume">${ICON.play} Resume</button>` : `<button class="btn sm" data-act="tr-menu" aria-expanded="${TR.menu}">${ICON.pause} Pause</button>`}<button class="btn sm ghost" data-act="nav" data-view="apps">Details</button></div>
       ${TR.menu && !paused ? `<div class="trk-menu"><button data-act="tr-pause" data-min="15">Pause for 15 minutes</button><button data-act="tr-pause" data-min="60">Pause for 1 hour</button><button data-act="tr-pause" data-min="0">Pause until I resume</button></div>` : ""}</div>`;
   }
-  const msg = TR.state === "blocked" ? "This site isn't allowed yet" : IN_CLAUDE ? "Open Keel from your own site to connect" : TR.state === "unknown" ? "Checking…" : TR.state === "off" ? "Not set up on this computer yet" : "Not running on this computer";
-  const check = !IN_CLAUDE && TR.state !== "unknown" ? `<button class="btn sm ghost" data-act="tr-retry">Check again</button>` : "";
+  const msg = SAFARI_BLOCKED && IS_MAC ? "Safari can't reach it from this site: open Keel on this Mac" : TR.state === "blocked" ? "This site isn't allowed yet" : IN_CLAUDE ? "Open Keel from your own site to connect" : TR.state === "unknown" ? "Checking…" : TR.state === "off" ? "Not set up on this computer yet" : "Not running on this computer";
+  const check = SAFARI_BLOCKED && IS_MAC ? `<button class="btn sm ghost" data-act="open-local">Open Keel on this Mac</button>` : !IN_CLAUDE && TR.state !== "unknown" ? `<button class="btn sm ghost" data-act="tr-retry">Check again</button>` : "";
   return `<div class="trk off"><div class="trk-h"><i class="pulse"></i><b>${TR.state === "unknown" ? "Looking for tracker" : "Tracker not connected"}</b></div><div class="trk-s">${msg}</div><div class="row"><button class="btn sm ghost" data-act="nav" data-view="apps">How to connect</button>${check}</div></div>`;
 }
 function renderTrk() { const el = $("#trk"); if (el) el.innerHTML = trkWidget(); }
@@ -2734,6 +2789,18 @@ function setupPanel() {
   if (!IS_MAC) return `<section class="panel setup"><h2 style="margin-bottom:8px">App tracking works on macOS</h2>
     <p class="muted" style="margin:0 0 16px">Keel Tracker is a small Mac app, so it can't run on this computer. Focus sessions, tasks and your plan all work here. To see app time from a Mac, import its activity file.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap">${importBtn}</div>${privacy}</section>`;
+  if (SAFARI_BLOCKED) return `<section class="panel setup">
+    <h2 style="margin-bottom:8px">Turn on app tracking</h2>
+    <p class="muted" style="margin:0 0 16px">Safari doesn't let websites talk to apps on your Mac, so in Safari you use Keel from Keel Tracker, which has its own copy of Keel. You install it once; after that it starts by itself when you log in.</p>
+    <ol class="steps">
+      <li><b>Download Keel Tracker.</b> <a class="btn sm primary" href="${TRACKER_DOWNLOAD}" download>Download Keel Tracker</a> Already have it? Go to step 4.</li>
+      <li><b>Unzip it, move Keel Tracker to Applications, and open it.</b></li>
+      <li><b>Approve it once.</b> macOS says it can't check the app, because it isn't notarized by Apple yet. Open <b>System Settings → Privacy &amp; Security</b>, scroll down, click <b>Open Anyway</b> and confirm.</li>
+      <li><b>Open Keel on this Mac.</b> <button class="btn sm primary" data-act="open-local">Open Keel on this Mac</button> It asks before bringing your tasks and history over. Bookmark it and use it instead of this site.</li>
+    </ol>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">${importBtn}</div>
+    ${privacy}
+  </section>`;
   return `<section class="panel setup">
     <h2 style="margin-bottom:8px">Turn on app tracking</h2>
     <p class="muted" style="margin:0 0 16px">Keel needs a small helper on your Mac to see which apps and sites you use. You install it once; after that it starts by itself when you log in.</p>
@@ -2741,7 +2808,7 @@ function setupPanel() {
       <li><b>Download Keel Tracker.</b> <a class="btn sm primary" href="${TRACKER_DOWNLOAD}" download>Download Keel Tracker</a></li>
       <li><b>Unzip it, move Keel Tracker to Applications, and open it.</b></li>
       <li><b>Approve it once.</b> macOS says it can't check the app, because it isn't notarized by Apple yet. Open <b>System Settings → Privacy &amp; Security</b>, scroll down, click <b>Open Anyway</b> and confirm.</li>
-      <li><b>That's it.</b> Keel Tracker says it's on, and this page connects by itself. If your browser asks to allow access to devices on your local network, choose <b>Allow</b>. Use Chrome, Arc, Brave or Edge.</li>
+      <li><b>That's it.</b> Keel Tracker says it's on, and this page connects by itself. If your browser asks to allow access to devices on your local network, choose <b>Allow</b>.</li>
     </ol>
     <p class="muted" role="status" style="margin:14px 0 0;font-size:13px">${TR.state === "blocked" ? "Keel Tracker is running but doesn't allow this site yet: see the Tracker panel." : "Looking for Keel Tracker on this Mac…"}</p>
     <details style="margin-top:14px"><summary class="muted" style="cursor:pointer;font-size:13px">Advanced: set it up with Python</summary>
@@ -2759,7 +2826,7 @@ function viewApps() {
       ${dateField({ key: "act-day", value: k, attrs: `data-change="act-date"`, label: "Day shown", compact: true })}
       <button class="icon-btn" data-act="act-day" data-d="1" aria-label="Next day">${ICON.right}</button>
       ${k !== todayKey() ? `<button class="btn sm" data-act="act-today">Today</button>` : ""}` : ""}
-      ${has ? (TR.state === "online" ? `<button class="btn primary" data-act="tr-refresh">Refresh</button>` : `<button class="btn primary" data-act="act-refresh">${FSH.handle ? "Refresh" : "Import activity file"}</button>`) : ""}</div></div>`;
+      ${has ? (TR.state === "online" ? `<button class="btn primary" data-act="tr-refresh">Refresh</button>` : `${SAFARI_BLOCKED ? `<button class="btn" data-act="open-local">Open Keel on this Mac</button>` : ""}<button class="btn primary" data-act="act-refresh">${FSH.handle ? "Refresh" : "Import activity file"}</button>`) : ""}</div></div>`;
   if (!has) return head + `<div class="grid g-today">${setupPanel()}<div class="stack">${trackerPanel()}</div></div>`;
   const a = actStats(k);
   const lim = ui.actAll ? 200 : 15;
@@ -3091,6 +3158,9 @@ const A = {
   reset: () => confirmModal("Erase all data?", "Every task, project, session and setting will be deleted from this browser and your account. This can't be undone.", "Erase everything", () => { state = defaultState(); state.updatedAt = Date.now(); act = {}; saveAct(); commit(); applyTheme(); toast("All data erased"); }),
   shortcuts: () => showShortcuts(),
   "act-import": () => pickActivity(),
+  "open-local": () => openLocalKeel(),
+  "handoff-yes": () => { const o = HANDOFF.pending; if (!o) return; restoreBackup(o); closeModal(); handoffDone(true); toast("Your data is here now. Keep this window, or bookmark it."); },
+  "handoff-no": () => { closeModal(); handoffDone(false); },
   "dp-open": el => openPicker(el),
   "dp-pick": el => commitPick(el.dataset.v),
   "dp-month": el => { const [y, m] = PICK.month.split("-").map(Number); const d = new Date(y, m - 1 + +el.dataset.d, 1); PICK.month = `${d.getFullYear()}-${pad(d.getMonth() + 1)}`; renderCalendar(pickInput(PICK.key).value, pickButton(PICK.key).dataset.clear === "1"); PICK.el.querySelector(".cal-days button:not(.out)")?.focus(); },
@@ -3254,12 +3324,16 @@ document.addEventListener("submit", e => {
       if (text.length > MAX_IMPORT_BYTES) { $("#imp-err").textContent = BACKUP_TOO_BIG; return; }
       const obj = JSON.parse(text);
       if (!obj || !Array.isArray(obj.tasks) || !Array.isArray(obj.entries)) throw new Error("bad");
-      state = normalize(obj);
-      if (isObj(obj.activity)) { act = cleanActDays(obj.activity); saveAct(); }   // older backups have no activity: keep what's here
-      closeModal(); commit(); applyTheme(); toast("Backup restored");
+      restoreBackup(obj);
+      closeModal(); toast("Backup restored");
     } catch { $("#imp-err").textContent = "That doesn't look like a Keel backup. Copy it again from Settings → Back up."; }
   }
 });
+function restoreBackup(obj) {   // obj already checked: has tasks[] and entries[]
+  state = normalize(obj);
+  if (isObj(obj.activity)) { act = cleanActDays(obj.activity); saveAct(); }   // older backups have no activity: keep what's here
+  commit(); applyTheme();
+}
 let nameTimer = null;
 function onFieldChange(e) {
   const el = e.target.closest("[data-change]"); if (!el) return;
@@ -3362,7 +3436,7 @@ function tick() {
     if (stretch >= lim && remindedFor !== a.id && now >= (ui.breakSnoozeUntil || 0)) { remindedFor = a.id; chime("nudge"); bgRender(); }
   }
   if (FSH.handle && TR.state !== "online" && !document.hidden && now - lastActPoll > 2 * MIN) { lastActPoll = now; refreshActivity(true); }
-  const onSetup = ui.view === "apps" && TR.state !== "online" && !IN_CLAUDE && IS_MAC;   // the setup screen is open
+  const onSetup = ui.view === "apps" && TR.state !== "online" && !IN_CLAUDE && IS_MAC && !SAFARI_BLOCKED;   // the setup screen is open
   const trEvery = TR.state === "online" ? 10000 : IN_CLAUDE ? 10 * MIN : onSetup ? 5000 : 60000;
   if ((ui.trSeen || onSetup) && !document.hidden && now - TR.lastPoll > trEvery) trPoll(false);
   if (now - (state.lastCleanup || 0) > DAY) cleanupKeel(false);
@@ -3381,8 +3455,10 @@ if (state.active && state.active.mode === "pomodoro" && !state.active.pausedAt &
 }
 // The tracker is only contacted once it has connected before (or when the user presses Check again), so
 // visitors without it don't get a failed request and console error on every page (bug 25).
+if (IS_LOCAL_KEEL) ui.trSeen = true;   // served by Keel Tracker itself, so it's there
 if (!ui.trSeen) TR.state = "off";
 render();
+startHandoff();
 setInterval(tick, 1000);
 document.addEventListener("pointerdown", unlockAudio, { once: true });
 Sync.init();

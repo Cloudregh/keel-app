@@ -6,7 +6,7 @@ import { TRACKER, guardTracker } from "../fixtures/tracker-guard.mjs";
 import AxeBuilder from "@axe-core/playwright";
 
 const test = base;
-test.use({ bypassCSP: false });   // the sweep never contacts the tracker, so it runs under the app's real policy
+test.use({ bypassCSP: false });   // the app's real policy; tracker requests are refused in the page (guardTracker refuse)
 test.use({ timezoneId: "Africa/Accra" });
 const VIEWS = ["today", "focus", "tasks", "timeline", "apps", "reports", "projects", "settings"];
 const SIZES = [["mobile", 390, 844], ["tablet", 768, 1024], ["desktop", 1440, 900]];
@@ -27,8 +27,8 @@ for (const theme of ["dark", "light"]) {
       page.on("console", m => { if (m.type() === "error") consoleErrors.push(`${m.text()} @ ${m.location().url}`); });
       page.on("pageerror", e => pageErrors.push(e.message));
       page.on("requestfailed", r => failed.push(`${r.url()} ${r.failure()?.errorText}`));
-      await guardTracker(page);
-      await page.route(TRACKER, r => r.abort("connectionrefused"));        // tracker not running, as for most visitors
+      await guardTracker(page, { refuse: true });                          // tracker not running, as for most visitors
+      await page.route(TRACKER, r => r.abort("connectionrefused"));        // backstop: nothing may reach the fake host either
       await page.clock.setFixedTime(new Date("2026-11-10T10:00:00Z"));
       await page.setViewportSize({ width, height });
       await page.goto("/index.html");
@@ -42,6 +42,9 @@ for (const theme of ["dark", "light"]) {
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
         if (overflow > 1) problems.push(`${v}: page is ${overflow}px wider than the screen`);
       }
+      // Keel looks for the tracker only from the Apps page (every 5 s on a Mac while it isn't connected); never elsewhere.
+      const calls = await page.evaluate(() => window.__trackerCalls);
+      expect.soft(calls.filter(c => c.view !== "apps"), "tracker requests from pages other than Apps").toEqual([]);
       const isFont = s => /fonts\.(googleapis|gstatic)\.com/.test(s);
       // Soft assertions: every category is checked and reported, even when an earlier one fails.
       expect.soft(pageErrors, "page errors").toEqual([]);

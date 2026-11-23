@@ -34,6 +34,8 @@ The tracker records which app is in front and, for browsers, which site and tab 
 
 Open Keel Tracker again at any time to pause, resume or turn tracking off.
 
+**Using Safari?** Safari doesn't let a website (https) talk to apps on your Mac, so the Keel website can't see Keel Tracker there. Keel Tracker therefore carries its own copy of Keel at **http://127.0.0.1:47821**. In Safari, the website's Apps page has **Open Keel on this Mac**: it opens that copy and, after you agree, moves your tasks, time and activity across (inside the browser; nothing is uploaded). Bookmark it and use it from then on. Chrome, Edge, Arc, Brave and Firefox connect from the website directly. (Needs Keel Tracker 1.1 or later.)
+
 **Publishing a new version (maintainers).** Push a tag such as `tracker-v1.0.0`. The `tracker-app` workflow builds the app on a Mac runner, checks it (both architectures, the signature, a self-test) and attaches `Keel-Tracker.zip` to a GitHub Release. The download link above always points to the latest release.
 
 **Or with Python (advanced):**

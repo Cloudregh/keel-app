@@ -270,7 +270,9 @@ def test_preflight_disallowed(server):
 
 
 @pytest.mark.parametrize(
-    "method, path", [("GET", "/"), ("GET", "/nope"), ("POST", "/status"), ("POST", "/nope"), ("GET", "/../../etc/passwd")]
+    "method, path",
+    # GET / serves Keel's page since 2026-11-23 (tests/py/test_web.py); the root still has no POST, and near-misses are 404
+    [("POST", "/"), ("GET", "/index"), ("GET", "/nope"), ("POST", "/status"), ("POST", "/nope"), ("GET", "/../../etc/passwd")],
 )
 def test_unknown_paths_are_404_json(server, method, path):
     code, h, body = server.request(method, path, origin=GOOD)
